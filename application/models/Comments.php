@@ -2,7 +2,7 @@
 
 class Application_Model_Comments
 {
-	public $blabName, $content;
+	public $blabName, $content, $count;
 	
 	public function __construct($currentBlab = 'linkblab.com')
 	{
@@ -184,16 +184,30 @@ EOT;
 		$select->from("comments", array('id', 'parent_id'));
 		$select->where("parent_id = ?", $commentID);
 		$results = $db->fetchAll($select);
-		$n = count($results);
+		$this->count = count($results);
+		if ($this->count > 1) {
 		foreach ($results as $comment) {
-			$select = $db->select();
-			$select->from("comments", array('id', 'parent_id'));
-			$select->where("parent_id = ?", $comment["id"]);
-			$results2 = $db->fetchAll($select);
-			$n += count($results2);
+				$this->countCommentRecursion($comment["id"]);
 			}
-		return $n;
+		}
+		return $this->count;
 	
+	}
+	
+	private function countCommentRecursion($commentID) {
+		$db = Zend_Db_Table::getDefaultAdapter();
+		$select = $db->select();
+		$select->from("comments", array('id', 'parent_id'));
+		$select->where("parent_id = ?", $commentID);
+		$results2 = $db->fetchAll($select);
+		$n = count($results2);
+		$this->count += $n;
+		if ($n > 1) {
+		foreach ($results2 as $comment) {
+				$this->count += $this->countCommentRecursion($comment["id"]);
+			}
+		}
+						
 	}
 
 }
