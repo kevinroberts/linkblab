@@ -13,6 +13,7 @@ I know this application mught be a little fugly on the outside, but on the insid
 it was an engineering labor of love. I tried to incorporate the same functionality Reddit offers with some  
 of my own tweaks as I attempted to reverse engineer the Python code base. 
 
+
 TODO 
 ----------------------
 
