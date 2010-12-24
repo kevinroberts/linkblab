@@ -1,0 +1,9 @@
+<?php 
+
+$this->headTitle('- Login');
+$this->headScript()->appendFile("/js/jquery.uiforms.js", $type = 'text/javascript', $attrs = array());
+$this->headScript()->appendScript("$(document).ready(function(){
+	$(document).uiforms()
+	 });", $type = 'text/javascript', $attrs = array());
+
+?>

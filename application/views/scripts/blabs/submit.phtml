@@ -1,0 +1,194 @@
+<?php 
+$this->headTitle()->prepend("submit link - ");
+
+$this->headScript()->appendFile("/js/jquery.validate.js", $type = 'text/javascript', $attrs = array());
+$this->headScript()->appendFile("/js/jquery.uiforms.js", $type = 'text/javascript', $attrs = array());
+$token = sha1('7a8b6A894D4CBzaAEE0'.$this->username.date('D', time() ));
+
+// Add default blab to submit to if specified
+$addDefault = '';
+if (!empty($this->toBlab)) {
+	$addDefault = "$('#blab').val('".$this->toBlab."')";
+}
+
+$scriptIfSelf = <<<EOT
+var selfTgl = false;
+function setRadio(id) {
+    var radio = $('#' + id);
+    radio[0].checked = true;
+    radio.button("refresh");
+}
+$(document).ready(function(){
+	$("#description").resizable();
+	$(document).uiforms();
+	$('#urlFormHolder').hide();
+	$("#check").button();
+	setRadio('check'); $addDefault
+	$('#searchForm').removeClass('uiforms-form ui-widget ui-corner-all');
+	$('#searchForm input').removeClass('uiforms-input ui-state-default ui-corner-all uiforms-text uiforms-submit');
+	$('#searchForm input').focus(function() {
+		$('#searchForm input').removeClass('ui-state-focus');
+		});
+	$('#searchForm input').hover(function() {
+		$('#searchForm input').removeClass('ui-state-hover');
+		});
+	$( "#blab" ).autocomplete({
+			source: "/blabs/search/token/$token",
+			minLength: 1,
+			select: function( event, ui ) {
+				writeBlab( ui.item ?
+					ui.item.value :
+					"Nothing selected, input was " + this.value );
+			}
+		});
+	
+});
+
+function writeBlab( message ) {
+			$('#blab').val(message);
+		}
+
+function toggleTextSubmit() {
+var newvalue = 0;
+if (selfTgl) {
+	newvalue = 1;
+}
+$('#isSelf').val(newvalue);
+$('#descriptionFormHolder').toggle('slow');
+$('#urlFormHolder').toggle('fast');
+selfTgl = !selfTgl;
+return false;
+}
+EOT;
+
+$script = <<<EOT
+var selfTgl = true;
+$(document).ready(function(){
+	$("#description").resizable();
+	$(document).uiforms();
+	$('#descriptionFormHolder').hide();
+	$("#check").button(); $addDefault
+	$('#searchForm').removeClass('uiforms-form ui-widget ui-corner-all');
+	$('#searchForm input').removeClass('uiforms-input ui-state-default ui-corner-all uiforms-text uiforms-submit');
+	$('#searchForm input').focus(function() {
+		$('#searchForm input').removeClass('ui-state-focus');
+		});
+	$('#searchForm input').hover(function() {
+		$('#searchForm input').removeClass('ui-state-hover');
+		});
+	$( "#blab" ).autocomplete({
+			source: "/blabs/search/token/$token",
+			minLength: 1,
+			select: function( event, ui ) {
+				writeBlab( ui.item ?
+					ui.item.value :
+					"Nothing selected, input was " + this.value );
+			}
+		});
+		
+	
+});
+
+function writeBlab( message ) {
+			$('#blab').val(message);
+		}
+
+
+function toggleTextSubmit() {
+var newvalue = 0;
+if (selfTgl) {
+	newvalue = 1;
+}
+$('#isSelf').val(newvalue);
+$('#descriptionFormHolder').toggle('slow');
+$('#urlFormHolder').toggle('fast');
+selfTgl = !selfTgl;
+return false;
+}
+EOT;
+if($this->isSelf) {
+	$this->headScript()->appendScript($scriptIfSelf, $type = 'text/javascript', $attrs = array());
+}
+else {
+	$this->headScript()->appendScript($script, $type = 'text/javascript', $attrs = array());
+}
+?>
+
+<style type="text/css">
+<!--
+#LinkCreateForm {
+	width:570px;
+	margin:25px auto;
+}
+label {
+	cursor: pointer;
+}
+#resetErrors {
+	color: red;
+}
+#description {
+	height:120px; width: 500px
+}
+.gray {
+	padding-left: 10px;
+	font-size:small;
+	color:gray;
+}
+.ui-menu-item {
+	font-size:small;
+}
+#resetbtn {
+	font-size:small;
+	cursor:pointer;
+}
+-->
+</style>
+<form id="LinkCreate" action="<?php echo $this->escape($this->form->getAction()); ?>" method="<?php echo $this->escape($this->form->getMethod());?>">
+	<fieldset id="LinkCreateForm" style="">
+	<legend>submit to linkblab.com</legend>
+	<?php if ($this->form->isErrors()):?>
+				<?php foreach ($this->form->getErrors() as $errors):?>
+					<?php foreach ($errors as $message):?>
+					<?php if ($message == 'regexNotMatch')
+							$message = 'Invalid characters found in your submission'; ?>
+					<?php if ($message == 'isEmpty')
+							$message = 'A required field was not completed'; ?>
+					<?php if ($message == 'callbackValue')
+							$message = 'Please check your URL (It must start with "http://")'; ?>
+					<?php if ($message == 'badCaptcha')
+							$message = 'Invalid CAPTCHA code. Please try again'; ?>		
+						<div style="color:red"><span style="float: left; margin-right: 0.3em;position:relative; top:4px;" class="ui-icon ui-icon-alert"></span><?php echo $message;?></div>
+					<?php endforeach;?>
+				<?php endforeach;?>
+				
+				<?php foreach ($this->form->getErrorMessages() as $error):?>
+						<div style="color:red"><span style="float: left; margin-right: 0.3em;position:relative; top:4px;" class="ui-icon ui-icon-alert"></span><?php echo $error;?></div>
+				<?php endforeach;?>
+				
+				<?php endif; ?>
+	<p style="margin-left:50px;"><input onClick="toggleTextSubmit()" type="checkbox" id="check" /><label style="font-size: 12px;" for="check">Text-Only Submission</label> </p>
+	<div><label for="title">Title:</label> <span class="gray">title of your link submission</span></div>	
+	 <?php echo $this->form->title;?>
+	<p> </p>
+	<div id="urlFormHolder"><label for="link_url">url:</label><span class="gray">e.g., http://www.linkblab.com/b/funny </span> 
+	<?php echo $this->form->link_url;?>	
+	</div>	
+	<div id="descriptionFormHolder"><label for="description">Description:</label><span class="gray">20,000 characters max. <a id="open-format-dialog" href="#">Text Formatting Guide</a></span>
+	<?php echo $this->form->description;?>
+	</div>
+	<p> </p>
+	<div><label for="blab">Blab:</label> <span class="gray">popular choices - <a onClick="$('#blab').val('linkblab.com')" href="#">linkblab.com</a>, <a onClick="$('#blab').val('funny')" href="#">funny</a>, <a onClick="$('#blab').val('self')" href="#">self.blab</a>, <a onClick="$('#blab').val('music')" href="#">music</a>, <a onClick="$('#blab').val('technology')" href="#">technology</a></span></div>	
+	 <?php echo $this->form->blab;?>
+	<p> </p>
+	<?php echo $this->form->captcha;?>
+	<br />
+	<p style="text-align:center">
+	<input title="Create" style="cursor:pointer;" type="submit" value="Submit" />&nbsp; or &nbsp;<input id="resetbtn" type="reset" value="Reset form" />
+	<?php echo $this->form->___h;?>
+	<?php echo $this->form->isSelf;?>
+	</p>
+
+</fieldset>
+
+</form>
+<?php echo $this->formattingDialog(); ?>

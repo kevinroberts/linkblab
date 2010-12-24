@@ -1,0 +1,48 @@
+<?php 
+
+$this->headTitle('| Reset Password');
+$this->headScript()->appendFile("/js/jquery.uiforms.js", $type = 'text/javascript', $attrs = array());
+$this->headScript()->appendFile("/js/jquery.validate.js", $type = 'text/javascript', $attrs = array());
+
+
+?>
+
+<style>
+<!--
+#resetForm {
+	width:450px;
+	margin:25px auto;
+}
+-->
+</style>
+
+		<form id="reset" action="<?php echo $this->escape($this->form->getAction()); ?>" method="<?php echo $this->escape($this->form->getMethod());?>">
+			<fieldset id="resetForm" style="">
+			<legend>Password Reset</legend>
+			<?php if ($this->form->isErrors()):?>
+			<?php foreach ($this->form->getErrors() as $errors):?>
+				<?php foreach ($errors as $message):?>
+					<div style="color:red"><span style="float: left; margin-right: 0.3em;position:relative; top:4px;" class="ui-icon ui-icon-alert"></span><?php echo $message;?></div>
+				<?php endforeach;?>
+			<?php endforeach;?>
+			
+			<?php foreach ($this->form->getErrorMessages() as $error):?>
+					<div style="color:red"><span style="float: left; margin-right: 0.3em;position:relative; top:4px;" class="ui-icon ui-icon-alert"></span><?php echo $error;?></div>
+			<?php endforeach;?>
+			
+			<?php endif; ?>
+			<p></p>
+			<div><label for="password">New Password:</label></div>	
+			 <?php echo $this->form->password;?>
+			<p> </p>
+			<div><label for="confirm_password">Confirm Password:</label></div>
+			<?php echo $this->form->confirm_password;?>
+			<p> </p>
+			<br />
+			<p>
+			<input title="Reset my password" style="cursor:pointer;" type="submit" value="Reset Password" /> 
+			<?php echo $this->form->___h;?>
+			</p>
+			
+		  </fieldset>
+		</form>

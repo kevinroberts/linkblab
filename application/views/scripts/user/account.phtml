@@ -1,0 +1,139 @@
+<?php
+$this->headTitle('- '.$this->username); 
+?>
+
+<style>
+<!--
+ul.tabs, ul.tabs2 {
+	margin: 0;
+	padding: 0;
+	float: left;
+	list-style: none;
+	height: 32px; /*--Set height of tabs--*/
+	border-bottom: 1px solid #999;
+	border-left: 1px solid #999;
+	width: 100%;
+}
+ul.tabs li, ul.tabs2 li {
+	float: left;
+	margin: 0;
+	padding: 0;
+	height: 31px; /*--Subtract 1px from the height of the unordered list--*/
+	line-height: 31px; /*--Vertically aligns the text within the tab--*/
+	border: 1px solid #999;
+	border-left: none;
+	margin-bottom: -1px; /*--Pull the list item down 1px--*/
+	overflow: hidden;
+	position: relative;
+	background: #e0e0e0;
+}
+ul.tabs li a, ul.tabs2 li a {
+	text-decoration: none;
+	color: #000;
+	display: block;
+	font-size: 1.2em;
+	padding: 0 20px;
+	border: 1px solid #fff; /*--Gives the bevel look with a 1px white border inside the list item--*/
+	outline: none;
+}
+ul.tabs li a:hover, ul.tabs2 li a:hover {
+	background: #ccc;
+}
+html ul.tabs li.active, html ul.tabs li.active a:hover, html ul.tabs2 li.active, html ul.tabs2 li.active a:hover  { /*--Makes sure that the active tab does not listen to the hover properties--*/
+	background: #fff;
+	border-bottom: 1px solid #fff; /*--Makes the active tab look like it's connected with its content--*/
+}
+.tab_container {
+	border: 1px solid #999;
+	border-top: none;
+	overflow: hidden;
+	clear: both;
+	float: left; width: 100%;
+	background: #fff;
+}
+.tab_content, .tab_content2 {
+	padding: 20px;
+	font-size: 12px;
+}
+
+-->
+</style>
+<script type="text/javascript">
+<!--
+$(document).ready(function() {
+
+	$(".tab_content").hide(); //Hide all content
+	//$(".tab_content2").hide(); //Hide all content
+
+	$("ul.tabs li:first").addClass("active").show(); //Activate first tab
+	$(".tab_content:first").show(); //Show first tab content
+	
+	//On Click Event
+	$("ul.tabs li").click(function() {
+
+		$("ul.tabs li").removeClass("active"); //Remove any "active" class
+		$(this).addClass("active"); //Add "active" class to selected tab
+		$(".tab_content").hide(); //Hide all tab content
+
+		var activeTab = $(this).find("a").attr("href"); //Find the href attribute value to identify the active tab + content
+		$(activeTab).fadeIn(); //Fade in the active ID content
+		return false;
+	});
+
+});
+//-->
+</script>
+
+<div class="usernameHeader">
+<?php echo $this->username;?>'s Profile
+</div>
+
+<?php if ($this->loggedIn) { ?>
+
+<p>Welcome <?php echo $this->username; ?>: <a id="accountOptionsBtn" href="/user/edit/username/<?php echo $this->username; ?>">Edit My Account Options</a></p>
+
+<!-- Logged in actions for this user  -->
+<div id="accountActivity">
+<ul class="tabs">
+    <li><a href="#tab1">Comments</a></li>
+    <li><a href="#tab2">Submitted Links</a></li>
+    <li><a href="#tab3">Links liked</a></li>
+    <li><a href="#tab4">Blabs Created</a></li>
+</ul>
+
+<div class="tab_container">
+    <div id="tab1" class="tab_content">
+        Comments submitted
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris nisl ligula, sagittis ac interdum vitae, consequat at orci. Cras vel scelerisque nulla. Nam luctus cursus libero, et sodales lacus auctor nec. Donec dictum bibendum dapibus. Duis ultricies sagittis felis, non luctus sapien cursus et. Vestibulum id ipsum et massa venenatis euismod. Suspendisse potenti. Phasellus bibendum fringilla ante, sit amet tincidunt tortor interdum ut. Vestibulum at erat ut urna malesuada porta. Fusce sodales, tellus vitae vestibulum laoreet, nibh metus facilisis tortor, nec bibendum velit elit eget sem. Donec convallis ante ut magna mollis non consectetur lectus ultricies. Morbi placerat, leo id mollis fermentum, purus urna facilisis ante, eu consectetur odio nisl at nisl. In felis eros, pellentesque eget varius eget, bibendum non dolor. Sed sagittis bibendum iaculis. Morbi pharetra sagittis augue in congue. Sed sapien quam, ultricies non dapibus a, consequat ut neque. Nunc eu tortor ipsum, non iaculis metus. Donec interdum fringilla nunc. Duis pretium, mauris et cursus hendrerit, orci mauris bibendum purus, quis placerat arcu tellus tempus dui. In faucibus justo quis leo volutpat mattis. 
+    </div>
+    <div id="tab2" class="tab_content">
+       Content tab 2
+    </div>
+    <div id="tab3" class="tab_content">
+       Content tab 2
+    </div>
+    <div id="tab4" class="tab_content">
+       Content tab 2
+    </div>
+</div>
+</div>
+<?php } else { ?>
+<ul class="tabs">
+    <li><a href="#tab1">Overview</a></li>
+    <li><a href="#tab2">Comments</a></li>
+    <li><a href="#tab3">Submitted Links</a></li>
+</ul>
+
+<div class="tab_container">
+    <div id="tab1" class="tab_content">
+        This is not you
+    </div>
+    <div id="tab2" class="tab_content">
+       This is not you 2
+    </div>
+    <div id="tab3" class="tab_content">
+       This is not you 3
+    </div>
+</div>
+
+<?php }?>

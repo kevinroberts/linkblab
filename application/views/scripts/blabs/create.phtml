@@ -1,0 +1,108 @@
+<?php 
+
+$this->headTitle('- Create Blab');
+$this->headScript()->appendFile("/js/jquery.validate.js", $type = 'text/javascript', $attrs = array());
+$this->headScript()->appendFile("/js/jquery.uiforms.js", $type = 'text/javascript', $attrs = array());
+
+/*
+ * 
+ <script type="text/javascript">
+<!--
+$(document).ready(function(){
+	$(document).uiforms();
+	$('#searchForm').removeClass('uiforms-form ui-widget ui-corner-all');
+	$('#searchForm input').removeClass('uiforms-input ui-state-default ui-corner-all uiforms-text uiforms-submit');
+	$('#searchForm input').focus(function() {
+		$('#searchForm input').removeClass('ui-state-focus');
+		});
+	$('#searchForm input').hover(function() {
+		$('#searchForm input').removeClass('ui-state-hover');
+		});
+
+});
+
+//-->
+</script>
+ */
+?>
+
+<style type="text/css">
+<!--
+#blabCreateForm {
+	width:550px;
+	margin:25px auto;
+}
+label {
+	cursor: pointer;
+}
+#resetErrors {
+	color: red;
+}
+#description {
+	height:120px; width: 500px
+}
+.gray {
+	padding-left: 10px;
+	font-size:small;
+	color:gray;
+}
+#resetbtn {
+	font-size:small;
+	cursor:pointer;
+}
+-->
+</style>
+
+<?php 
+
+/*if (isset($this->formData)) {
+	echo "<div>";
+	print_r($this->formData);
+	echo "</div>";
+}*/
+
+?>
+
+<form id="BlabCreate" action="<?php echo $this->escape($this->form->getAction()); ?>" method="<?php echo $this->escape($this->form->getMethod());?>">
+<fieldset id="blabCreateForm" style="">
+			<legend>Create a Blab!</legend>
+			<?php if ($this->form->isErrors()):?>
+			<?php foreach ($this->form->getErrors() as $errors):?>
+				<?php foreach ($errors as $message):?>
+				<?php if ($message == 'regexNotMatch')
+						$message = 'Invalid characters for blab name. Alpha-Numeric with no spaces '; ?>
+				<?php if ($message == 'recordFound')
+						$message = '<span style="display: block; text-align: center;">A blab by that name has already been created, see it at <a href="/b/'.$this->blabTitle.'">/b/'.$this->blabTitle.'/</a></span>'; ?>
+				<?php if ($message == 'isEmpty')
+						$message = 'A required field was not completed'; ?>
+					<div style="color:red"><span style="float: left; margin-right: 0.3em;position:relative; top:4px;" class="ui-icon ui-icon-alert"></span><?php echo $message;?></div>
+				<?php endforeach;?>
+			<?php endforeach;?>
+			
+			<?php foreach ($this->form->getErrorMessages() as $error):?>
+					<div style="color:red"><span style="float: left; margin-right: 0.3em;position:relative; top:4px;" class="ui-icon ui-icon-alert"></span><?php echo $error;?></div>
+			<?php endforeach;?>
+			
+			<?php endif; ?>
+			<p> </p>
+			<div><label for="title">Name:</label></div>
+			<span class="gray">no spaces, e.g., slashdot</span>	
+			 <?php echo $this->form->title;?>
+			<p> </p>
+			<div><label for="head_title">Title:</label></div>
+			<span class="gray">e.g., slashdot: news for nerds, stuff that matters</span>	
+			<?php echo $this->form->head_title;?>
+			<p> </p>
+			<div><label for="description">Description:</label></div>
+			<span class="gray">1400 characters max. Make them count. (optional)</span>	
+			<?php echo $this->form->description;?>
+			<p> </p>
+			<?php echo $this->form->captcha;?>
+			<br />
+			<p style="text-align:center">
+			<input title="Create" style="cursor:pointer;" type="submit" value="Create!" />&nbsp; or &nbsp;<input id="resetbtn" type="reset" value="Reset form" />
+			<?php echo $this->form->___h;?>
+			</p>
+</fieldset>
+
+</form>

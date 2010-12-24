@@ -1,0 +1,127 @@
+<?php 
+
+$this->headTitle('| Create Account');
+$this->headScript()->appendFile("/js/jquery.uiforms.js", $type = 'text/javascript', $attrs = array());
+$this->headScript()->appendFile("/js/jquery.validate.js", $type = 'text/javascript', $attrs = array());
+
+?>
+<style type="text/css"><!--
+
+input.error {
+	background: #F57676 !important;
+	color: #FFFFFF !important;
+	
+}
+dd {
+	margin-left: 0;
+}
+.errors {
+	padding: 0 !important;
+}
+#signup {
+	margin:25px auto;
+	width: 571px;
+}
+#signup label.error {
+	color:red !important;
+	float: right;
+	width: 310px;
+}
+#submit {
+	margin-left: -5px;
+	margin-top: 5px;
+}
+-->
+--></style>
+<script type="text/javascript">
+<!--
+$(document).ready(function() {
+	$('#username-label').hide();
+	$("#signup").validate({
+			rules: {
+				username: {
+					required: true,
+					minlength: 2,
+					maxlength: 30
+				},
+				email: {
+					required: true,
+					email: true
+				},
+				password: {
+					required: true,
+					minlength: 5
+				},
+				confirm_password: {
+					required: true,
+					minlength: 5,
+					equalTo: "#password"
+				}
+			},
+			messages: {
+				username: {
+					required: "Please enter a username",
+					minlength: "Your username must consist of at least 2 characters",
+					maxlength: "Your username must be less than 30 characters"
+				},
+				password: {
+					required: "Please provide a password",
+					minlength: "Your password must be at least 5 characters long"
+				},
+				confirm_password: {
+					required: "Confirmation of your password is required",
+					minlength: "Your password must be at least 5 characters long",
+					equalTo: "Please enter the same password as above"
+				},
+				email: "Please enter a valid email address"
+			}
+		});
+	   
+	 });
+	 
+//-->
+</script>
+
+		<form id="signup" action="<?php echo $this->escape($this->form->getAction()); ?>" method="<?php echo $this->escape($this->form->getMethod());?>">
+			<fieldset style="width:550px; margin-left: 25px;">
+			<legend>Create Account</legend>
+			<?php if ($this->form->isErrors()):?>
+			<?php foreach ($this->form->getErrors() as $errors):?>
+				<?php foreach ($errors as $message):?>
+					<?php if ($message == 'recordFound')
+						$message = 'Username already taken, choose another';?>
+					<?php if ($message == 'regexNotMatch')
+						$message = 'Invalid characters for username'; ?>
+					<div style="color:red"><span style="float: left; margin-right: 0.3em;position:relative; top:4px;" class="ui-icon ui-icon-alert"></span><?php echo $message;?></div>
+				<?php endforeach;?>
+			<?php endforeach;?>
+			
+			<?php foreach ($this->form->getErrorMessages() as $error):?>
+					<?php //if ($error == 'recordFound')
+						//$error = 'Username already taken, choose another';?>
+					<div style="color:red"><span style="float: left; margin-right: 0.3em;position:relative; top:4px;" class="ui-icon ui-icon-alert"></span><?php echo $error;?></div>
+			<?php endforeach;?>
+			
+			<?php endif; ?>
+			<p></p>
+			<div><label for="username">Username:</label></div>	
+			 <?php echo $this->form->username;?>
+			<br />
+			<div><label for="email">Email:</label></div>	
+			 <?php echo $this->form->email;?>
+			<br /><br />
+			<div><label for="password">Password:</label></div>
+			<?php echo $this->form->password;?>
+			<br />
+			<div><label for="confirm_password">Confirm Password:</label></div>
+			<?php echo $this->form->confirm_password;?>
+			<br /><br />
+			
+			<?php echo $this->form->captcha;?>
+			<p>
+			<input style="cursor:pointer;" id="submit" type="submit" value="Create Account" /> 
+			<?php echo $this->form->___h;?>
+			</p>
+			
+		  </fieldset>
+		</form>

@@ -1,0 +1,25 @@
+<?php
+$this->headTitle('- 404 Not Found'); 
+?>
+<br />
+<?php 
+
+	//	$auth = Zend_Auth::getInstance();
+    	//$user = $auth->getIdentity();
+    //    print_r($auth);
+?>
+ <div style="margin:0 auto; padding-top: 10px; width: 600px;" class="ui-state-highlight ui-corner-all"> 
+	<p><span style="position: relative; float: left; left: 5px; top: -24px;" class="ui-icon ui-icon-info"></span>
+		<?php 
+if (!empty($this->errorMsg)) {
+	//print_r($this->errorMsg);
+	echo $this->errorMsg;
+}
+else {
+	echo 'Sorry, your requested page could not be found.
+	<br /><br />
+	Please check your link to see if you\'ve misstyped something.' ;
+}
+
+?>			
+</div>

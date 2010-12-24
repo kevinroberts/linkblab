@@ -1,0 +1,899 @@
+@charset "utf-8";
+body {
+	font: 100%/1.4 Verdana, Arial, Helvetica, sans-serif;
+	background: #4E5869;
+	margin: 0;
+	padding: 0;
+	color: #000;
+}
+
+/* ~~ Element/tag selectors ~~ */
+ul, ol, dl { /* Due to variations between browsers, it's best practices to zero padding and margin on lists. For consistency, you can either specify the amounts you want here, or on the list items (LI, DT, DD) they contain. Remember that what you do here will cascade to the .nav list unless you write a more specific selector. */
+	padding: 0;
+	margin: 0;
+}
+h1, h2, h3, h4, h5, h6 {
+	margin-top: 0;	 /* removing the top margin gets around an issue where margins can escape from their containing div. The remaining bottom margin will hold it away from any elements that follow. */
+	padding-right: 15px;
+	padding-left: 15px; /* adding the padding to the sides of the elements within the divs, instead of the divs themselves, gets rid of any box model math. A nested div with side padding can also be used as an alternate method. */
+}
+
+a img { /* this selector removes the default blue border displayed in some browsers around an image when it is surrounded by a link */
+	border: none;
+}
+
+/* ~~ Styling for your site's links must remain in this order - including the group of selectors that create the hover effect. ~~ */
+a:link {
+	color:#414958;
+	text-decoration: underline; /* unless you style your links to look extremely unique, it's best to provide underlines for quick visual identification */
+}
+a:visited {
+	color: #4E5869;
+	text-decoration: underline;
+}
+a:hover, a:active, a:focus { /* this group of selectors will give a keyboard navigator the same hover experience as the person using a mouse. */
+	text-decoration: none;
+	-moz-outline-style: none;
+}
+
+/* ~~ this container surrounds all other divs giving them their percentage-based width ~~ */
+.container {
+	width: 80%;
+	max-width: 1260px;/* a max-width may be desirable to keep this layout from getting too wide on a large monitor. This keeps line length more readable. IE6 does not respect this declaration. */
+	min-width: 850px;/* a min-width may be desirable to keep this layout from getting too narrow. This keeps line length more readable in the side columns. IE6 does not respect this declaration. */
+	background: #FFF;
+	margin: 0 auto; /* the auto value on the sides, coupled with the width, centers the layout. It is not needed if you set the .container's width to 100%. */
+}
+
+/* ~~ the header is not given a width. It will extend the full width of your layout. It contains an image placeholder that should be replaced with your own linked logo ~~ */
+.header {
+	background: white;
+	border-bottom:1px groove black;
+}
+
+/* ~~ These are the columns for the layout. ~~ 
+
+1) Padding is only placed on the top and/or bottom of the divs. The elements within these divs have padding on their sides. This saves you from any "box model math". Keep in mind, if you add any side padding or border to the div itself, it will be added to the width you define to create the *total* width. You may also choose to remove the padding on the element in the div and place a second div within it with no width and the padding necessary for your design.
+
+2) No margin has been given to the columns since they are all floated. If you must add margin, avoid placing it on the side you're floating toward (for example: a right margin on a div set to float right). Many times, padding can be used instead. For divs where this rule must be broken, you should add a "display:inline" declaration to the div's rule to tame a bug where some versions of Internet Explorer double the margin.
+
+3) Since classes can be used multiple times in a document (and an element can also have multiple classes applied), the columns have been assigned class names instead of IDs. For example, two sidebar divs could be stacked if necessary. These can very easily be changed to IDs if that's your preference, as long as you'll only be using them once per document.
+
+4) If you prefer your nav on the right instead of the left, simply float these columns the opposite direction (all right instead of all left) and they'll render in reverse order. There's no need to move the divs around in the HTML source.
+
+*/
+.sidebar1 {
+	float: left;
+	width: 20%;
+	background: #93A5C4;
+	padding-bottom: 10px;
+	
+}
+.content {
+	padding: 0;
+	width: 79%;
+	float: left;
+	position:relative;
+	left:10px;
+}
+
+/* ~~ This grouped selector gives the lists in the .content area space ~~ */
+.content ul, .content ol { 
+	padding: 0 15px 15px 40px; /* this padding mirrors the right padding in the headings and paragraph rule above. Padding was placed on the bottom for space between other elements on the lists and on the left to create the indention. These may be adjusted as you wish. */
+}
+
+/* ~~ The navigation list styles (can be removed if you choose to use a premade flyout menu like Spry) ~~ */
+ul.nav {
+	list-style: none; /* this removes the list marker */
+	border-top: 1px solid #666; /* this creates the top border for the links - all others are placed using a bottom border on the LI */
+	margin-bottom: 10px; /* this creates the space between the navigation on the content below */
+}
+ul.nav li {
+	border-bottom: 1px solid #666; /* this creates the button separation */
+}
+ul.nav a, ul.nav a:visited { /* grouping these selectors makes sure that your links retain their button look even after being visited */
+	padding: 5px 5px 5px 15px;
+	display: block; /* this gives the link block properties causing it to fill the whole LI containing it. This causes the entire area to react to a mouse click. */
+	text-decoration: none;
+	background: #8090AB;
+	color: #000;
+}
+ul.nav a:hover, ul.nav a:active, ul.nav a:focus { /* this changes the background and text color for both mouse and keyboard navigators */
+	background: #6F7D94;
+	color: #FFF;
+}
+
+#selected a {
+	background: #6F7D94;
+	color: #FFF;
+	font-weight:bold;
+}
+
+
+/* ~~ The footer ~~ */
+.footer {
+	padding: 10px 0;
+	background: #6F7D94;
+	position: relative;/* this gives IE6 hasLayout to properly clear */
+	clear: both; /* this clear property forces the .container to understand where the columns end and contain them */
+}
+.footer a {
+	color: white;
+	font-style:italic;
+	text-decoration: none;
+}
+.footer a:hover {
+	text-decoration: underline;
+}
+.footer .reddit a:hover {
+	color: orangered;
+	font-style:normal;
+	background-color:white;
+	text-decoration: underline;
+}
+/* ~~ miscellaneous float/clear classes ~~ */
+.fltrt {  /* this class can be used to float an element right in your page. The floated element must precede the element it should be next to on the page. */
+	float: right;
+	margin-left: 8px;
+}
+.fltlft { /* this class can be used to float an element left in your page. The floated element must precede the element it should be next to on the page. */
+	float: left;
+	margin-right: 8px;
+}
+.clearfloat { /* this class can be placed on a <br /> or empty div as the final element following the last floated div (within the #container) if the #footer is removed or taken out of the #container */
+	clear:both;
+	height:0;
+	font-size: 1px;
+	line-height: 0px;
+}
+#recentlyViewed {
+	background-color: #ffffff;
+	margin:0 auto;
+	font-size: 12px;
+}
+
+#recentlyViewed td{
+	padding-bottom: 2px;
+}
+
+.centerHeader {
+	text-align:center;
+	padding: 10px 0 10px 0;
+	margin: 0;
+	font-size: 16px;
+}
+.viewedVote {
+	width: 25px;
+}
+.viewedVote a {
+	display:block;
+	left:4px;
+	outline:medium none;
+	padding:0;
+	position:relative;
+	margin-bottom: 4px;
+	width:16px;
+	cursor: pointer;
+}
+.viewedVote a:active {
+	outline: none;
+}
+.viewedVote > span {
+	display:block;
+}
+
+
+#loginMenu {
+clear:right;
+
+float:right;
+margin-top:26px;
+padding:0;
+}
+.zend_form{
+background:#fff;
+width:460px;
+padding:0;
+overflow:auto;
+}
+
+.zend_form dt{
+padding:0;
+clear:both;
+width:30%;
+float:left;
+text-align:right;
+margin:5px 5px 5px 0;
+}
+
+.zend_form dd{
+padding:0;
+float:left;
+width:68%;
+margin:5px 2px 5px 0;
+}
+
+.zend_form p{
+padding:0;
+margin:0;
+}
+
+.zend_form input, .zend_form textarea{
+margin:0 0 2px 0;
+padding:0;
+}
+
+.submit{
+float:right;
+}
+
+#searchForm {
+	display: inline;
+	padding-left: 10px;
+	padding-right: 5px;
+}
+#searchForm .empty {
+	color: #aaa;
+}
+#blabs {
+	float: right;
+	background-color: #F0F0F0;
+	height: 29px;
+	border: 1px solid gray;
+	padding-right:15px;
+	margin-right: 5px;
+	text-transform:uppercase;
+	font-size: small;
+	overflow:hidden;
+	}
+#blabs a{
+	color: black;
+	text-decoration: none;
+	}
+#blabs a:hover {
+	text-decoration: underline;
+	}
+
+#blabsTitle {
+	background-color: #FFFFFF;
+	display:inline-block;
+	padding-left:5px;
+	padding-right:5px;
+	padding-top:6px;
+	height:23px;
+
+	}
+#moreLink {
+background-color:#F0F0F0;
+float:right;
+font-size:small;
+font-weight:bold;
+padding-left:14px;
+position:relative;
+top:-24px;
+right:6px;	
+}
+#moreLink a {
+text-decoration: none;
+}
+#moreLink a:hover {
+text-decoration: underline;
+}
+/*.required:before{content:'* '}
+
+.optional:before{content:'+ '}
+*/
+.errors {
+	color:red;
+	display:inline;
+	list-style:none outside none;
+}
+
+.fberrorbox  
+ {  
+     background-color: #ffebe8;  
+     border: 1px solid #dd3c10;  
+     color: #333333;  
+     padding: 10px;  
+     font-size: 13px;  
+     font-weight: bold;  
+ }  
+ .voted {
+ 	background-image: url('/images/iconsOrange.png') !important;
+}
+ .downvoted {
+ 	background-image: url('/images/iconsBlue.png') !important;
+}
+.largeVote {
+	font-size:10px;
+}
+.sidecontentbox {
+
+}
+.sidecontentbox h2 {
+color:#555;
+font-size:12px;
+margin:0;
+text-transform:uppercase;
+}
+
+.sidecontentbox a {
+color:#336699;
+text-decoration: none;
+}
+
+.sidecontentbox a:hover {
+text-decoration: underline;
+}
+
+.sidecontentbox a.mailLink {
+font-size: smaller;
+color:#336699;
+text-decoration: none;
+float:right;
+}
+a.mailLink span {
+	display:inline-block !important;
+	position:relative;
+	top:3px;
+}
+a.mailLink:hover span {
+	background-position:-96px -96px;
+}
+.sidecontentbox .blabcontent {
+background-color: #FFFFFF;
+border:1px solid gray;
+font-size:13px;
+padding:5px;
+margin:0 0 9px;
+}
+.blabcontent {
+float:left;
+left:5px;
+padding:10px 0;
+position:relative;
+width:91%;
+}
+.sidecontentbox .author {
+display:block;
+color:#336699;
+text-decoration:none;
+}
+ul.flat-vert {
+text-align:left;
+margin:0;
+padding:0;
+}
+ul.flat-vert li {
+	list-style:none outside none;
+}
+.icon-menu li {
+margin:5px 0;
+}
+.blab-icons {
+	display:inline-block !important;
+	position:relative;
+	top:3px;
+}
+
+.titlebox .bottom {
+border-top:1px solid gray;
+font-size:80%;
+padding-top:2px;
+padding-left: 5px;
+margin-bottom:10px;
+}
+.titlebox h1 {
+font-family:arial,verdana,helvetica,sans-serif;
+font-size:20px;
+font-weight:bold;
+margin:0 0 5px;
+}
+.titlebox h1 a {
+	color: #000;
+	text-decoration: none;
+}
+.titlebox h1 a:hover {
+	text-decoration: underline;
+}
+.titlebox .age {
+padding-left: 8px;
+}
+.usertext-body {
+	font-size: small;
+	max-width:60em;
+	overflow:auto;
+	padding:0 9px;
+}
+.ismod {
+	font-size: small;
+	text-align: center;
+	font-style:italic;
+}
+#recentlyViewed a {
+	text-decoration: none;
+	color: #336699;
+}
+#recentlyViewed a:hover {
+	text-decoration: underline;
+	color: #414958;
+}
+.activeBlab {
+	color:orangered !important;
+}
+.usernameHeader {
+	text-align: center;
+	font-size: 20px;
+	font-weight: bold;
+	margin: 10px 0;
+}
+.ui-autocomplete-loading { background: white url('/images/ajax-loader.gif') right center no-repeat !important; }
+.help {
+	font:x-small verdana,arial,helvetica,sans-serif;
+}
+
+
+
+/* Promoted Link styles
+*/
+#promotedAndUpcoming {
+	background-color:#F8F8F8;
+	padding:5px 7em 10px 0;
+	border: 1px solid gray;
+}
+.help a.open {
+margin:-5px 5px 5px 0;
+position:absolute;
+right:0;
+}
+#promotedAndUpcoming .nextprev {
+margin:0;
+position:absolute;
+right:0;
+top:0;
+vertical-align:top;
+margin:9px 4px 0 0;
+}
+.nextprev {
+color:gray;
+font-size:larger;
+margin-top:10px;
+}
+#promotedAndUpcoming .nextprev img {
+margin:5px 5px 2px 0;
+border:1px solid #B3B3B3;
+}
+#promotedAndUpcoming .nextprev img:hover {
+cursor: pointer;
+border:1px solid #336699;
+}
+
+.pagination {
+width:80%;
+}
+
+/*
+ * Main Link Styles
+ */
+.link {
+margin:8px 0 15px 0;
+padding-left:3px;
+}
+.link .listNumber {
+color:#C6C6C6;
+float:left;
+font-family:arial;
+font-size:medium;
+margin-top:25px;
+text-align:center;
+}
+.listNumber {
+overflow:hidden;
+}
+
+.link .midcol {
+font-size:small;
+font-weight:bold;
+}
+.midcol {
+background:none repeat scroll 0 0 transparent;
+float:left;
+margin-left:7px;
+margin-right:4px;
+overflow:hidden;
+}
+.midcol a{
+cursor:pointer;
+display:block;
+margin:4px 0 2px 9px;
+outline:medium none;
+padding:0;
+width:16px;
+}
+.downVotes, .upVotes {
+display:none;
+}
+.link .score {
+color:#414958;
+text-align:center;
+}
+
+div.voted {
+	background-image: none !important;
+	color: Orangered !important;
+}
+div.downvoted
+	{
+	background-image: none !important;
+	color: #9494FF !important;	
+}
+
+
+.clrLeft {
+clear:left;
+height:0;
+}
+.thumbnail {
+float:left;
+margin:0 5px;
+overflow:hidden;
+text-decoration: none !important;
+width:70px;
+}
+.link .entry {
+position: relative;
+margin-left:3px;
+opacity:1;
+overflow:hidden;
+left: 3px;
+}
+.entry p {
+	margin-top: 0px;
+}
+.link .title {
+font-size:medium;
+font-weight:normal;
+margin-bottom:1px;
+}
+.link .title a{
+	color:blue;
+	text-decoration: none;
+}
+.link .title a:hover{
+	color:blue;
+}
+.link .title a:visited{
+	color:#551A8B;
+}
+.domain {
+color:#888888;
+font-size:x-small;
+}
+.domain a{
+color:#888888 !important;
+font-size:x-small;
+text-decoration: none;
+}
+.domain a:hover, .tagline a:hover{
+text-decoration: underline;
+}
+.tagline {
+color:#888888;
+font-size:x-small;
+margin-bottom: 0px;
+}
+.tagline a {
+color:#336699;
+text-decoration:none;
+}
+.entry .buttons {
+	font-size: x-small;
+	padding: 0;
+}
+.nsfw-stamp acronym {
+border:medium none;
+cursor: help;
+color:black;
+text-decoration:none;
+}
+.entry .buttons li.nsfw-stamp {
+background-color:white;
+border:1px solid #FF7777 !important;
+padding:0 4px;
+}
+.flat-list li {
+display:inline;
+}
+.flat-list {
+display:inline;
+list-style:none outside none;
+list-style-type:none;
+}
+.flat-list a{
+	text-decoration: none;
+	font-weight: bold;
+}
+.flat-list a:hover{
+	text-decoration: underline;
+}
+.flat-list form {
+display:inline;
+}
+.entry .buttons li + li {
+padding-left:4px;
+}
+.flat-list .first {
+}
+#dynamicLoginForm input label{
+	float: left;
+}
+#dynamicLoginForm label{
+	padding-right: 10px;
+}
+#dynamicLoginForm br{
+	clear: left;
+	line-height: 2em;
+}
+#dynamicLoginError, #usernameError, #passwordError {
+color: red;
+}
+.linkSortOptions {
+float:left;
+position: relative;
+top:-20px;
+font-size: 12px;
+}
+/*
+ * define styles for linkselect plug-in
+ */
+a.linkselectLink {
+	-khtml-user-select: none;
+	-o-user-select: none;
+	-moz-user-select: none;
+	-moz-user-focus: ignore; 
+	-moz-user-input: disabled; 
+	background:url("/images/droparrowgray.gif") no-repeat scroll right center transparent;
+	color:gray;
+	padding-right:21px;
+	position:relative;
+	text-decoration:underline;
+	}
+
+a.linkselectLink:hover, a.linkselectLinkFocus {
+	color: #000;
+	/*outline: 1px solid #565770;  prevent the link from being outlined */
+}
+
+a.linkselectLinkOpen {
+	outline: 0; /* prevent the link from being outlined */
+}
+
+span.linkselectDisabled {
+	filter: alpha(opacity=75);
+	-moz-opacity: 0.75;
+	opacity: 0.75;
+	-khtml-user-select: none;
+	-o-user-select: none;
+	-moz-user-select: none;
+	-moz-user-focus: ignore; 
+	-moz-user-input: disabled; 
+}
+
+.linkselectContainer {
+	position: absolute;
+	/* this is required to correctly calculate the width of the container */
+	left: 0; top: 0;
+	display: none;
+	/* 
+	 * move the box up 3 pixels so that the title bar aligns with original anchor text, this 
+	 * should be adjusted according to the padding/margin differences between the two links 
+	 */
+	margin-top: -3px;
+	max-width: 500px;
+	z-index: 50000;
+}
+
+.linkselectContainer .title {
+	/* background: #565770 url(/images/linkselect_bkgrd.png) no-repeat 100% 50% !important; */
+	color: #fff !important;
+	padding-right: 20px !important;
+	white-space: nowrap;
+	font-size: 11px !important;
+	font-weight: bold !important;
+	line-height: 11px !important;
+}
+
+.linkselectContainer .title span {
+	display: block;
+	padding: 3px 4px;
+}
+
+.linkselectContainer .scrollable {
+	width: auto;
+	background-color: white;
+	border: 1px solid #565770;
+	margin: 0;
+	padding: 0px;
+	font-size: 11px;
+	text-align: left;
+	overflow: auto;
+	max-height: 216px;
+	clear: both;
+}
+
+.linkselectContainer ul {
+	list-style-type: decimal !important;
+	margin: 0px;
+	padding: 0px;
+}
+
+.linkselectContainer ul li.selected { 
+	background-color: #cfcfea;
+}
+
+.linkselectContainer ul li.current { 
+	background-color: #a3a4bd;
+	color: #fff;
+}
+
+.linkselectContainer ul li {
+	display: block;
+	margin: 0;
+	padding: 2px;
+	font-size: 11px;
+	cursor: pointer;
+	-khtml-user-select: none;
+	-o-user-select: none;
+	-moz-user-select: none;
+	-moz-user-focus: ignore; 
+	-moz-user-input: disabled; 
+}
+/*
+ *  Comment Page Styles
+ */
+.singleLink {
+	margin-top: 10px;	
+}
+.expando {
+    clear: left;
+    margin: 5px 0px 0px 0px;
+}
+.usertext {
+    font-size: small;
+}
+.link .usertext .md {
+	-moz-border-radius: 7px 7px 7px 7px;
+	border-radius: 7px 7px 7px 7px;
+    background-color: #FAFAFA;
+    border: 1px solid #336699;
+    padding: 4px 5px;
+}
+.md {
+    font-size: small;
+    max-width: 60em;
+    overflow: auto;
+}
+.decoda_quote {
+		background: url("/images/quotes.gif") no-repeat scroll left top transparent;
+    color: #666666;
+    line-height: 1.5em;
+    margin: 0 0 0 30px;
+    padding: 10px 0 0 20px;
+	
+}
+.decoda_quoteAuthor {
+	margin-bottom: 5px;
+}
+.decoda_code {
+font-family: consolas, courier, monospace;
+white-space: pre-wrap;
+white-space: -moz-pre-wrap;
+white-space: -o-pre-wrap;
+background: #faf8f0;
+border: 1px solid #bebab0;
+padding: 0.5em 1em;
+display: block;
+}
+.decoda_list {
+	padding: 0 0 0 40px !important;
+}
+.commentsTitlebar {
+	border-bottom: 1px dotted gray;
+    margin: 10px 10px 10px 5px;
+    padding-bottom: 3px;
+	
+}
+.comment {
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+.comment .collapsed {
+    color: gray !important;
+    font-size: x-small;
+    font-style: italic;
+    padding-bottom: 10px;
+    padding-left: 17px;
+}
+.comment .collapsed a {
+    color: gray;
+}
+.commentsContent .child {
+    border-left: 1px dotted #DDDDFF;
+    margin-left: 50px;
+}
+.comment .author {
+    font-weight: bold;
+}
+.tagline .submitter {
+    color: #0055DF;
+}
+.tagline .moderator, .green {
+    color: #228822;
+}
+
+.collapsed .expand {
+	font-style: normal;
+    margin-left: 1px;
+    margin-right: 5px;
+    padding: 1px;
+    text-decoration: none;
+}
+.collapsed .expand:hover {
+    background-color: #336699;
+    color: white;
+    text-decoration: none;	
+}
+
+.tagline .expand {
+	font-style: normal;
+    margin-left: 1px;
+    margin-right: 5px;
+    padding: 1px;
+	
+}
+
+.tagline .expand:hover {
+    background-color: #336699;
+    color: white;
+    text-decoration: none;	
+}
+.comment .score {
+    font-size: x-small;
+}
+.dislikes, .likes {
+    display: none;
+}
+.likes .score.total {
+    display: inline;
+}
+.comment .midcol a {
+	cursor: pointer;
+    display: block;
+    margin-bottom: 4px;
+    outline: medium none;
+    padding: 0;
+    width: 16px;
+}
+.comment .entry {
+position: relative;
+margin-left:3px;
+opacity:1;
+overflow:hidden;
+left: 3px;
+}
+.comment .entry .md {
+	margin-top: 5px;
+	margin-bottom: -5px;
+	
+}
+.noncollapsed .author.submitter {
+    background-color: #5F99CF;
+     -moz-border-radius: 3px 3px 3px 3px;
+    border-radius: 3px 3px 3px 3px;
+    color: white;
+    padding: 0 2px;
+}
+.author.submitter:hover {
+    background-color: #4E7EAB;
+    text-decoration: none;
+}

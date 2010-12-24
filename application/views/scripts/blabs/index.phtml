@@ -1,0 +1,161 @@
+<style>
+<!--
+dt {
+font-size:0.9em;
+font-weight:bold;
+margin-bottom:5px;
+}
+dd {
+	background:none no-repeat left top;
+	padding-left: 40px;
+	width: 600px;
+}
+.blablink {
+	font-size: small; color: gray; font-weight:normal;
+}
+.blabinfo {
+	margin-bottom: 10px; color: gray; font-size: small;
+}
+.blabinfo a:link{
+	text-decoration: none;
+}
+.blabinfo a:hover {
+	text-decoration: underline;
+}
+.removebtn, .addbtn {
+	text-decoration: none !important;
+	font-size: small;
+	display:block;
+	padding-top: 5px;
+	width:197px;
+}
+.addbtn {
+	color: darkgreen !important;
+}
+.removebtn:hover, .addbtn:hover{
+	color: #336699;
+}
+.removebtn .ui-icon {
+	display:inline-block;
+	background-image:url("/images/iconsRed.png") !important;
+}
+.addbtn .ui-icon {
+	display:inline-block;
+	background-image:url("/images/iconsOrange.png") !important;
+}
+.options {
+	font-size: 11px;
+	margin: 10px 0;
+	text-align:center;
+}
+#toolbar {
+        padding: 10px 4px;
+}
+
+#listOptions {
+	padding-right: 10px;
+}
+#sortOptions {
+	padding-right: 10px;
+}
+#helpbtn {
+	margin-left: 5px;
+}
+-->
+</style>
+<script type="text/javascript">
+<!--
+$(function() {
+    $( "#listOptions" ).buttonset();
+    $("#help").dialog({ 
+        autoOpen: false,
+        modal: true,
+        width: 500,
+        buttons: {
+			Ok: function() {
+				$( this ).dialog( "close" );
+				}
+    		}
+        });
+
+    $("#helpbtn").button({ 
+        icons: {primary:'ui-icon-newwin' } 
+    	});
+    $("#helpbtn").click(function() {
+         $("#help").dialog('open');
+         });
+    
+    
+});
+//-->
+</script>
+<div style="text-align:center; font-size: 24px">More Blabs</div>
+
+<div class="options">
+<form action="<?php echo $_SERVER['REQUEST_URI']?>" method="GET">
+	<span id="toolbar" class="ui-widget-header ui-corner-all">
+
+		<span id="listOptions">
+			<input type="radio" value="10" id="radio1" name="list" <?php echo ($this->sortNumber == 10) ? 'checked="checked"' : ''; ?>/>
+			<label for="radio1">List 10</label>
+			<input type="radio" value="30" id="radio2" name="list" <?php echo ($this->sortNumber == 30) ? 'checked="checked"' : ''; ?>/>
+			<label for="radio2">List 30</label>
+			<input type="radio" value="all" id="radio3" name="list" <?php echo ($this->sortNumber == 50) ? 'checked="checked"' : ''; ?>/>
+			<label for="radio3">List All</label>
+		</span>
+		<span id="sortOptions">
+			<select name="sort" id="blabSorting">
+				<option value="alpha"<?php echo ($this->sortType == 'title ASC') ? ' selected="selected"' : ''; ?>>Sort alphabetically</option>
+				<option value="date"<?php echo ($this->sortType == 'date_created DESC') ? ' selected="selected"' : ''; ?>>Sort by date</option>
+				<?php if ($this->loggedIn) { ?>
+				<option value="frontpage"<?php echo ($this->sortType == 'frontpage') ? ' selected="selected"' : ''; ?>>Sort by frontpage status</option>
+				<?php } ?>
+			</select>
+		</span>
+			
+	    <input type="submit" value="Sort" />
+</span>
+<a id="helpbtn" href="#">What is this?</a>
+</form>
+</div>
+
+
+<dl>
+<?php 
+	/*
+	 * Properties of a blab:
+	protected $_userID;
+	protected $_title;
+	protected $_headTitle;
+	protected $_description;
+	protected $_dateCreated;
+	protected $_id;
+	*/
+foreach ($this->paginator as $blab):
+?>
+	<dt><a href="/b/<?php echo $this->escape($blab->title); ?>"><?php echo $this->escape($blab->headTitle); ?></a> <span class="blablink">(/b/<?php echo $this->escape($blab->title); ?>/)</span>
+	<?php echo $this->blabIsFrontPage($blab->id); ?></dt>
+		<dd>
+		<?php echo $blab->description; ?>
+		<div class="blabinfo">
+		Founded by <?php echo $this->displayName($blab->userID); ?> <?php echo $this->timeAgo(strtotime($blab->dateCreated));?> ago
+		</div>
+		</dd>
+<?php endforeach; ?>
+</dl>
+<?php echo $this->paginationControl($this->paginator, 'Sliding', 'pagination.phtml'); ?>
+
+<div id="help" title="What is this page?">
+	<p>
+		This page contains a list of every sub-category or 'blab' that exists on the site.
+	</p>
+	<p>
+		If you are logged in, you can specify which Blabs appear on the upper navigation bar by clicking on the "add to frontpage" link. 
+		<br /><br />
+		This will add the Blab to the front of your navigation bar so you can access it later. To customize the frontpage further, visit your profile (click on your username) and you can specify which blabs appears in what order. 
+	</p>
+	<p>
+	You can try sorting by front page status to see all of the blabs you are subscribed to show up first.
+	</p>
+
+</div>

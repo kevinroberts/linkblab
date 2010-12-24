@@ -1,0 +1,188 @@
+<?php 
+
+$this->headTitle('- Login');
+$this->headScript()->appendFile("/js/jquery.validate.js", $type = 'text/javascript', $attrs = array());
+$this->headScript()->appendFile("/js/jquery.uiforms.js", $type = 'text/javascript', $attrs = array());
+
+?>
+<script type="text/javascript">
+<!--
+$(document).ready(function(){
+	$('#ajaxLoader').hide();
+	$("#resetPasswordForm").dialog({
+		autoOpen: false,
+		height: 250,
+		width: 490,
+		modal: true,
+		buttons: {
+			'Reset Password': function() {
+				var bValid = true;
+				$('#resetErrors').html('');
+				var username = $('#resetusername').val();
+				var email = $('#resetemail').val();
+				var check = $('#check').val();
+				if (username.length == 0 || email.length == 0 || check.length == 0)
+				{
+					$('#resetErrors').html('Username / Email required');
+					bValid = false;
+				}
+				if (bValid) {
+
+					$.ajax( {
+						type : "POST",
+						url : "/auth/reset",
+						data : "user="+username+"&mail="+email+"&token="+check ,
+						beforeSend: function(request) {
+						$('#resetemail').attr('enabled', 'false');
+						$('#ajaxLoader').show();
+						},
+						success : function(data) {
+						$('#resetemail').attr('enabled', 'true');
+						$('#ajaxLoader').hide();
+						var response = jQuery.parseJSON( data );
+		    			if (response.isvalid == 'true')
+		    			{
+		    				$('#resetPasswordForm').dialog('close');
+		    				$('#loginForm').html("<strong>Success!</strong><br />" + response.message);
+		    			}
+		    			else
+		    			{
+		    				alert("Error: " + response.message);
+		    			}
+						}
+					
+					});
+					
+				   
+					
+				}
+			},
+			Cancel: function() {
+				$(this).dialog('close');
+			}
+		},
+		close: function() {
+			//allFields.val('').removeClass('ui-state-error');
+		}
+	});
+
+	$('#reset-user')
+	.click(function() {
+		$('#resetPasswordForm').dialog('open');
+	});
+
+
+	
+});
+
+//-->
+</script>
+<style type="text/css">
+<!--
+#loginForm {
+	width:450px;
+	margin:25px auto;
+}
+label {
+	cursor: pointer;
+}
+#resetErrors {
+	color: red;
+}
+
+-->
+</style>
+<?php
+ if (isset($_GET["msg"]))
+ {
+ 	if ($_GET["msg"] == 1)
+ 	{
+ 		echo '<div style="margin: 10px auto 0pt; padding-top: 7px; width: 600px;" class="ui-state-highlight ui-corner-all"> 
+					<p><span style="position: relative; float: left; left: 5px; top: -21px;" class="ui-icon ui-icon-info"></span>
+					<strong style="">Good bye!</strong> You\'ve successfully logged out. Come back again soon.</p>
+           </div>'.PHP_EOL;	
+ 	
+ 	}
+ 	if ($_GET["msg"] == 2)
+ 	{
+ 		echo '<div style="margin: 12px auto 0pt; padding: 0pt 0.7em;width: 600px;" class="ui-state-error ui-corner-all"> 
+					<p><span style="position: relative; left: -5px; float: left; top: 4px;" class="ui-icon ui-icon-alert"></span> 
+					<strong style="">Access Denied:</strong> You must be logged-in to view that page.</p>
+			</div>'.PHP_EOL;
+ 	}
+  	if ($_GET["msg"] == 3)
+ 	{
+ 		echo '<div style="margin: 12px auto 0pt; padding-top: 10px;width: 600px;" class="ui-state-highlight ui-corner-all">'.PHP_EOL. 
+					'<p><span style="position: relative; float: left; left: 5px; top: -24px;" class="ui-icon ui-icon-info"></span>'.PHP_EOL.
+					'<strong style="">Success!</strong> You\'ve successfully changed passwords. You can now login below.</p>'.PHP_EOL.
+           '</div>'.PHP_EOL;
+ 	}
+  	if ($_GET["msg"] == 4)
+ 	{
+ 		echo '<div style="margin: 12px auto 0pt; padding: 0pt 0.7em; width: 600px;" class="ui-state-error ui-corner-all"> 
+					<p><span style="position: relative; left: -5px; float: left; top: 4px;" class="ui-icon ui-icon-alert"></span> 
+					<strong style="">Access Denied:</strong> Your account has been locked and no longer has the privledges to access that page.</p>
+			</div>'.PHP_EOL;
+ 	}
+ 
+ }
+?>
+
+		
+		<form id="login" action="<?php echo $this->escape($this->form->getAction()); ?>" method="<?php echo $this->escape($this->form->getMethod());?>">
+			<fieldset id="loginForm" style="">
+			<legend>Please Login</legend>
+			<?php if ($this->form->isErrors()):?>
+			<?php foreach ($this->form->getErrors() as $errors):?>
+				<?php foreach ($errors as $message):?>
+					<div style="color:red"><span style="float: left; margin-right: 0.3em;position:relative; top:4px;" class="ui-icon ui-icon-alert"></span><?php echo $message;?></div>
+				<?php endforeach;?>
+			<?php endforeach;?>
+			
+			<?php foreach ($this->form->getErrorMessages() as $error):?>
+					<div style="color:red"><span style="float: left; margin-right: 0.3em;position:relative; top:4px;" class="ui-icon ui-icon-alert"></span><?php echo $error;?></div>
+			<?php endforeach;?>
+			
+			<?php endif; ?>
+			<p></p>
+			<div><label for="username">Username:</label></div>	
+			 <?php echo $this->form->username;?>
+			<p> </p>
+			<div><label for="password">Password:</label></div>
+			<?php echo $this->form->password;?>
+			<p> </p>
+			<div><?php echo $this->form->rememberMe;?> <label for="rememberMe">Remember me? </label> <label style="cursor: Text" class="tagline">(persistant login - don't use on public computers)</label></div>
+
+			<?php echo $this->form->captcha;?>
+			<br />
+			<p>
+			<input title="log me in" style="cursor:pointer;" type="submit" value="Login" /> or  <a title="sign up for a new account"  href="<?php echo $this->url(array('controller' => 'auth', 'action' => 'signup'), null, true);?>">Sign up</a>
+			 &nbsp;|&nbsp; <a id="reset-user" title="forgotten password? just reset it" href="#">reset my password</a>
+			<?php echo $this->form->___h;?>
+			
+			</p>
+			
+		  </fieldset>
+		</form>
+		
+		<div id="resetPasswordForm" title="Password Reset">
+			<form id="reset" action="/auth/reset" method="post">
+				<table>
+					<tr>
+						<td id="resetErrors"></td>
+						<td> </td>
+					</tr>
+					<tr>
+					<td><label>Your Username:</label></td>
+					<td><input id="resetusername" name="resetusername" type="text" /> </td>
+					</tr>
+					<tr>
+					<td><label>Your Email: </label></td>
+					<td><input id="resetemail" name="resetemail" type="text" /> 
+					<input type="hidden" id="check" name="check" value="<?php echo $this->token;?>" />
+					</td>
+					</tr>	
+					</table>	
+			</form>
+			<img id="ajaxLoader" style="float:right; padding-right: 205px; padding-top: 10px" src="/images/ajax-loader.gif" />
+		</div>

@@ -1,0 +1,107 @@
+<?php
+$isCommentPage = (isset($this->commentPage)) ? true : false;
+
+if ($isCommentPage) {
+$this->headTitle()->prepend($this->displayLink($this->commentPage).' : '. $this->category.' ');
+ // view helper to build comment page here
+ echo $this->buildCommentPage($this->commentPage);
+}
+else {
+	
+$this->headTitle(' | '.$this->category); 
+$addJS = isset($this->addJS) ? $this->addJS.PHP_EOL : '';
+$this->headScript()->appendFile("/js/tooltip.jquery.js", $type = 'text/javascript', $attrs = array());
+ 	    	$script = <<<EOT
+$(document).ready(function(){
+$addJS
+	$('.mailLink').tooltip();
+});
+EOT;
+ 			
+ 			$this->headScript()->appendScript($script, $type = 'text/javascript', $attrs = array());
+ ?>
+<br />
+<?php 
+$noLinks = isset($this->noLinks) ? $this->noLinks : false;
+if (!$noLinks) {	
+?>
+<div id="linkList">
+<?php 
+	/*
+	 * Properties of a link:
+	protected $_linkurl;
+	protected $_domain;
+	protected $_thumbnail;
+	protected $_upvotes;
+	protected $_downvotes;
+	protected $_votes;
+	protected $_title;
+	protected $_description;
+	protected $_dateCreated;
+	protected $_blabID;
+	protected $_userID;
+	protected $_isNsfw;
+	protected $_isSelf;
+	protected $_timesReported;
+	protected $_controversy;
+	protected $_id;
+	*/
+$i = 1;
+if ($this->pagenumber > 1) {
+$i = 1 + (25 * ($this->pagenumber -1));
+}
+
+foreach ($this->paginator as $link):
+$linkBlab = $this->displayBlab($link->blabID, 1); // returns an array with [0] = blab title, [1] = anchor link to blab
+$linkURL = ($link->isSelf == 1) ? '/b/'.$linkBlab[0].'/comments/'.$link->id : $link->linkurl;
+?>
+<div class="link">
+<span style="width: 2.2ex;" class="listNumber"><?php echo $i; ?></span>	
+		<?php if ($this->loggedIn) {?>
+			<?php echo $this->linkBuilder($link->id, $link->downvotes, $link->votes, $link->upvotes); ?>
+		<?php } else {?>
+		<div style="width: 5ex;" class="midcol unvoted">
+			<a id="link<?php echo $link->id; ?>-up" class="ui-state-default ui-corner-all" title="vote this link up" onclick="voteAction($(this), 1, <?php echo $link->id; ?>)"><span class="ui-icon ui-icon-circle-arrow-n"></span></a>
+			<div class="score downVotes"><?php echo $link->downvotes; ?></div>
+			<div class="score unVoted"><?php echo $link->votes; ?></div>
+			<div class="score upVotes"><?php echo $link->upvotes; ?></div>
+			<a id="link<?php echo $link->id; ?>-down" class="ui-state-default ui-corner-all" title="vote this link down" onclick="voteAction($(this), 2, <?php echo $link->id; ?>)"><span class="ui-icon ui-icon-circle-arrow-s"></span></a>
+		</div>
+		<?php } if (!(is_null($link->thumbnail))) {?>
+			<a href="<?php echo $linkURL; ?>" class="thumbnail">&#8203;<img alt="" src="<?php echo $link->thumbnail; ?>" /></a>
+		<?php }?>
+		<div class="entry">
+			<p class="title"><a href="<?php echo $linkURL; ?>" class="title loggedin"><?php echo $link->title; ?></a> 
+			<span<?php echo ($link->isSelf == 1) ? ' style="display:none;"' : '' ?> class="domain">(<a title="see more links from this domain" href="/domain/<?php echo $link->domain; ?>/"><?php echo $link->domain; ?></a>)</span></p>	
+			<p class="tagline">submitted <?php echo $this->timeAgo(strtotime($link->dateCreated));?> ago by <?php echo $this->displayName($link->userID, "autho user-".$link->userID); ?><span class="userattrs"></span> to <?php echo $linkBlab[1]; ?></p>
+			<ul class="flat-list buttons">
+				<?php if ($link->isNsfw == 1) {?>
+				<li class="ui-corner-all nsfw-stamp stamp">
+				<acronym title="Adult content: Not Safe For Work">NSFW</acronym></li>
+				<?php } ?>
+				<li class="first">
+					<a target="_parent" href="/b/<?php echo $linkBlab[0].'/comments/'.$link->id; ?>" class="comments"><?php echo $this->displayHowManyComments($link->id); ?> comments</a>
+				</li>
+				<li>
+					<?php echo $this->buildReportButton($link->id); ?>
+				</li>
+			</ul>
+		</div>
+</div>
+<div class="clrLeft"></div>
+<?php 
+$i++;
+endforeach; ?>
+<?php echo $this->paginationControl($this->paginator, 'Sliding', 'pagination.phtml'); ?>
+</div>
+<?php } else {
+	
+			echo '<div style="margin: 10px auto 0pt; width: 600px; padding: 10px;" class="ui-state-highlight ui-corner-all"> 
+					<p>
+					<strong style="">It&rsquo;s quiet...too quiet...</strong> <br />There are no links to display here. Why don&rsquo;t you add some?</p>
+           </div>'.PHP_EOL;
+	
+}
+
+}
+?>
