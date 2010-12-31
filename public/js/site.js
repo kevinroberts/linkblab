@@ -151,8 +151,7 @@ function addClass(ele,cls) {
 	    			}
 	    			else if (response.error == 'login')
 	    			{
-	    				$('#dynamicLoginError').html("You must be logged in to vote! <a href=\"/auth/signup\">sign up</a>");
-	    				$('#dynamicLogin').dialog('open');
+	    				showLogin('<span style="font-size:small">no account yet?: <a href="/auth/signup">sign up!</a></span>');
 	    			}
 	    			else {
 	    				alert("Server AJAX error : " + response.message);    	
@@ -199,8 +198,7 @@ function addClass(ele,cls) {
 		    			}
 		    			else if (response.error == 'login')
 		    			{
-		    				$('#dynamicLoginError').html("You must be logged in to vote! <a href=\"/auth/signup\">sign up</a>");
-		    				$('#dynamicLogin').dialog('open');
+		    				showLogin('<span style="font-size:small">no account yet?: <a href="/auth/signup">sign up!</a></span>');
 		    			}
 		    			else {
 		    				alert("Server AJAX error : " + response.message);
@@ -282,6 +280,15 @@ function addClass(ele,cls) {
 	 var childComments = voteBtns.parent(".comment").next().next(".child");
 	 childComments.show();
 	 return false;
+ }
+ 
+ function showLogin(msg) {
+	 	if (msg != null || msg != '') {
+			$('#dynamicLoginError').html(msg);
+	 	}
+		$('#dynamicLogin').dialog('open');
+		$('#username').focus();
+		return false;
  }
   
   $(document).ready(function() {

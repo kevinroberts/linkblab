@@ -774,7 +774,7 @@ span.linkselectDisabled {
     overflow: auto;
 }
 .decoda_quote {
-		background: url("/images/quotes.png") no-repeat scroll left top transparent;
+	background: url("/images/quotes.png") no-repeat scroll left top transparent;
     color: #666666;
     line-height: 1.5em;
     margin: 0 0 0 30px;
@@ -783,6 +783,7 @@ span.linkselectDisabled {
 }
 .decoda_quoteAuthor {
 	margin-bottom: 5px;
+	font-style: italic;
 }
 .decoda_code {
 font-family: consolas, courier, monospace;
@@ -900,4 +901,8 @@ left: 3px;
 .usertext-edit textarea {
     height: 100px;
     width: 500px;
+}
+.ui-resizable-se {
+    bottom: 17px;
+    right: 11px;
 }

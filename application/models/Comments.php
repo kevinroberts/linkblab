@@ -2,7 +2,7 @@
 
 class Application_Model_Comments
 {
-	public $blabName, $content, $count;
+	public $blabName, $content, $count, $loggedIn, $user;
 	
 	public function __construct($currentBlab = 'linkblab.com')
 	{
@@ -11,6 +11,15 @@ class Application_Model_Comments
 		/*if (is_array($options)) {
 			$this->setOptions($options);
 		}*/
+		$auth = Zend_Auth::getInstance();
+        if ($auth->hasIdentity()) {
+        	$this->loggedIn = true;
+        	$this->user = $auth->getIdentity();
+        }
+        else
+        {
+        	$this->loggedIn = false;
+        }
 	}
 	
 	private function displayName($userID, $CSSclass = '') {
