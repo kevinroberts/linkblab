@@ -331,6 +331,8 @@ function addClass(ele,cls) {
 				function() { $(this).children('span').removeClass(' ui-icon-circle-plus'); $(this).children('span').addClass('ui-icon-plus'); }
 			);
 		
+		$(".usertext-edit textarea").resizable();
+		
 		var username = $( "#username" ),
 		password = $( "#password" ),
 		allFields = $( [] ).add( username ).add( password ),

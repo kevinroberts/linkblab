@@ -75,8 +75,13 @@ class Application_Model_Comments
 		if (!is_array($comment))
 			return false;
 		$blab = $this->blabName;
-		$id = $comment["id"]; $com = strip_tags($comment["comment"]); $up_votes = $comment["up_votes"];
-		$down_votes = $comment["down_votes"]; $votes = $comment["votes"]; $user_id = $comment["user_id"];
+		$id = $comment["id"]; 
+		$com = strip_tags($comment["comment"]); 
+		$up_votes = $comment["up_votes"];
+		$down_votes = $comment["down_votes"];
+		$votes = $comment["votes"];
+		$user_id = $comment["user_id"];
+		
 		$userName = $this->displayName($user_id, 'author submitter');
 		$utils = new Application_Model_Utils();
 		$votes = ($votes == 1) ? $votes.' point' : $votes.' points'; 
