@@ -27,10 +27,10 @@ class Zend_View_Helper_LoggedInAs extends Zend_View_Helper_Abstract {
             $prefUrl = '/user/edit/username/'.$username;
             if ($role == "administrator")
             {
-            return 'Welcome <a title="go to your account activity" href="/user/'.$username.'">' . $username .  '</a> | <a href="'.$prefUrl.'">preferences</a> | <a href="'.$logoutUrl.'">Logout</a> | <a href="/auth/admin">Site Admin</a>';
+            return 'Welcome <a id="loginLink" name="logged_in" title="go to your account activity" href="/user/'.$username.'">' . $username .  '</a> | <a href="'.$prefUrl.'">preferences</a> | <a href="'.$logoutUrl.'">Logout</a> | <a href="/auth/admin">Site Admin</a>';
             }
             else {
-            return 'Welcome <a title="go to your account activity" href="/user/'.$username.'">' . $username .  '</a> | <a title="go to your account preferences" href="'.$prefUrl.'">preferences</a>  | <a href="'.$logoutUrl.'">Logout</a> ';
+            return 'Welcome <a id="loginLink" name="logged_in" title="go to your account activity" href="/user/'.$username.'">' . $username .  '</a> | <a title="go to your account preferences" href="'.$prefUrl.'">preferences</a>  | <a href="'.$logoutUrl.'">Logout</a> ';
             }
            } 
 
@@ -41,7 +41,7 @@ class Zend_View_Helper_LoggedInAs extends Zend_View_Helper_Abstract {
             return '';
         }
         $loginUrl = "/auth/login";
-        return 'Welcome <a title="register for an account" href="/auth/signup">Guest</a> | <a href="'.$loginUrl.'">Login</a>  | <a href="/auth/signup">Register</a> ';
+        return 'Welcome <a id="loginLink" name="logged_out" title="register for an account" href="/auth/signup">Guest</a> | <a href="'.$loginUrl.'">Login</a>  | <a href="/auth/signup">Register</a> ';
 		
 	}
 	

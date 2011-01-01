@@ -371,15 +371,19 @@ class Application_Model_Utils
 		return nl2br($clean);
 	}
 	
-	public function docodaOutput ($input, $stripTags = true, $allowedTags = array('b', 'i', 'u', 'align', 'color', 'font', 'sub', 'sup', 'code', 'url', 'quote', 'list', 'email' )) {
+	public function docodaOutput ($input, $stripTags = true, $allowedTags = array('b', 'i', 'u', 'align', 'color', 'font', 'sub', 'sup', 'code', 'url', 'quote', 'list', 'email', 'li', 'decode', 'spoiler')) {
 				if ($stripTags)
 				$d = strip_tags($input);
 				else
 				$d = $input;
 								
 				$code = new Decoda($d, $allowedTags);
-				$code->useShorthand(false);
-				$code->makeClickable(false);
+				$options = array(
+					"clickable" => false,
+					"censor" => false,
+					"jquery" => true
+				);
+				$code->configure($options);
 				return $code->parse(true);		
 	}
 	
@@ -388,4 +392,3 @@ class Application_Model_Utils
 
 	
 }
-

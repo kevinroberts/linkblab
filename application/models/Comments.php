@@ -97,7 +97,7 @@ class Application_Model_Comments
 		$numberOfChildren = $this->countChildCommments($comment["id"]);
 		$numberOfChildren = ($numberOfChildren == 1) ? $numberOfChildren.' child' : $numberOfChildren.' children'; 
 		
-		$comm = $utils->docodaOutput($com,false,array('b', 'i', 'u', 'align', 'color', 'font', 'sub', 'sup', 'url', 'quote', 'list', 'email' ));
+		$comm = $utils->docodaOutput($com,false,array('b', 'i', 'u', 'align', 'color', 'font', 'sub', 'sup', 'url', 'quote', 'list', 'email', 'spoiler', 'li'));
 		$comm = str_replace(PHP_EOL, "", $comm);
 		$comm = str_replace("<br /><br />", "<br />", $comm);
 		

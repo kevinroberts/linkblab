@@ -13,7 +13,9 @@
 // Constants
 define('DECODA', dirname(__FILE__) . DIRECTORY_SEPARATOR);
 define('DECODA_GESHI', DECODA .'geshi'. DIRECTORY_SEPARATOR);
-define('DECODA_EMOTICONS', DECODA .'emoticons'. DIRECTORY_SEPARATOR);
+//define('DECODA_EMOTICONS', DECODA .'emoticons'. DIRECTORY_SEPARATOR);
+define('DECODA_EMOTICONS', "http://" . $_SERVER['SERVER_NAME'] .'/images/emoticons'. DIRECTORY_SEPARATOR);
+
 define('DECODA_CONFIG', DECODA .'config'. DIRECTORY_SEPARATOR);
 
 // Includes
@@ -814,10 +816,12 @@ class Decoda {
 			$click .= "this.innerHTML = (document.getElementById('spoilerContent-". $id ."').style.display == 'block' ? '". $hideText ."' : '". $showText ."');";
 		}
 		
-        $html  = '<div class="decoda-spoiler" id="spoiler-'. $id .'">';
+        /*$html  = '<div class="decoda-spoiler" id="spoiler-'. $id .'">';
         $html .= '<button class="decoda-spoilerButton" type="button" onclick="'. $click .'">'. $showText .'</button>';
         $html .= '<div class="decoda-spoilerBody" id="spoilerContent-'. $id .'" style="display: none">'. $matches[1] .'</div>';
         $html .= '</div>';
+        */
+        $html = '<a href="/spoiler" class="decoda-spoilerBody" id="spoilerContent-'. $id .'">'. $matches[1] .'</a>';
 
         $this->__counters['spoiler']++;
 

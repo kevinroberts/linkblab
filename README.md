@@ -15,3 +15,4 @@ TODO
 - Render links for blab specific pages
 - Putting "NSFW" in some subblabs automatically (toggle in blab settings?).
 - alt. Name for karma -- cred? 
+- change line 17 of decoda.php on live site

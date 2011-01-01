@@ -116,8 +116,22 @@ function addClass(ele,cls) {
 	  }
   }
   
+  function isLoggedIn() {
+	  var loginTxt = $("#loginLink").attr( "name" );
+	  if (loginTxt == 'logged_out')
+		return false;
+	  else
+		return true; 
+  }
+  
   function voteAction(elm, type, number) {
-		if(type == 1) 
+	   
+	  if (!isLoggedIn()) {
+		  showLogin('You must be logged in to vote! <span style="font-size:small">no account yet?: <a href="/auth/signup">sign up!</a></span>');
+		  return false;
+	  }
+	   
+	   if(type == 1) 
 		{
 	  // this is an up vote:
 		    // check if this link has not been up voted on yet
@@ -151,7 +165,7 @@ function addClass(ele,cls) {
 	    			}
 	    			else if (response.error == 'login')
 	    			{
-	    				showLogin('<span style="font-size:small">no account yet?: <a href="/auth/signup">sign up!</a></span>');
+	    				showLogin('You must be logged in to vote! <span style="font-size:small">no account yet?: <a href="/auth/signup">sign up!</a></span>');
 	    			}
 	    			else {
 	    				alert("Server AJAX error : " + response.message);    	
@@ -198,7 +212,7 @@ function addClass(ele,cls) {
 		    			}
 		    			else if (response.error == 'login')
 		    			{
-		    				showLogin('<span style="font-size:small">no account yet?: <a href="/auth/signup">sign up!</a></span>');
+		    				showLogin('You must be logged in to vote! <span style="font-size:small">no account yet?: <a href="/auth/signup">sign up!</a></span>');
 		    			}
 		    			else {
 		    				alert("Server AJAX error : " + response.message);
@@ -294,7 +308,12 @@ function addClass(ele,cls) {
   $(document).ready(function() {
 	 
 	  $('#search').defaultValue({'value':' Search Linkblab'});
-		
+	  
+	  $(".decoda-spoilerBody").click(function(event) {
+		  event.preventDefault();
+		  if( window.console ) console.log("Spoiler Clicked");
+		});
+
 		$("#sortOptionsDropdown").linkselect({
 			change: function(li, value, text){
 				var g = value.split("|");

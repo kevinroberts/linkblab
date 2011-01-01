@@ -773,7 +773,7 @@ span.linkselectDisabled {
     max-width: 60em;
     overflow: auto;
 }
-.decoda_quote {
+.decoda-quote {
 	background: url("/images/quotes.png") no-repeat scroll left top transparent;
     color: #666666;
     line-height: 1.5em;
@@ -781,11 +781,11 @@ span.linkselectDisabled {
     padding: 10px 0 0 20px;
 	
 }
-.decoda_quoteAuthor {
+.decoda-quoteAuthor {
 	margin-bottom: 5px;
 	font-style: italic;
 }
-.decoda_code {
+.decoda-code {
 font-family: consolas, courier, monospace;
 white-space: pre-wrap;
 white-space: -moz-pre-wrap;
@@ -795,7 +795,8 @@ border: 1px solid #bebab0;
 padding: 0.5em 1em;
 display: block;
 }
-.decoda_list {
+
+.decoda-list {
 	padding: 0 0 0 40px !important;
 }
 .commentsTitlebar {
@@ -905,4 +906,14 @@ left: 3px;
 .ui-resizable-se {
     bottom: 17px;
     right: 11px;
+}
+a[href$="/spoiler"] {
+    background: none repeat scroll 0 0 #000000 !important;
+    color: #000000 !important;
+}
+a[href$="/spoiler"]:hover {
+    color: #FFFFFF !important;
+}
+.decoda-spoilerBody {
+	padding: 1px;
 }
