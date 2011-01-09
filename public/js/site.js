@@ -127,7 +127,7 @@ function addClass(ele,cls) {
   function voteAction(elm, type, number) {
 	   
 	  if (!isLoggedIn()) {
-		  showLogin('You must be logged in to vote! <span style="font-size:small">no account yet?: <a href="/auth/signup">sign up!</a></span>');
+		  showLogin('You must be logged in to vote. <span style="font-size:small">no account yet?: <a href="/auth/signup">sign up!</a></span>');
 		  return false;
 	  }
 	   
@@ -160,12 +160,12 @@ function addClass(ele,cls) {
 	    				  
 	    				  var points = upPoints - downPoints;
 
-	    				  // Animate the upVote!:
+	    				  // Animate the upvote.:
 	    				  animateVote(elm, type, points);
 	    			}
 	    			else if (response.error == 'login')
 	    			{
-	    				showLogin('You must be logged in to vote! <span style="font-size:small">no account yet?: <a href="/auth/signup">sign up!</a></span>');
+	    				showLogin('You must be logged in to vote. <span style="font-size:small">no account yet?: <a href="/auth/signup">sign up!</a></span>');
 	    			}
 	    			else {
 	    				alert("Server AJAX error : " + response.message);    	
@@ -207,12 +207,12 @@ function addClass(ele,cls) {
 		    				  
 		    				  var points = upPoints - downPoints;
 		    				  
-		    				  // Animate the downVote!:
+		    				  // Animate the downvote.:
 		    				  animateVote(elm, type, points);
 		    			}
 		    			else if (response.error == 'login')
 		    			{
-		    				showLogin('You must be logged in to vote! <span style="font-size:small">no account yet?: <a href="/auth/signup">sign up!</a></span>');
+		    				showLogin('You must be logged in to vote. <span style="font-size:small">no account yet?: <a href="/auth/signup">sign up!</a></span>');
 		    			}
 		    			else {
 		    				alert("Server AJAX error : " + response.message);
@@ -303,6 +303,87 @@ function addClass(ele,cls) {
 		$('#dynamicLogin').dialog('open');
 		$('#username').focus();
 		return false;
+ }
+ 
+ function post_comment(comForm, type) {
+	 var err = comForm.find(".form_errors");
+	 var status = comForm.find(".status");
+	 var valid = true;
+	 err.hide();
+	 // If this a new parent comment
+	 if (type == 'parent') {
+		 	  var values = comForm.serializeArray();
+		      jQuery.each(values, function(i, field){
+		          if (field.name == "text") {
+		        	  if (field.value == '') {
+		        		  err.text('Woah there buddy! Enter some text first');
+		        		  err.show(); 
+		        		  valid = false;
+		        	  }
+		        	 
+		          }
+		          if (field.name == "link_id") {
+		        	  if (field.value == '' || isNaN(field.value) ) {
+		        		  err.text('Invalid comment. Try again');
+		        		  err.show(); 
+		        		  valid = false;
+		        	  }
+		          }
+		        });
+		      // Comment valid -- now post it
+		      if (valid) {
+		    	  status.show();
+					$.ajax( {
+						type : "POST",
+						url : "/blabs/comment",
+						data : comForm.serialize() + "&type="+type,
+						success : function(data) {
+						var response = jQuery.parseJSON( data );
+		    			if (response.success == true)
+		    			{
+		    				err.text(response.message);
+		    				err.show();
+		    				comForm.find("textarea").val('');
+		    				// Insert this new comment on top of all other comments:
+		    				comForm.after('<div class="comment" id="comment-'+response.commentID+'">'+
+		    						response.orig+'</div>');
+		    			}
+		    			else if (response.error == 'login')
+		    			{
+		    				showLogin('You must be logged in to comment. <span style="font-size:small">no account yet?: <a href="/auth/signup">sign up!</a></span>');
+		    			}
+		    			else {
+		    				err.text("Server AJAX error : " + response.message);
+		    				err.show();
+		    			}
+		    			status.hide();
+						}
+					
+					});
+		    	  
+		    	  
+		      }
+		 		 
+	 }
+	 return false;
+	 
+	 
+ }
+ 
+ function hideForm (ele) {
+	 var form = ele.next("form");
+	 if (ele.hasClass( "collapsedForm" )) {
+		 form.slideDown();
+		 ele.text('[- Add Comment]');
+		 ele.removeClass("collapsedForm");
+	 }
+	 else {
+		 form.slideUp();
+		 ele.text('[+ Add Comment]');
+		 ele.addClass("collapsedForm");
+	 }
+	 ele.blur();
+	 return false;
  }
   
   $(document).ready(function() {

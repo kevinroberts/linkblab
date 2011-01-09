@@ -105,12 +105,36 @@ EOT;
 			
 		
 		$content .= '</div><!-- end link --> <div class="clrLeft"></div>';
-	    
+		
+		// If User is logged in Output New Comment Form:
+		$commentForm = '';
+		if ($loggedIn) {
+			$commentForm = '
+			<a href="#" class="hideForm" onclick="return hideForm($(this))" title="collapse this form">[- Add Comment]</a>
+			<form id="form-'.$linkID.'" method="post" onsubmit="return post_comment($(this), \'parent\')" class="usertext cloneable" action="">
+				<div style="" class="usertext-edit">
+					<div>
+						<textarea name="text" cols="1" rows="1"></textarea>
+					</div>
+					<div class="bottom-area">
+					<div style="display:none;" class="form_errors"></div>
+						<div class="usertext-buttons">
+						    <input type="hidden" value="'.$linkID.'" name="link_id">
+							<button class="save" type="submit">submit</button>
+							<span class="status" style="display: none;">submitting...</span>
+						</div>
+					</div>
+				</div>
+			</form>
+			';
+			
+		}
 		// If there are comments associated with this link:	
 		if ($numberComments > 0) {
 		$howManyTitle = ($numberComments > 1) ? 'All '.$numberComments.' Comments' : "All Comments";
 		$cModel = new Application_Model_Comments($linkBlab[0]);
 		$commentContent = $cModel->getAllComments($linkID);
+
 		/*
 		 *  Build Comment HTML
 		 */
@@ -119,7 +143,7 @@ EOT;
 	<div class="commentsTitlebar">
 		$howManyTitle
 	</div>
-	
+	$commentForm
 	$commentContent
 	
 </div>
@@ -131,6 +155,7 @@ $content .= <<<EOT
 	<div class="commentsTitlebar">
 		no comments (yet)
 	</div>
+	$commentForm
 <div style="margin: 15px 5px 30px 10px; color: red;">there doesn't seem to be anything here...</div>
 
 </div>

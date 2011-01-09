@@ -3,6 +3,8 @@ $isCommentPage = (isset($this->commentPage)) ? true : false;
 
 if ($isCommentPage) {
 $this->headTitle()->prepend($this->displayLink($this->commentPage).' : '. $this->category.' ');
+$this->headScript()->appendFile("/js/tooltip.jquery.js", $type = 'text/javascript', $attrs = array());
+ $this->headScript()->appendScript("$(document).ready(function(){	$('.mailLink').tooltip(); });", $type = 'text/javascript', $attrs = array());
  // view helper to build comment page here
  echo $this->buildCommentPage($this->commentPage);
 }
@@ -73,7 +75,7 @@ $linkURL = ($link->isSelf == 1) ? '/b/'.$linkBlab[0].'/comments/'.$link->id : $l
 		<div class="entry">
 			<p class="title"><a href="<?php echo $linkURL; ?>" class="title loggedin"><?php echo $link->title; ?></a> 
 			<span<?php echo ($link->isSelf == 1) ? ' style="display:none;"' : '' ?> class="domain">(<a title="see more links from this domain" href="/domain/<?php echo $link->domain; ?>/"><?php echo $link->domain; ?></a>)</span></p>	
-			<p class="tagline">submitted <?php echo $this->timeAgo(strtotime($link->dateCreated));?> ago by <?php echo $this->displayName($link->userID, "autho user-".$link->userID); ?><span class="userattrs"></span> to <?php echo $linkBlab[1]; ?></p>
+			<p class="tagline">submitted <?php echo $this->timeAgo(strtotime($link->dateCreated));?> by <?php echo $this->displayName($link->userID, "autho user-".$link->userID); ?><span class="userattrs"></span> to <?php echo $linkBlab[1]; ?></p>
 			<ul class="flat-list buttons">
 				<?php if ($link->isNsfw == 1) {?>
 				<li class="ui-corner-all nsfw-stamp stamp">

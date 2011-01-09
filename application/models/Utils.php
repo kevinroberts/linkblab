@@ -21,7 +21,7 @@ class Application_Model_Utils
 	 * Change "$levels = 2;" to whatever you want. A value of 1 will limit to only one number in the result 
 	 * ("3 days ago"). A value of 3 would result in up to three ("3 days 1 hour 2 minutes ago") 
 	 */
- public function compare_dates($date1, $date2 = NULL, $levels = 2 ) {
+ public function compare_dates($date1, $date2 = null, $levels = 1 ) {
     $blocks = array(
         array('name'=>'year','amount'    =>    60*60*24*365    ),
         array('name'=>'month','amount'    =>    60*60*24*31    ),
@@ -36,7 +36,14 @@ class Application_Model_Utils
     	$date2 = time();
     }
     $diff = abs($date1-$date2);
-   
+       if ($diff <= 60) { // if this is under a minute
+		if ($diff <= 1) {
+			return '1 second ago';
+		}
+		else
+    	return $diff.' seconds ago';
+    }
+    
     $current_level = 1;
     $result = array();
     foreach($blocks as $block)
@@ -56,7 +63,11 @@ class Application_Model_Utils
 	
 	public function TimeSince($original) // $original should be the original date and time in Unix format
 {
-    // Common time periods as an array of arrays
+    //**** use other function ************
+    return $this->compare_dates($original);
+	// ************************************
+	
+	// Common time periods as an array of arrays
     $periods = array(
         array(60 * 60 * 24 * 365 , 'year'),
         array(60 * 60 * 24 * 30 , 'month'),

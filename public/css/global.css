@@ -916,4 +916,33 @@ a[href$="/spoiler"]:hover {
 }
 .decoda-spoilerBody {
 	padding: 1px;
+	display: block;
+    max-width: 500px;
+}
+.usertext .bottom-area {
+    overflow: hidden;
+    width: 100%;
+    margin-bottom: 10px;
+}
+.usertext .bottom-area .status {
+	color: red;
+}
+.form_errors {
+	color: red;
+	margin-bottom: 5px;
+}
+.hideForm {
+    font-style: normal;
+	font-size: 8pt;
+    padding: 1px;
+    text-decoration: none !important;
+}
+.hideForm:hover {
+    background-color: #336699;
+    color: white;
+    text-decoration: none;	
+}
+.collapsedForm {
+	display: inline-block;
+	margin-bottom: 10px;
 }

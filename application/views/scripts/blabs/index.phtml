@@ -138,7 +138,7 @@ foreach ($this->paginator as $blab):
 		<dd>
 		<?php echo $blab->description; ?>
 		<div class="blabinfo">
-		Founded by <?php echo $this->displayName($blab->userID); ?> <?php echo $this->timeAgo(strtotime($blab->dateCreated));?> ago
+		Founded by <?php echo $this->displayName($blab->userID); ?> <?php echo $this->timeAgo(strtotime($blab->dateCreated));?> 
 		</div>
 		</dd>
 <?php endforeach; ?>

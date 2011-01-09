@@ -14,3 +14,4 @@ sad         = :( :[ ;( ;[ :sad:
 tongue      = :P :tongue:
 what        = :o :? :what:
 wink        = ;) ;] :wink:
+brb			= :brb:

@@ -60,7 +60,7 @@ EOT;
 <h1><a href="/b/$user">$user</a></h1>
 <div class="bottom">
 Member for <span class="age">$created</span><br />
-Last login <span class="age">$lastLogin ago</span>
+Last login <span class="age">$lastLogin </span>
 </div>
 </div>
 EOT;
@@ -110,7 +110,7 @@ EOT;
 $description
 </div>
 <div class="bottom">
-created by <a href="/user/$founder">$founder</a><span class="userattrs"></span><span class="age">$founded ago</span>
+created by <a href="/user/$founder">$founder</a><span class="userattrs"></span><span class="age">$founded</span>
 </div>
 </div>
 <div class="sidecontentbox ">
