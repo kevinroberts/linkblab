@@ -343,17 +343,19 @@ function addClass(ele,cls) {
 		    			{
 		    				err.text(response.message);
 		    				err.show();
-		    				comForm.find("textarea").val('');
+		    				var texarea = comForm.find("textarea");
+		    				
 		    				// Insert this new comment on top of all other comments:
 		    				comForm.after('<div class="comment" id="comment-'+response.commentID+'">'+
-		    						response.orig+'</div>');
+		    						texarea.val()+'</div>');
+		    				texarea.val('');
 		    			}
 		    			else if (response.error == 'login')
 		    			{
 		    				showLogin('You must be logged in to comment. <span style="font-size:small">no account yet?: <a href="/auth/signup">sign up!</a></span>');
 		    			}
 		    			else {
-		    				err.text("Server AJAX error : " + response.message);
+		    				err.text("Error: " + response.message);
 		    				err.show();
 		    			}
 		    			status.hide();

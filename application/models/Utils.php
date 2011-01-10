@@ -382,7 +382,10 @@ class Application_Model_Utils
 		return nl2br($clean);
 	}
 	
-	public function docodaOutput ($input, $stripTags = true, $allowedTags = array('b', 'i', 'u', 'align', 'color', 'font', 'sub', 'sup', 'code', 'url', 'quote', 'list', 'email', 'li', 'decode', 'spoiler')) {
+	public function docodaOutput ($input, $stripTags = true, $allowedTags = NULL) {
+				if (is_null($allowedTags)) {
+					$allowedTags = preg_split("/[\s,]+/", DECODAPOST);
+				}
 				if ($stripTags)
 				$d = strip_tags($input);
 				else

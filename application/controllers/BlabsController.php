@@ -734,6 +734,16 @@ class BlabsController extends Zend_Controller_Action
      $userID = $auth->getIdentity()->id;
      
      if (isset($data['text']) && isset($data['link_id']) && isset($data['type'])) {
+     	if (strlen($data['text']) > 10000) {
+     		// this comment is too long
+     				$Result = array(
+                				'message' => "this is too long (max: 10,000)",
+                				'success' =>  false,
+                				'error' => "tooLong"     	
+               			 		);
+    		$jsonData = Zend_Json::encode($Result);
+      		return $this->_response->appendBody($jsonData);
+     	}
     	   // Save new comment to DB and return insert ID (comment ID):
     	   $commentType = $data['type'];
      	   switch ($commentType) {
@@ -746,7 +756,7 @@ class BlabsController extends Zend_Controller_Action
                 				if ($result['success']) {
                 				$Result = array(
                 				'message' => $result["message"],
-                				'orig' => strip_tags($data['comment']),
+                				'comment' => strip_tags($data['comment']), // return decoda result
                 				'success' =>  true,
                 				'commentID' => $result["id"]         	
                			 		);

@@ -899,10 +899,7 @@ left: 3px;
     background-color: #4E7EAB;
     text-decoration: none;
 }
-.usertext-edit textarea {
-    height: 100px;
-    width: 500px;
-}
+
 .ui-resizable-se {
     bottom: 17px;
     right: 11px;
@@ -918,6 +915,17 @@ a[href$="/spoiler"]:hover {
 	padding: 1px;
 	display: block;
     max-width: 500px;
+}
+/*
+ * Commenting Form Styles
+ */
+.usertext textarea {
+    height: 100px;
+    width: 500px;
+    font-style: normal;
+    font-weight: normal;
+    font-family: verdana,arial,helvetica,sans-serif;
+    font-size: 11pt;
 }
 .usertext .bottom-area {
     overflow: hidden;
