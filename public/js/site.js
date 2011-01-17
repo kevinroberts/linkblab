@@ -301,7 +301,7 @@ function addClass(ele,cls) {
 			$('#dynamicLoginError').html(msg);
 	 	}
 		$('#dynamicLogin').dialog('open');
-		$('#username').focus();
+		$('#dynUsername').focus();
 		return false;
  }
  
@@ -373,7 +373,7 @@ function addClass(ele,cls) {
  }
  
  function hideForm (ele) {
-	 var form = ele.next("form");
+	 var form = ele.nextAll("form");
 	 if (ele.hasClass( "collapsedForm" )) {
 		 form.slideDown();
 		 ele.text('[- Add Comment]');
@@ -387,11 +387,12 @@ function addClass(ele,cls) {
 	 ele.blur();
 	 return false;
  }
+ 
   
   $(document).ready(function() {
 	 
 	  $('#search').defaultValue({'value':' Search Linkblab'});
-	  
+
 	  $(".decoda-spoilerBody").click(function(event) {
 		  event.preventDefault();
 		  if( window.console ) console.log("Spoiler Clicked");
@@ -442,11 +443,19 @@ function addClass(ele,cls) {
 		
 		$(".usertext-edit textarea").resizable();
 		
-		var username = $( "#username" ),
-		password = $( "#password" ),
+		var username = $( "#dynUsername" ),
+		password = $( "#dynPassword" ),
 		allFields = $( [] ).add( username ).add( password ),
 		usernameMsg = $("#usernameError"),
 		passwordMsg = $("#passwordError");
+		
+		$("#dynUsername, #dynPassword").bind('keypress', function(e) {
+			  var code = (e.keyCode ? e.keyCode : e.which);
+			  if(code == 13) { //Enter keycode
+			     $("#dynamicLogin").nextAll(".ui-dialog-buttonpane").children('div').children('button:first').click();
+			  }
+
+		  });
 		
 		$('#ajaxLoader').hide();
 		
@@ -476,6 +485,7 @@ function addClass(ele,cls) {
 					}
 					if (password.val().length == 0 || token.length == 0)
 					{
+						alert(token.length);
 						password.addClass("ui-state-error");
 						passwordMsg.text("* required");
 						bValid = false;

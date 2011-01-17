@@ -1,0 +1,102 @@
+/* -------------------------------------------------------------------
+// markItUp!
+// By Jay Salvat - http://markitup.jaysalvat.com/
+// ------------------------------------------------------------------*/
+.bbcode .bold a	{
+	background-image:url(images/bold.png);
+}
+.bbcode .italic a	{
+	background-image:url(images/italic.png);
+}
+.bbcode .underline a	{
+	background-image:url(images/underline.png);
+}
+.bbcode .subscript a	{
+	background-image:url(images/text_subscript.png);
+}
+.bbcode .superscript a	{
+	background-image:url(images/text_superscript.png);
+}
+
+.bbcode .email a	{
+	background-image:url(images/email_link.png);
+}
+.bbcode .anchor a	{
+	background-image:url(images/link.png);
+}
+
+.bbcode .colors a {
+	background-image:url(images/colors.png);
+}
+
+.bbcode .colors ul {
+		width:81px;
+		padding:1px;	
+	}
+	.bbcode .colors li {
+		border:1px solid white;
+		width:25px;	height:25px;
+		overflow:hidden;
+		padding:0px; margin:0px;
+		float:left;
+	}
+	.bbcode .colors ul a {
+		width:25px;	height:25px;
+	}
+	.bbcode .colors ul a:hover {
+		background-color:none;
+	}
+	
+	.bbcode .colors .col1-1 a {
+		background:yellow;
+	}
+	.bbcode .colors .col1-2 a {
+		background:orange;
+	}
+	.bbcode .colors .col1-3 a {
+		background:red;
+	}
+	
+	.bbcode .colors .col2-1 a {
+		background:blue;
+	}
+	.bbcode .colors .col2-2 a {
+		background:purple;
+	}
+	.bbcode .colors .col2-3 a {
+		background:green;
+	}
+	
+	.bbcode .colors .col3-1 a {
+		background:white;
+	}
+	.bbcode .colors .col3-2 a {
+		background:gray;
+	}
+	.bbcode .colors .col3-3 a {
+		background:black;
+	}
+	
+.bbcode .bullet a	{
+	background-image:url(images/list-bullet.png);
+}
+.bbcode .numeric a	{
+	background-image:url(images/list-numeric.png);
+}
+.bbcode .listitem a	{
+	background-image:url(images/list-item.png);
+}
+
+.bbcode .quotes a	{
+	background-image:url(images/quotes.png);
+}
+.bbcode .plaincode a	{
+	background-image:url(images/code.png);
+}
+	
+.bbcode .clean a	{
+	background-image:url(images/clean.png);
+}
+.bbcode .preview a {
+	background-image:url(images/preview.png);
+}

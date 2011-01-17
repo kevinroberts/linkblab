@@ -4,7 +4,11 @@ $isCommentPage = (isset($this->commentPage)) ? true : false;
 if ($isCommentPage) {
 $this->headTitle()->prepend($this->displayLink($this->commentPage).' : '. $this->category.' ');
 $this->headScript()->appendFile("/js/tooltip.jquery.js", $type = 'text/javascript', $attrs = array());
- $this->headScript()->appendScript("$(document).ready(function(){	$('.mailLink').tooltip(); });", $type = 'text/javascript', $attrs = array());
+// Add Shadowbox stuff:
+$this->headScript()->appendFile("/js/shadowbox/shadowbox.js", $type = 'text/javascript', $attrs = array());
+$this->headLink()->appendStylesheet("/js/shadowbox/shadowbox.css");
+$this->headScript()->appendFile("/js/comments.js", $type = 'text/javascript', $attrs = array());
+
  // view helper to build comment page here
  echo $this->buildCommentPage($this->commentPage);
 }

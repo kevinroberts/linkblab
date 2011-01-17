@@ -16,3 +16,7 @@ TODO
 - Putting "NSFW" in some subblabs automatically (toggle in blab settings?).
 - alt. Name for karma -- cred? 
 - change line 17 of decoda.php on live site
+
+To Change for Production
+----------------------
+- Remove all references to linkblab.local

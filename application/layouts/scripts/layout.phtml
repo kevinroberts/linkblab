@@ -2,12 +2,11 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico">
-  <link rel="stylesheet" href="/css/cupertino/jquery-ui-1.8.4.custom.css" type="text/css">
+  <link rel="shortcut icon" type="image/x-icon" href="/images/favicon.ico" />
+  <link rel="stylesheet" href="/css/cupertino/jquery-ui-1.8.4.custom.css" type="text/css" />
   <script type="text/javascript" src="/js/jquery-1.4.2.min.js"></script>
-<!--  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>-->
-  <script src="/js/jquery-ui-1.8.5.custom.min.js" type="text/javascript"></script>  
-  	<script type="text/javascript" src="/js/jquery.linkselect.js"></script>
+  <script src="/js/jquery-ui-1.8.8.custom.min.js" type="text/javascript"></script>
+  <script type="text/javascript" src="/js/jquery.linkselect.js"></script>
  <?php  // <script type="text/javascript" src="/js/jquery.bgiframe.js"></script> ?>
   <?php echo $this->headMeta()->appendName('keywords', 'framework, PHP, productivity').PHP_EOL; ?>
   <?php echo $this->headLink()->appendStylesheet('/css/global.css').PHP_EOL; ?>
@@ -62,18 +61,18 @@
 <div id="dynamicLogin" title="Login to Linkblab">
 			<form id="dynamicLoginForm" action="/auth/login" method="post">
 				<div id="dynamicLoginError">You must be logged in to vote! <a href="/auth/signup">sign up</a></div>
-				<label for="username" class="uiforms-label">Username:</label>
-				<input class="uiforms-input ui-state-default ui-corner-all uiforms-text" id="username" name="username" type="text" /> 
+				<label for="dynUsername" class="uiforms-label">Username:</label>
+				<input class="uiforms-input ui-state-default ui-corner-all uiforms-text" id="dynUsername" name="username" type="text" /> 
 				<span id="usernameError"></span>
 				<br />
-				<label for="password" class="uiforms-label">Password:&nbsp;</label>
-				<input class="uiforms-input ui-state-default ui-corner-all uiforms-text" id="password" name="password" type="password" />
+				<label for="dynPassword" class="uiforms-label">Password:&nbsp;</label>
+				<input class="uiforms-input ui-state-default ui-corner-all uiforms-text" id="dynPassword" name="password" type="password" />
 				<span id="passwordError"></span>
 				 <br />
 				<input id="rememberMe" type="checkbox" value="1" name="rememberMe" />
 				<label for="rememberMe" class="uiforms-label">Remember me? </label>
 				<label class="tagline uiforms-label" style="cursor: text;">(persistant login - don't use on public computers)</label> 
-				<input class="uiforms-input ui-state-default ui-corner-all uiforms-text" type="hidden" id="token" name="token" value="<?php echo $this->token;?>" />
+				<input class="uiforms-input ui-state-default ui-corner-all uiforms-text" type="hidden" id="token" name="token" value="<?php echo $this->formToken();?>" />
 
 			</form>
 			<span style="float:right; padding-right: 101px; padding-top: 10px" id="ajaxLoader"><img alt="loading" src="/images/ajax-loader.gif" /> - Validating Credentials - <img alt="loading" src="/images/ajax-loader.gif" /></span>

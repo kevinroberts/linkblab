@@ -111,7 +111,8 @@ EOT;
 		if ($loggedIn) {
 			$commentForm = '
 			<a href="#" class="hideForm" onclick="return hideForm($(this))" title="collapse this form">[- Add Comment]</a>
-			<form id="form-'.$linkID.'" method="post" onsubmit="return post_comment($(this), \'parent\')" class="usertext cloneable" action="">
+			<a href="#" class="hideForm" onclick="return openRichEditor($(this))" title="open rich text editor"><span style="display: inline-block; position: relative; top: 2px;" class="ui-icon ui-icon-newwin"></span>Rich Text Editor</a>
+			<form id="form-'.$linkID.'" name="newCommentForm" method="post" onsubmit="return post_comment($(this), \'parent\')" class="usertext cloneable" action="">
 				<div style="" class="usertext-edit">
 					<div>
 						<textarea name="text" cols="1" rows="1"></textarea>

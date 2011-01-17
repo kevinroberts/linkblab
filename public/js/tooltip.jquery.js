@@ -10,7 +10,7 @@
  *  Version: 3.2.2
  *  Dated : 24-Mar-2010
  *	24-Jan-2010 : V1.1 : Build tooltip without static file.
- *	07-Feb-2010 : V3.0 : ToolTip Fadein and fadeout effects added, with some coding improvement - Thx Ian for 	pointing it. And also building one seprate div tag to hold tooltip data, so no need to create file, or no need to use id tag of tooltip.
+ *	07-Feb-2010 : V3.0 : ToolTip Fadein and fadeout effects added, with some coding improvement - And also building one seprate div tag to hold tooltip data, so no need to create file, or no need to use id tag of tooltip.
  *	08-Feb-2010 : V3.1 : Now float to right or left when tooltip come near to the browser border, thanks Max for suggestion.
  *	09-Feb-2010 : V3.2 : Now you can limit your tooltips width and height with option named, 'width', 'height' by default both run on 'auto' value;
  *	24-Mar-2010 : V3.2.1 : Now you can change default help cursor with any diffrent cursor just 'cursor' option to set by default its use 'help' cursor;
@@ -32,7 +32,7 @@
 		    filetype: 'txt', // tooltip's content files type, can be use html, txt
 		    height: 'auto', // Tooltip's width
 		    width : 'auto', //Tooltip's Height
-		    cursor : 'help' // Mouse cursor
+		    cursor : 'pointer' // Mouse cursor
 		   };  
 	var options = $.extend(defaults, options);
 	//Runtime div building to hold tooltip data, and make it hidden
@@ -126,9 +126,3 @@
 		});
 	};
  })(jQuery);
-
-//FINISH, simple isnt it ??
-//if you like it or have any suggestions / comments , or you have some idea to make it better, 
-//or you need some more fetures in it PLS PLS PLS let me know that at
-//i.rizvi@hotmail.com
-//Thank you for using my plugin

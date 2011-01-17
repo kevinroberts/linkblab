@@ -18,6 +18,7 @@ class Zend_View_Helper_LoggedInAs extends Zend_View_Helper_Abstract {
 	 */
 	public function loggedInAs() {
 		$auth = Zend_Auth::getInstance();
+		$utils = new Application_Model_Utils();
         if ($auth->hasIdentity()) {
             $username = $auth->getIdentity()->username;
             $role = $auth->getIdentity()->role;
@@ -37,10 +38,11 @@ class Zend_View_Helper_LoggedInAs extends Zend_View_Helper_Abstract {
         $request = Zend_Controller_Front::getInstance()->getRequest();
         $controller = $request->getControllerName();
         $action = $request->getActionName();
-        if($controller == 'auth' && $action == 'index') {
-            return '';
+        if(($controller == 'auth' && ($action == 'login' || $action == 'signUp')) || $controller == 'index') {
+            $loginUrl = "/auth/login";
+        	return 'Welcome <a id="loginLink" name="logged_out" title="register for an account" href="/auth/signup">Guest</a> | <a href="'.$loginUrl.'">Login</a>  | <a href="/auth/signup">Register</a> ';
         }
-        $loginUrl = "/auth/login";
+        $loginUrl = "/auth/login?r=".$utils->urlsafe_b64encode($utils->curPageURL());
         return 'Welcome <a id="loginLink" name="logged_out" title="register for an account" href="/auth/signup">Guest</a> | <a href="'.$loginUrl.'">Login</a>  | <a href="/auth/signup">Register</a> ';
 		
 	}

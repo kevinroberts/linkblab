@@ -122,6 +122,7 @@ class AuthController extends Zend_Controller_Action
 							                             false
 							                           ),
 							              'message' => array( 'Sorry your request could not be completed. Please try again. (Token error: HTTP400) ')
+							              //'message' => array( 't1:'.$data['token'].'  t2:'.$utils->form_token())
 							           ); $jsonData = Zend_Json::encode($myArray);
 										return $this->_response->appendBody($jsonData);
 									}
@@ -165,8 +166,13 @@ class AuthController extends Zend_Controller_Action
                 						if ($this->_process($form->getValues(), $rememberMe)) {
                 					// We're authenticated! Redirect them to their previously requested page
                 						 if (isset($_GET["r"])) {
- 										$returnTo = urldecode($_GET["r"]);
+ 										$returnTo = $utils->urlsafe_b64decode($_GET["r"]);
+ 										// check if this link is within the linkblab server domain
+ 										$urlParts = parse_url($returnTo);
+ 										if (strpos($urlParts['host'], $_SERVER['SERVER_NAME']) === false) {
+ 												$returnTo = '/'; // this link is not within the domain
  											}
+ 										}
  										else // no requested url was supplied -> send them to the homepage
  										$returnTo = "/";
                 						return $this->_redirect($returnTo);
