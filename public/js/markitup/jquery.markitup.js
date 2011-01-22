@@ -477,10 +477,10 @@
 			function writeInPreview(data) {
 				if (previewWindow.document) {			
 					try {
-						sp = previewWindow.document.documentElement.scrollTop
+						sp = previewWindow.document.documentElement.scrollTop;
 					} catch(e) {
 						sp = 0;
-					}	
+					}
 					previewWindow.document.open();
 					previewWindow.document.write(data);
 					previewWindow.document.close();

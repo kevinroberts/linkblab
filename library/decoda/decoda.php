@@ -821,7 +821,9 @@ class Decoda {
         $html .= '<div class="decoda-spoilerBody" id="spoilerContent-'. $id .'" style="display: none">'. $matches[1] .'</div>';
         $html .= '</div>';
         */
-        $html = '<a href="/spoiler" class="decoda-spoilerBody" id="spoilerContent-'. $id .'">'. $matches[1] .'</a>';
+		// if this spoiler text is longer than 35 char. display as block, otherwise display inline
+		$class = (strlen($matches[1]) > 35) ? 'decoda-spoilerBody-blk' : 'decoda-spoilerBody';
+        $html = '<a href="/spoiler" class="'.$class.'" id="spoilerContent-'. $id .'">'. $matches[1] .'</a>';
 
         $this->__counters['spoiler']++;
 

@@ -25,6 +25,81 @@
 	background-image:url(images/link.png);
 }
 
+
+.bbcode .emoticon a {
+	background-image:url(images/emoticon.png);
+}
+.bbcode .emoticon ul {
+		width:162px;
+		padding:1px;	
+}
+
+	.bbcode .emoticon li {
+		border:1px solid white;
+		width:25px;	height:25px;
+		overflow:hidden;
+		padding:0px; margin:0px;
+		float:left;
+	}
+	.bbcode .emoticon ul a {
+		width:25px;	height:25px;
+	}
+	.bbcode .emoticon ul a:hover {
+		background-color:white;
+		border: 1px dotted white;
+	}
+	
+	.bbcode .emoticon .happy a {
+		background-image:url(/images/emoticons/happy.png);
+		background-position: 0% -1%;
+	}
+	.bbcode .emoticon .angry a {
+		background-image:url(/images/emoticons/angry.png);
+		background-position: 0% -1%;
+	}
+	.bbcode .emoticon .cool a {
+		background-image:url(/images/emoticons/cool.png);
+		background-position: 0% -1%;
+	}
+	
+	.bbcode .emoticon .estatic a {
+		background-image:url(/images/emoticons/ecstatic.png);
+		background-position: 0% -1%;
+	}
+	.bbcode .emoticon .gasp a {
+		background-image:url(/images/emoticons/gasp.png);
+		background-position: 0% -1%;
+	}
+	.bbcode .emoticon .heart a {
+		background-image:url(/images/emoticons/heart.png);
+		background-position: 0% -1%;
+	}
+	
+	.bbcode .emoticon .hm a {
+		background-image:url(/images/emoticons/hm.png);
+		background-position: 0% -1%;
+	}
+	.bbcode .emoticon .kiss a {
+		background-image:url(/images/emoticons/kiss.png);
+		background-position: 0% -1%;
+	}
+	.bbcode .emoticon .sad a {
+		background-image:url(/images/emoticons/sad.png);
+		background-position: 0% -1%;
+	}
+	.bbcode .emoticon .tongue a {
+		background-image:url(/images/emoticons/tongue.png);
+		background-position: 0% -1%;
+	}
+	.bbcode .emoticon .wink a {
+		background-image:url(/images/emoticons/wink.png);
+		background-position: 0% -1%;
+	}
+	.bbcode .emoticon .brb a {
+		background-image:url(/images/emoticons/brb.png);
+		background-position: 0% -2%;
+	}
+	
 .bbcode .colors a {
 	background-image:url(images/colors.png);
 }
@@ -32,7 +107,7 @@
 .bbcode .colors ul {
 		width:81px;
 		padding:1px;	
-	}
+}
 	.bbcode .colors li {
 		border:1px solid white;
 		width:25px;	height:25px;

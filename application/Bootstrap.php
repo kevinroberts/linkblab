@@ -126,8 +126,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     	require_once('../library/decoda/decoda.php');
     	Zend_Registry::set("rememberMeSeconds",  $this->getOption('remember_me_seconds')); // set default time a session should be persistant
     	// Set allowed markup constants
-    	define("DECODAPOST",     "b,i,u,align,color,font,sub,sup,code,url,quote,list,olist,email,li,decode,spoiler");
-    	define("DECODACOMMENT",     "b,i,u,color,sub,sup,url,quote,list,olist,email,spoiler,li,code,decode");
+    	define("DECODAPOST",     "b,i,u,align,color,sub,sup,code,url,quote,list,olist,email,li,decode,spoiler");
+    	define("DECODACOMMENT",     "b,i,u,color,sub,sup,code,url,quote,list,olist,email,li,decode,spoiler");
 
         $IE = '.content { margin-right: -1px; } /* this 1px negative margin can be placed on any of the columns in this layout with the same corrective effect. */'.PHP_EOL;
     	$IE.= 'ul.nav a { zoom: 1; }  /* the zoom property gives IE the hasLayout trigger it needs to correct extra whiltespace between the links */';

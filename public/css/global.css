@@ -910,10 +910,13 @@ a[href$="/spoiler"] {
 a[href$="/spoiler"]:hover {
     color: #FFFFFF !important;
 }
-.decoda-spoilerBody {
+.decoda-spoilerBody-blk {
 	padding: 1px;
 	display: block;
     max-width: 500px;
+}
+.decoda-spoilerBody {
+	
 }
 /*
  * Commenting Form Styles

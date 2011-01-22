@@ -258,7 +258,7 @@ class BlabsController extends Zend_Controller_Action
                                                              $utils = new Application_Model_Utils();
                                                                                     	if (!$auth->hasIdentity())
                                                                                 		{
-                                                                                			return $this->_redirect("/auth/login?msg=2&r=".urlencode($utils->curPageURL()));
+                                                                                			return $this->_redirect("/auth/login?msg=2&r=".$utils->urlsafe_b64encode($utils->curPageURL()));
                                                                                 			//header('Location: http://'.$_SERVER['SERVER_NAME'].'/auth/login?msg=2&r='.urlencode($this->curPageURL()));
                                                                                 			 //$this->_helper->redirector('/auth/login?r='.urlencode($this->curPageURL()));
                                                                                 		}
@@ -464,7 +464,7 @@ class BlabsController extends Zend_Controller_Action
                                         $utils = new Application_Model_Utils();
                                 		if (!$auth->hasIdentity())
                                         {
-                                        	return $this->_redirect("/auth/login?msg=2&r=".urlencode($utils->curPageURL()));
+                                        	return $this->_redirect("/auth/login?msg=2&r=".$utils->urlsafe_b64encode($utils->curPageURL()));
                                         	//header('Location: http://'.$_SERVER['SERVER_NAME'].'/auth/login?msg=2&r='.urlencode($this->curPageURL()));
                                         }
                                         $isSelf = false; // is this a self post?
@@ -808,8 +808,63 @@ class BlabsController extends Zend_Controller_Action
            $data = $data['data'];
            $utils = new Application_Model_Utils();
            $data = $utils->docodaOutput($data, true, preg_split("/[\s,]+/", DECODACOMMENT));
+           $content = <<<EOT
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
+<html>
+<head>
+<title>preview</title>
+<script type="text/javascript" src="/js/jquery-latest.min.js"></script>
+<script src="/js/jquery-ui-latest.min.js" type="text/javascript"></script>
+<link rel="stylesheet" href="/css/cupertino/jquery-ui-lastest.custom.css" type="text/css" />
+<link rel="stylesheet" href="/css/global.css" type="text/css" />
+<style type="text/css">
+html, body {
+background: none repeat scroll 0pt 0pt rgb(255, 255, 255);
+}
+#comment-1 {
+	margin-top: 10px;
+}
+</style>
+</head>
+<body>
+
+<div class="comment" id="comment-1">		
+		<div class="midcol" style="display: block;">
+		<a id="recent-link328-up" class="ui-state-default ui-corner-all"><span class="ui-icon ui-icon-circle-arrow-n"></span></a>
+		<a id="recent-link328-down" class="ui-state-default ui-corner-all"><span class="ui-icon ui-icon-circle-arrow-s"></span></a>
+		</div>
+	<div class="entry">
+
+		<div class="noncollapsed" style="display: block;">
+		<p class="tagline">
+			<a href="JavaScript:void(0);" class="author submitter">you</a>
+
+			<span class="userattrs"> [<a class="submitter" title="submitter" href="JavaScript:void(0);">S</a>]</span>
+			<span class="score dislikes">0</span>
+			<span class="score likes">1</span>
+			<span class="score total">1 point</span>
+			just now
+			<a href="JavaScript:void(0);" class="expand" title="collapse">[-]</a>
+		</p>
+		<div class="md">
+			<div>
+			$data
+			</div>
+			
+		</div>
+		<ul style="visibility:hidden;" class="flat-list buttons">
+		<li class="first"><a href="" class="bylink" rel="nofollow">permalink</a></li>
+		
+		</ul>
+	 </div>
+	</div>
+	
+	</div>
+</body>
+</html>
+EOT;
            
-           return $this->_response->appendBody($data);
+           return $this->_response->appendBody($content);
            
     }
 

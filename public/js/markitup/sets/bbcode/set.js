@@ -8,6 +8,10 @@ myBbcodeSettings = {
   nameSpace:          "bbcode", // Useful to prevent multi-instances CSS conflict
   previewParserPath:  "/blabs/preview",
   previewAutoRefresh: true,
+  previewInWindow: '',
+  previewParserVar: 'data',
+  previewPosition: 'before',
+  previewTemplatePath:	'/js/markitup/templates/preview.html',
   onTab:          {keepDefault:false, openWith:'     ', placeHolder:'' },
   markupSet: [
       {name:'Bold', key:'B', openWith:'[b]', closeWith:'[/b]', className:"bold"}, 
@@ -19,6 +23,20 @@ myBbcodeSettings = {
       {name:'E-Mail', key:'M', openWith:'[mail=[![E-Mail]!]]', closeWith:'[/mail]', placeHolder:'email link text here...', className:"email"}, 
       {name:'Link', key:'L', openWith:'[url=[![Url]!]]', closeWith:'[/url]', placeHolder:'Your text to link here...', className:"anchor"},
       {separator:'---------------' },
+      {name:'Emoticons', openWith:'[![emoticon]!]', className:"emoticon", dropMenu: [
+              {name:'happy', openWith:' :) ', className:"happy" },
+              {name:'angry', openWith:' :angry: ', className:"angry" },
+              {name:'cool', openWith:' 8) ', className:"cool" },
+              {name:'estatic', openWith:' :D ', className:"estatic" },
+              {name:'gasp', openWith:' :O ', className:"gasp" },
+              {name:'heart', openWith:' :heart: ', className:"heart" },
+              {name:'hm', openWith:' :/ ', className:"hm" },
+              {name:'kiss', openWith:' :3 ', className:"kiss" },
+              {name:'sad', openWith:' :( ', className:"sad" },
+              {name:'tongue', openWith:' :P ', className:"tongue" },
+              {name:'wink', openWith:' ;) ', className:"wink" },
+              {name:'brb', openWith:' :brb: ', className:"brb" }
+      ]},      
       {name:'Colors', openWith:'[color=[![Color]!]]', closeWith:'[/color]', className:"colors", dropMenu: [
           {name:'Yellow', openWith:'[color=yellow]', closeWith:'[/color]', className:"col1-1" },
           {name:'Orange', openWith:'[color=orange]', closeWith:'[/color]', className:"col1-2" },
@@ -38,7 +56,7 @@ myBbcodeSettings = {
       {name:'Quotes', openWith:'[quote]', closeWith:'[/quote]', className:"quotes"}, 
       {name:'Code', openWith:'[code]', closeWith:'[/code]', className:"plaincode"}, 
       {separator:'---------------' },
-      {name:'Clean', className:"clean", replaceWith:function(h) { return h.selection.replace(/\[(.*?)\]/g, ""); } },
+      {name:'Remove all Markup', className:"clean", replaceWith:function(h) { return h.selection.replace(/\[(.*?)\]/g, ""); } },
       {name:'Preview', className:"preview", call:'preview' }
    ]
 }

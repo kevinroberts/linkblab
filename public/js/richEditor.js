@@ -30,5 +30,8 @@ function closeWindow() {
 
 $(document).ready(function(){
 	$('#comment').markItUp(myBbcodeSettings);
-  	$('#comment').focus();
+	window.setTimeout(function() {
+		$('#comment').trigger('focus');
+	}, 400);
+  	
   });
