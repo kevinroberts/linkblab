@@ -176,7 +176,7 @@ class Application_Model_Comments
 		$numberOfChildren = $this->countChildCommments($comment["id"]);
 		$numberOfChildren = ($numberOfChildren == 1) ? $numberOfChildren.' child' : $numberOfChildren.' children'; 
 		
-		$comm = $utils->docodaOutput($com,true, preg_split("/[\s,]+/", DECODACOMMENT));
+		$comm = $utils->docodaOutput($com, preg_split("/[\s,]+/", DECODACOMMENT));
 		$comm = str_replace(PHP_EOL, "", $comm);
 		$comm = str_replace("<br /><br />", "<br />", $comm);
 		
@@ -253,7 +253,7 @@ EOT;
 		$numberOfChildren = $this->countChildCommments($comment["id"]);
 		$numberOfChildren = ($numberOfChildren == 1) ? $numberOfChildren.' child' : $numberOfChildren.' children'; 
 		
-		$comm = $utils->docodaOutput($com,true,preg_split("/[\s,]+/", DECODACOMMENT));
+		$comm = $utils->docodaOutput($com, preg_split("/[\s,]+/", DECODACOMMENT));
 		$comm = str_replace(PHP_EOL, "", $comm);
 		$comm = str_replace("<br /><br />", "<br />", $comm);
 		
@@ -318,7 +318,7 @@ EOT;
 		}
 	 switch ($type) {
            case 'parent':
-           		$comment = strip_tags($data['comment']);
+           		$comment = $data['comment'];
                 $linkID = $data['link_id'];
                 $userID = $data['user_id'];
 				$result = $this->db_create_comment($comment, $linkID, $userID);

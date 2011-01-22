@@ -494,7 +494,7 @@ class BlabsController extends Zend_Controller_Action
                                          	if ($form->isValid($data))
                                 			{
                                 				if (!empty($data["description"])) {
-                										$description = strip_tags($data["description"]);
+                										$description = $data["description"];
                                 				}
                                 				// Form submission is valid - create the new link
                                 				$insertCols = array(
@@ -758,7 +758,7 @@ class BlabsController extends Zend_Controller_Action
                         				if ($result['success']) {
                         				$Result = array(
                         				'message' => $result["message"],
-                        				'comment' => strip_tags($data['comment']), // return decoda result
+                        				'comment' => $data['comment'], // return decoda result
                         				'success' =>  true,
                         				'commentID' => $result["id"]         	
                        			 		);
@@ -807,7 +807,7 @@ class BlabsController extends Zend_Controller_Action
            
            $data = $data['data'];
            $utils = new Application_Model_Utils();
-           $data = $utils->docodaOutput($data, true, preg_split("/[\s,]+/", DECODACOMMENT));
+           $data = $utils->docodaOutput($data, preg_split("/[\s,]+/", DECODACOMMENT));
            $content = <<<EOT
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
 <html>

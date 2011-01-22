@@ -382,23 +382,27 @@ class Application_Model_Utils
 		return nl2br($clean);
 	}
 	
-	public function docodaOutput ($input, $stripTags = true, $allowedTags = NULL) {
+	public function docodaOutput ($input, $allowedTags = NULL, $purify = true) {
 				if (is_null($allowedTags)) {
 					$allowedTags = preg_split("/[\s,]+/", DECODAPOST);
 				}
-				if ($stripTags)
-				$d = strip_tags($input);
-				else
-				$d = $input;
-								
-				$code = new Decoda($d, $allowedTags);
+												
+				$code = new Decoda($input, $allowedTags);
 				$options = array(
 					"clickable" => false,
 					"censor" => false,
 					"jquery" => true
 				);
 				$code->configure($options);
-				return $code->parse(true);		
+				if ($purify) {
+				$purifier = new HTMLPurifier();
+    			$clean_html = $purifier->purify($code->parse(true));
+				}
+				else {
+					$clean_html = $code->parse(true);
+				}
+				
+				return $clean_html;		
 	}
 	
 public function urlsafe_b64encode($string) {

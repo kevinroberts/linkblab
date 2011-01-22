@@ -124,6 +124,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     {
     	//require_once ('/models/BigOrNot_CookieManager.php');
     	require_once('../library/decoda/decoda.php');
+    	require_once('../library/htmlpurifier/HTMLPurifier.standalone.php');
+    	
     	Zend_Registry::set("rememberMeSeconds",  $this->getOption('remember_me_seconds')); // set default time a session should be persistant
     	// Set allowed markup constants
     	define("DECODAPOST",     "b,i,u,align,color,sub,sup,code,url,quote,list,olist,email,li,decode,spoiler");
