@@ -41,7 +41,7 @@ class Zend_View_Helper_BuildSortingOptions {
 EOT;
 		}
 	 // If this is a Blab Specific page and not the comments page
-	 if ($controller == 'blabs' && $action == 'display' && !isset($params['comments'])) {
+	 if ($controller == 'blabs' && $action == 'display' && !isset($params['comments']) && !isset($params['comment'])) {
 	 	$cat = $params["category"];
 		$content .= <<<EOT
 		<div class="linkSortOptions">

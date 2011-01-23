@@ -43,10 +43,10 @@ class Application_Model_Comments
 	/**
 	 * function getAllComments returns all comments for a particular
 	 * link ID or optionally all comments under a comment ID
-	 * returns an associative array 
+	 * returns all comments in HTML
 	 * 	@param link id integer|$linkID
 	 *  @param comment id integer|$commentID
-	 *  @return mixed|$comments
+	 *  @return string|$comments
 	 *  
 	 */
 	public function getAllComments($linkID, $orderby = null, $commentID = null) {
@@ -56,10 +56,16 @@ class Application_Model_Comments
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$select = $db->select();
 		$select->from("comments", array('id', 'comment', 'up_votes', 'down_votes', 'votes', 'date_added', 'user_id', 'link_id', 'parent_id', 'controversy', 'hot'));
+		if (!is_null($commentID)) {
+		$select->where("id = ?", $commentID);
+		}
+		else {
 		$select->where("link_id = ?", $linkID);
 		$select->where("parent_id IS NULL");
 		$select->order($orderby);
 		$select->order("date_added DESC"); // fall back to ordering by date added
+		}
+		
 		$results = $db->fetchAll($select);
 		if (empty($results)) { return false; }
 		
@@ -223,7 +229,7 @@ class Application_Model_Comments
 		</div>
 		<div style="display: none;" class="usertext-edit"><div><textarea name="text">$com</textarea></div></div>
 		<ul class="flat-list buttons">
-		<li class="first"><a rel="nofollow" class="bylink" href="/b/$blab/commentLink/$id">permalink</a></li>
+		<li class="first"><a rel="nofollow" class="bylink" href="/b/$blab/comment/$id">permalink</a></li>
 		
 		</ul>
 	 </div>
@@ -299,7 +305,7 @@ EOT;
 			
 		</div>
 		<ul class="flat-list buttons">
-		<li class="first"><a rel="nofollow" class="bylink" href="/b/$blab/commentLink/$id">permalink</a></li>
+		<li class="first"><a rel="nofollow" class="bylink" href="/b/$blab/comment/$id">permalink</a></li>
 		
 		</ul>
 	 </div>

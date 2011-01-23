@@ -10,7 +10,13 @@ $this->headLink()->appendStylesheet("/js/shadowbox/shadowbox.css");
 $this->headScript()->appendFile("/js/comments.js", $type = 'text/javascript', $attrs = array());
 
  // view helper to build comment page here
- echo $this->buildCommentPage($this->commentPage);
+ $isCommentPermPage = (isset($this->permLink)) ? true : false;
+ if ($isCommentPermPage) {
+ 	echo $this->buildCommentPage($this->getLinkIDFromCommentID($this->commentPage), $this->commentPage);
+ }
+ else {
+ 		echo $this->buildCommentPage($this->commentPage);
+      }
 }
 else {
 	

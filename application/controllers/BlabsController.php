@@ -158,11 +158,15 @@ class BlabsController extends Zend_Controller_Action
     {
         $utils = new Application_Model_Utils();
                 $commentPage = $this->_request->getParam('comments');
+                $commentPagePerm = $this->_request->getParam('comment');
                     	// Check if this is a valid comment page request (it is not empty and has a numeric value)
                     	$isCommentPage = (!empty($commentPage)) ? ((is_numeric($commentPage)) ? true : false) : false;
-                    	if ($isCommentPage) {
+                    	$isCommentPagePerm = (!empty($commentPagePerm)) ? ((is_numeric($commentPagePerm)) ? true : false) : false;
+                    	if ($isCommentPage || $isCommentPagePerm) {
                     		$this->view->token = $utils->form_token(true);
-                			$this->view->commentPage = $commentPage;
+                			$this->view->commentPage = ($isCommentPage) ? $commentPage : $commentPagePerm;
+                			if ($isCommentPagePerm)
+                			$this->view->permLink = true;
                     	}
                     	else // else render normal blab page with links
                     	{

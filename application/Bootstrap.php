@@ -38,6 +38,16 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		);
 		
 		 $router->addRoute('bComments', $route);
+	   
+	    $route = new Zend_Controller_Router_Route (
+       'b/:category/comment/:comment',
+        array('controller' => 'blabs',
+          'action'     => 'display', 
+          'category'   => 'pics',
+          'comment' => 8 )
+		);
+		
+		 $router->addRoute('bCommentsPermalink', $route);
 		 
 	   $route = new Zend_Controller_Router_Route (
        'b/:category/:sort',

@@ -15,7 +15,7 @@ class Zend_View_Helper_BuildCommentPage {
 	/**
 	 *  
 	 */
-	public function buildCommentPage($linkID) {
+	public function buildCommentPage($linkID, $commentID = null) {
 		$content = '';
 		$utils = new Application_Model_Utils();
 		$link = new Application_Model_Link();
@@ -42,7 +42,7 @@ class Zend_View_Helper_BuildCommentPage {
 		$linkBlabs = new Zend_View_Helper_displayBlab();
 		$linkBlab = $linkBlabs->displayBlab($link->blabID, 1); // returns an array with [0] = blab title, [1] = anchor link to blab
 		$linkURL = ($link->isSelf == 1) ? '/b/'.$linkBlab[0].'/comments/'.$link->id : $link->linkurl;
-		
+		$commentURL = '/b/'.$linkBlab[0].'/comments/'.$link->id;
 		
 		$howMany = new Zend_View_Helper_displayHowManyComments();
 		$reportBtn = new Zend_View_Helper_BuildReportButton();
@@ -134,7 +134,21 @@ EOT;
 		if ($numberComments > 0) {
 		$howManyTitle = ($numberComments > 1) ? 'All '.$numberComments.' Comments' : "All Comments";
 		$cModel = new Application_Model_Comments($linkBlab[0]);
+		// If this is a permalink to one comment:
+		if (!is_null($commentID)) {
+		$commentContent = $cModel->getAllComments($linkID, null, $commentID);
+		$howManyTitle = <<<EOT
+	<div>
+				<div style="padding: 0pt 0.7em;" class="ui-state-highlight ui-corner-all"> 
+					<p><span style="float: left; margin-right: 0.3em;" class="ui-icon ui-icon-info"></span>
+					You are viewing a single comment's thread. <a rel="nofollow" href="$commentURL">view the rest of the comments -></a></p>
+				</div>
+</div>	
+EOT;
+		}
+		else {
 		$commentContent = $cModel->getAllComments($linkID);
+		}
 
 		/*
 		 *  Build Comment HTML
