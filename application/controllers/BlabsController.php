@@ -224,11 +224,11 @@ class BlabsController extends Zend_Controller_Action
                 	            	$results = $links->fetchAll(500,$blabID, null, 'hot DESC');
                 	                break;
                                 case 'controversial':
-                                	$this->view->addJS = '$("#sortOptionsDropdown_link").text("controversial");'.PHP_EOL;
+                                	//$this->view->addJS = '$("#sortOptionsDropdown_link").text("controversial");'.PHP_EOL;
                 	                $results = $links->fetchAll(500,$blabID, null, 'controversy DESC');
                 	                break;
                                 case 'top':
-                                	$this->view->addJS = '$("#sortOptionsDropdown_link").text("top scoring");'.PHP_EOL;
+                                	//$this->view->addJS = '$("#sortOptionsDropdown_link").text("top scoring");'.PHP_EOL;
                 	                $results = $links->fetchAll(500,$blabID, null, 'votes DESC');
                 	                break;
                                 default:
