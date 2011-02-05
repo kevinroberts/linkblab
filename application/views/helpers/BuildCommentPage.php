@@ -11,108 +11,132 @@
  * @uses viewHelper Zend_View_Helper
  */
 class Zend_View_Helper_BuildCommentPage {
+	// standard variables
+	public static $content = '', $loggedIn = false, $userID, $blabInfo, $numberComments;
+	// object variables
+	public static $utils, $link, $linkMapper, $linkBlabs, $howMany, $reportBtn, $displayName;
 	
-	/**
-	 *  
-	 */
-	public function buildCommentPage($linkID, $commentID = null) {
-		$content = '';
-		$utils = new Application_Model_Utils();
-		$link = new Application_Model_Link();
-		$linkMapper = new Application_Model_LinksMapper();
-		$auth = Zend_Auth::getInstance(); $loggedIn = false;
-		if ($auth->hasIdentity())
-        {
-        	$loggedIn = true;
-            $userID = $auth->getIdentity()->id;
+	public function __construct() {
+		self::$utils = new Application_Model_Utils ( );
+		self::$link = new Application_Model_Link ( );
+		self::$linkMapper = new Application_Model_LinksMapper ( );
+		$auth = Zend_Auth::getInstance ();
+		if ($auth->hasIdentity ()) {
+			$this->loggedIn = true;
+			$this->userID = $auth->getIdentity ()->id;
+		}
+		// Include other comment and link related view helpers
+		include_once ("displayName.php");
+		include_once ("displayBlab.php");
+		include_once ("displayHowManyComments.php");
+		include_once ("BuildReportButton.php");
+		include_once ("linkBuilder.php");
+		self::$linkBlabs = new Zend_View_Helper_displayBlab ( );
+		self::$howMany = new Zend_View_Helper_displayHowManyComments ( );
+		self::$reportBtn = new Zend_View_Helper_BuildReportButton ( );
+		self::$displayName = new Zend_View_Helper_displayName ( );
+	
+	}
+	
+	private function buildLinkContent() {
+		
+		// If a link doesn't exist...
+		if (is_null ( self::$link->title )) {
+			return false;
 		}
 		
-		$linkMapper->find($linkID, $link);
-		// If link doesn't exist...
-		if (is_null($link->title)) 
-		{
-			 return '<div class="link" style="color: red;">There is nothing to see here...</div>'; 
+		// $linkBlab fills an array with [0] = blab title, [1] = anchor link to blab
+		self::$blabInfo = self::$linkBlabs->displayBlab ( self::$link->blabID, 1 );
+		$linkURL = (self::$link->isSelf == 1) ? '/b/' . self::$blabInfo [0] . '/comments/' . self::$link->id : self::$link->linkurl;
+		
+		self::$numberComments = self::$howMany->displayHowManyComments ( self::$link->id );
+		
+		$this->content .= '<div class="link singleLink">';
+		
+		if ($this->loggedIn) {
+			$linkbuilder = new Zend_View_Helper_linkBuilder ( );
+			$this->content .= $linkbuilder->linkBuilder ( self::$link->id, self::$link->downvotes, self::$link->votes, self::$link->upvotes );
+		} else {
+			$this->content .= '<div style="width: 5ex;" class="midcol unvoted">' . '<a id="link.' . self::$link->id . '-up" class="ui-state-default ui-corner-all" title="vote this link up" onclick="voteAction($(this), 1, ' . self::$link->id . ')"><span class="ui-icon ui-icon-circle-arrow-n"></span></a>' . '<div class="score downVotes">' . self::$link->downvotes . '</div>' . '<div class="score unVoted">' . self::$link->votes . '</div>' . '<div class="score upVotes">' . self::$link->upvotes . '</div>' . '<a id="link' . self::$link->id . '-down" class="ui-state-default ui-corner-all" title="vote this link down" onclick="voteAction($(this), 2, ' . self::$link->id . ')"><span class="ui-icon ui-icon-circle-arrow-s"></span></a>' . '</div>';
 		}
 		
-		// Build link html
-		
-		// view helpers
-		include_once("displayName.php"); include_once("displayBlab.php"); include_once("displayHowManyComments.php");
-		include_once("BuildReportButton.php"); include_once("linkBuilder.php");
-		$linkBlabs = new Zend_View_Helper_displayBlab();
-		$linkBlab = $linkBlabs->displayBlab($link->blabID, 1); // returns an array with [0] = blab title, [1] = anchor link to blab
-		$linkURL = ($link->isSelf == 1) ? '/b/'.$linkBlab[0].'/comments/'.$link->id : $link->linkurl;
-		$commentURL = '/b/'.$linkBlab[0].'/comments/'.$link->id;
-		
-		$howMany = new Zend_View_Helper_displayHowManyComments();
-		$reportBtn = new Zend_View_Helper_BuildReportButton();
-		$displayName = new Zend_View_Helper_displayName();
-		$numberComments = $howMany->displayHowManyComments($link->id);
-		
-		$content .= '<div class="link singleLink">';
-		
-		if ($loggedIn) {
-		$linkbuilder = new Zend_View_Helper_linkBuilder();
-		$content .= $linkbuilder->linkBuilder($link->id, $link->downvotes, $link->votes, $link->upvotes);
+		if (! (is_null ( self::$link->thumbnail ))) {
+			$this->content .= '<a href="' . $linkURL . '" class="thumbnail">&#8203;<img alt="" src="' . self::$link->thumbnail . '" /></a>';
 		}
-		else {
-			$content .= 
-			'<div style="width: 5ex;" class="midcol unvoted">'.
-			'<a id="link.'.$link->id.'-up" class="ui-state-default ui-corner-all" title="vote this link up" onclick="voteAction($(this), 1, '.$link->id.')"><span class="ui-icon ui-icon-circle-arrow-n"></span></a>'.
-			'<div class="score downVotes">'.$link->downvotes.'</div>'.
-			'<div class="score unVoted">'.$link->votes.'</div>'.
-			'<div class="score upVotes">'.$link->upvotes.'</div>'.
-			'<a id="link'.$link->id.'-down" class="ui-state-default ui-corner-all" title="vote this link down" onclick="voteAction($(this), 2, '.$link->id.')"><span class="ui-icon ui-icon-circle-arrow-s"></span></a>'.
-			'</div>';
-		}
-		if (!(is_null($link->thumbnail))) {
-				$content.= '<a href="'.$linkURL.'" class="thumbnail">&#8203;<img alt="" src="'.$link->thumbnail.'" /></a>';
-			}
-			$spanClass = ($link->isSelf == 1) ? ' style="display:none;"' : '';
-			$content.= 
-			'<div class="entry">'.
-			
-			'<p class="title"><a href="'.$linkURL.'" class="title loggedin">'.$link->title.'</a>'.
-			'&nbsp;<span'.$spanClass.' class="domain">(<a title="see more links from this domain" href="/domain/'.$link->domain.'/">'.$link->domain.'</a>)</span></p>'.
-			
-			'<p class="tagline">submitted '.$utils->TimeSince(strtotime($link->dateCreated)).' ago by '.$displayName->displayName($link->userID, "autho user-".$link->userID).'<span class="userattrs"></span> to '.$linkBlab[1].'</p>';
-			// If this is a self post, output the description here:
-			if ($link->isSelf == 1) {
-				$description = $utils->docodaOutput($link->description);
-				$content .= <<<EOT
-				<div class="expando">
-					<div class="usertext">
-						<div class="md">
+		$spanClass = (self::$link->isSelf == 1) ? ' style="display:none;"' : '';
+		$this->content .= '<div class="entry">' . 
+
+		'<p class="title"><a href="' . $linkURL . '" class="title loggedin">' . self::$link->title . '</a>' . '&nbsp;<span' . $spanClass . ' class="domain">(<a title="see more links from this domain" href="/domain/' . self::$link->domain . '/">' . self::$link->domain . '</a>)</span></p>' . 
+
+		'<p class="tagline">submitted ' . self::$utils->TimeSince ( strtotime ( self::$link->dateCreated ) ) . ' ago by ' . self::$displayName->displayName ( self::$link->userID, "autho user-" . self::$link->userID ) . '<span class="userattrs"></span> to ' . self::$blabInfo [1] . '</p>';
+		// If this is a self post, output the description here:
+		if (self::$link->isSelf == 1) {
+			$description = self::$utils->docodaOutput ( self::$link->description );
+			$this->content .= "
+				<div class=\"expando\">
+					<div class=\"usertext\">
+						<div class=\"md\">
 							$description
 						</div>
 					</div>
-				</div>
-EOT;
-			}
-			$content .= '<ul class="flat-list buttons">';
-			
-			if ($link->isNsfw == 1) {
-				$content .= '<li class="ui-corner-all nsfw-stamp stamp"> <acronym title="Adult content: Not Safe For Work">NSFW</acronym> </li>';
-			}
-			$content .= '<li class="first">'.
-			'<a target="_parent" href="/b/'.$linkBlab[0].'/comments/'.$link->id.'" class="comments">'.$numberComments.' comments</a>'.
-			'</li>'.
-			'<li>'.
-			$reportBtn->buildReportButton($link->id).
-			'</li>'.
-			'</ul>'.
-			'</div>';
-			
+				</div>";
+		}
+		$this->content .= '<ul class="flat-list buttons">';
 		
-		$content .= '</div><!-- end link --> <div class="clrLeft"></div>';
+		if (self::$link->isNsfw == 1) {
+			$this->content .= '<li class="ui-corner-all nsfw-stamp stamp"> <acronym title="Adult content: Not Safe For Work">NSFW</acronym> </li>';
+		}
+		$this->content .= '<li class="first">' . '<a target="_parent" href="/b/' . self::$blabInfo [0] . '/comments/' . self::$link->id . '" class="comments">' . self::$numberComments . ' comments</a>' . '</li>' . '<li>' . self::$reportBtn->buildReportButton ( self::$link->id ) . '</li>' . '</ul>' . '</div>';
 		
-		// If User is logged in Output New Comment Form:
-		$commentForm = '';
-		if ($loggedIn) {
-			$commentForm = '
+		$this->content .= '</div><!-- end link --> <div class="clrLeft"></div>';
+		return true;
+	
+	}
+	
+	/** 	
+	 * 		buildCommentsPage is a view helper for
+	 *  	building the content for a link's comment page
+	 */
+	public function buildCommentPage($linkID, $commentID = null) {
+		// retrieve link for this comment page from the mapper
+		self::$linkMapper->find ( $linkID, self::$link );
+		
+		$commentURL = '/b/' . self::$blabInfo [0] . '/comments/' . self::$link->id;
+		
+		// Build link html
+		if ($this->buildLinkContent () == false) {
+			// no link was found
+			return '<div class="link" style="color: red;">There is nothing to see here...</div>';
+		}
+		
+		// If there are comments associated with this link:	
+		if (self::$numberComments > 0) {
+			$howManyTitle = (self::$numberComments > 1) ? 'All ' . self::$numberComments . ' Comments' : "All Comments";
+			$cModel = new Application_Model_Comments ( self::$blabInfo [0] );
+			// If this is a permalink to one comment:
+			if (! is_null ( $commentID )) {
+				// hide the new comment form by default for permalink pages:
+				$hideDefault = true;
+				$commentContent = $cModel->getAllComments ( $linkID, null, $commentID );
+				$howManyTitle = "
+				<div>
+					<div style=\"padding: 0pt 0.7em;\" class=\"ui-state-highlight ui-corner-all\"> 
+						<p><span style=\"float: left; margin-right: 0.3em;\" class=\"ui-icon ui-icon-info\"></span>
+						You are viewing a single comment's thread. <a rel=\"nofollow\" href=\"$commentURL\">view the rest of the comments -></a></p>
+					</div>
+				</div>";
+			} else {
+				$commentContent = $cModel->getAllComments ( $linkID );
+				$hideDefault = false;
+			}
+			
+			// If User is logged in Output New Comment Form:
+			$commentForm = '';
+			if ($this->loggedIn && $hideDefault == false) {
+				$commentForm = '
 			<a href="#" class="hideForm" onclick="return hideForm($(this))" title="collapse this form">[- Add Comment]</a>
 			<a href="#" class="hideForm" onclick="return openRichEditor($(this))" title="open rich text editor"><span style="display: inline-block; position: relative; top: 2px;" class="ui-icon ui-icon-newwin"></span>Rich Text Editor</a>
-			<form id="form-'.$linkID.'" name="newCommentForm" method="post" onsubmit="return post_comment($(this), \'parent\')" class="usertext cloneable" action="">
+			<form id="form-' . $linkID . '" name="newCommentForm" method="post" onsubmit="return post_comment($(this), \'parent\')" class="usertext cloneable" action="">
 				<div style="" class="usertext-edit">
 					<div>
 						<textarea name="text" cols="1" rows="1"></textarea>
@@ -120,7 +144,7 @@ EOT;
 					<div class="bottom-area">
 					<div style="display:none;" class="form_errors"></div>
 						<div class="usertext-buttons">
-						    <input type="hidden" value="'.$linkID.'" name="link_id">
+						    <input type="hidden" value="' . $linkID . '" name="link_id">
 							<button class="save" type="submit">submit</button>
 							<span class="status" style="display: none;">submitting...</span>
 						</div>
@@ -129,57 +153,33 @@ EOT;
 			</form>
 			';
 			
-		}
-		// If there are comments associated with this link:	
-		if ($numberComments > 0) {
-		$howManyTitle = ($numberComments > 1) ? 'All '.$numberComments.' Comments' : "All Comments";
-		$cModel = new Application_Model_Comments($linkBlab[0]);
-		// If this is a permalink to one comment:
-		if (!is_null($commentID)) {
-		$commentContent = $cModel->getAllComments($linkID, null, $commentID);
-		$howManyTitle = <<<EOT
-	<div>
-				<div style="padding: 0pt 0.7em;" class="ui-state-highlight ui-corner-all"> 
-					<p><span style="float: left; margin-right: 0.3em;" class="ui-icon ui-icon-info"></span>
-					You are viewing a single comment's thread. <a rel="nofollow" href="$commentURL">view the rest of the comments -></a></p>
-				</div>
-</div>	
-EOT;
-		}
-		else {
-		$commentContent = $cModel->getAllComments($linkID);
-		}
-
-		/*
+			}
+			
+			/*
 		 *  Build Comment HTML
 		 */
-		$content .= <<<EOT
-<div class="commentsContent">
-	<div class="commentsTitlebar">
-		$howManyTitle
-	</div>
-	$commentForm
-	$commentContent
-	
-</div>
-EOT;
-				}
-		else { // no comments have been submitted: output empty template
-$content .= <<<EOT
-<div class="commentsContent">
-	<div class="commentsTitlebar">
-		no comments (yet)
-	</div>
-	$commentForm
-<div style="margin: 15px 5px 30px 10px; color: red;">there doesn't seem to be anything here...</div>
-
-</div>
-EOT;
-		
+			$this->content .= "
+		<div class=\"commentsContent\">
+			<div class=\"commentsTitlebar\">
+				$howManyTitle" . PHP_EOL . "
+			</div>
+			$commentForm" . PHP_EOL . "
+			$commentContent" . PHP_EOL . "
 			
+		</div>";
+		} else { // no comments have been submitted: output empty template
+			$this->content .= "
+			<div class=\"commentsContent\">
+				<div class=\"commentsTitlebar\">
+					no comments (yet)
+				</div>
+				$commentForm
+			<div style=\"margin: 15px 5px 30px 10px; color: red;\">there doesn't seem to be anything here...</div>
+			
+			</div>";
+		
 		}
-		return $content;
+		return $this->content;
 	}
-	
 
 }
