@@ -22,6 +22,7 @@ class Zend_View_Helper_displayBlab {
 		$select = $db->select();
 		$select->from('blabs', array("id", "title", "head_title"));
 		$select->where("id = ?", $blabID);	
+		$select->limit(1);
 		$stmt = $db->query($select);
 		$result = $stmt->fetchAll();
 		$title = $result[0]['title'];

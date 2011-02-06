@@ -101,13 +101,14 @@ class Zend_View_Helper_BuildCommentPage {
 		// retrieve link for this comment page from the mapper
 		self::$linkMapper->find ( $linkID, self::$link );
 		
-		$commentURL = '/b/' . self::$blabInfo [0] . '/comments/' . self::$link->id;
-		
 		// Build link html
 		if ($this->buildLinkContent () == false) {
 			// no link was found
 			return '<div class="link" style="color: red;">There is nothing to see here...</div>';
 		}
+		
+		$commentURL = "/b/".self::$blabInfo[0]."/comments/".self::$link->id;
+		
 		$commentForm = '
 			<a href="#" class="hideForm" onclick="return hideForm($(this))" title="collapse this form">[- Add Comment]</a>
 			<a href="#" class="hideForm" onclick="return openRichEditor($(this))" title="open rich text editor"><span style="display: inline-block; position: relative; top: 2px;" class="ui-icon ui-icon-newwin"></span>Rich Text Editor</a>
@@ -139,7 +140,7 @@ class Zend_View_Helper_BuildCommentPage {
 				<div>
 					<div style=\"padding: 0pt 0.7em;\" class=\"ui-state-highlight ui-corner-all\"> 
 						<p><span style=\"float: left; margin-right: 0.3em;\" class=\"ui-icon ui-icon-info\"></span>
-						You are viewing a single comment's thread. <a rel=\"nofollow\" href=\"$commentURL\">view the rest of the comments -></a></p>
+						You are viewing a single comment's thread. <a rel=\"nofollow\" href=\"".$commentURL."\">view the rest of the comments -></a></p>
 					</div>
 				</div>";
 			} else {
@@ -148,7 +149,7 @@ class Zend_View_Helper_BuildCommentPage {
 			}
 			
 			// If User is not logged => do not Output New Comment Form:
-			if (self::$loggedIn == false && $hideDefault !== false) {
+			if (self::$loggedIn == false || $hideDefault !== false) {
 			$commentForm = '';
 			}
 			
@@ -172,7 +173,7 @@ class Zend_View_Helper_BuildCommentPage {
 					no comments (yet)
 				</div>
 				$commentForm
-			<div style=\"margin: 15px 5px 30px 10px; color: red;\">there doesn't seem to be anything here...</div>
+			<div id=\"noComments\" style=\"margin: 15px 5px 30px 10px; color: red;\">there doesn't seem to be anything here...</div>
 			
 			</div>";
 		
