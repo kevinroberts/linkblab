@@ -53,7 +53,11 @@ class Application_Model_Comments
 		
 	}
 	
-	private function formatComment($com) {
+	/**
+	 * @param $com unformatted comment string
+	 * @return $comment in html format
+	 */
+	public function formatComment($com) {
 		$comm = self::$utils->docodaOutput($com, preg_split("/[\s,]+/", DECODACOMMENT));
 		$comm = str_replace("<br /><br />", "<br />", $comm);
 		return $comm;

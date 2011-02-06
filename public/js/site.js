@@ -307,7 +307,8 @@ function addClass(ele,cls) {
  
  function post_comment(comForm, type) {
 	 var err = comForm.find(".form_errors");
-	 var status = comForm.find(".status");
+	 var status = comForm.find(".status"); 
+	 var sBtn = comForm.find("button");
 	 var valid = true;
 	 err.hide();
 	 // If this a new parent comment
@@ -333,6 +334,7 @@ function addClass(ele,cls) {
 		      // Comment valid -- now post it
 		      if (valid) {
 		    	  status.show();
+		    	  sBtn.attr('disabled', '1'); // disable the submit button until ajax is finished
 					$.ajax( {
 						type : "POST",
 						url : "/blabs/comment",
@@ -359,6 +361,7 @@ function addClass(ele,cls) {
 		    				err.show();
 		    			}
 		    			status.hide();
+		    			sBtn.removeAttr('disabled');
 						}
 					
 					});

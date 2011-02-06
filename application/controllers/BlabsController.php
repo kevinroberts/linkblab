@@ -737,6 +737,11 @@ class BlabsController extends Zend_Controller_Action
              // GET POSTED COMMENT INFORMATION
              $data = $this->_request->getPost();
              
+             // Strip any HTML from comment
+             $filter = new Zend_Filter_StripTags();
+             $data['text'] = $filter->filter($data['text']);
+             
+             
              $userID = $auth->getIdentity()->id;
              
              if (isset($data['text']) && isset($data['link_id']) && isset($data['type'])) {
@@ -752,6 +757,7 @@ class BlabsController extends Zend_Controller_Action
              	}
             	   // Save new comment to DB and return insert ID (comment ID):
             	   $commentType = $data['type'];
+            	   
              	   switch ($commentType) {
                         			case 'parent':
                         				$data['comment'] = $data['text'];
@@ -798,9 +804,8 @@ class BlabsController extends Zend_Controller_Action
 
     public function previewAction()
     {
-           $auth = Zend_Auth::getInstance();
            $comments = new Application_Model_Comments();
-           if(!($this->_request->isXmlHttpRequest()) || !($auth->hasIdentity())) {
+           if(!($this->_request->isXmlHttpRequest()) || $comments->loggedIn == false) {
            	// form can only be accessed through ajax 
             		return $this->_redirect("/index/notfound");
             }
@@ -808,10 +813,10 @@ class BlabsController extends Zend_Controller_Action
            $this->_helper->viewRenderer->setNoRender();
              // GET POSTED INFORMATION
            $data = $this->_request->getPost();
+           $filter = new Zend_Filter_StripTags();
            
-           $data = $data['data'];
-           $utils = new Application_Model_Utils();
-           $data = $utils->docodaOutput($data, preg_split("/[\s,]+/", DECODACOMMENT));
+           $data = $filter->filter($data['data']);
+           $data = $comments->formatComment($data);
            $content = <<<EOT
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
 <html>

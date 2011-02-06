@@ -2,7 +2,7 @@
 /**
  *
  * @author sudoKevin
- * @version 
+ * @version 1.0
  */
 
 /**
@@ -153,17 +153,16 @@ class Zend_View_Helper_BuildCommentPage {
 			$commentForm = '';
 			}
 			
-			/*
+		 /*
 		 *  Build Comment HTML
 		 */
-			$this->content .= "
+		$this->content .= "
 		<div class=\"commentsContent\">
 			<div class=\"commentsTitlebar\">
-				$howManyTitle" . PHP_EOL . "
+			$howManyTitle
 			</div>
-			$commentForm" . PHP_EOL . "
-			$commentContent" . PHP_EOL . "
-			
+			$commentForm
+			$commentContent
 		</div>";
 		} else { // no comments have been submitted: output empty template
 			$commentForm = (self::$loggedIn == false) ? '' : $commentForm;
