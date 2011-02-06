@@ -402,11 +402,11 @@ function addClass(ele,cls) {
 			change: function(li, value, text){
 				var g = value.split("|");
 				if (g[0] == 'index') {
-					var url = "http://linkblab.local/index/" + g[1];
+					var url = "/index/" + g[1];
 					window.location.href = url;
 				}
 				else {
-					var url = "http://linkblab.local/b/" + g[0] + "/" + g[1];
+					var url = "/b/" + g[0] + "/" + g[1];
 					window.location.href = url;
 					
 				}

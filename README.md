@@ -10,13 +10,17 @@ Just like Gabriel Weinberg brought to my attention over at http://www.gabrielwei
 TODO 
 ----------------------
 
-- Build comments view. Add custom route for it in bootstrap. 
-- Change Line 268 in site.js on live site
-- Render links for blab specific pages
 - Putting "NSFW" in some subblabs automatically (toggle in blab settings?).
 - alt. Name for karma -- cred? 
-- change line 17 of decoda.php on live site
+
+- Implement Reply Comment
+- Implement Vote Comment
+- Implement Edit own Comment
+- Implement recent viewed links functionality for sidebar
+- Implement User Profile Page
+
 
 To Change for Production
 ----------------------
 - Remove all references to linkblab.local
+- check line 17 of decoda.php on live site
