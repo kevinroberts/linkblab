@@ -17,6 +17,10 @@ h1, h2, h3, h4, h5, h6 {
 	padding-left: 15px; /* adding the padding to the sides of the elements within the divs, instead of the divs themselves, gets rid of any box model math. A nested div with side padding can also be used as an alternate method. */
 }
 
+.baseP {
+	margin: auto 0 1em 0;
+}
+
 a img { /* this selector removes the default blue border displayed in some browsers around an image when it is surrounded by a link */
 	border: none;
 }
@@ -777,7 +781,7 @@ span.linkselectDisabled {
 	background: url("/images/quotes.png") no-repeat scroll left top transparent;
     color: #666666;
     line-height: 1.5em;
-    margin: 0 0 0 30px;
+    margin: 0 0 2px 30px;
     padding: 10px 0 0 20px;
 	
 }
@@ -818,6 +822,10 @@ display: block;
 }
 .comment .collapsed a {
     color: gray;
+    text-decoration: none;
+}
+.comment .collapsed a:hover {
+    background-color: transparent;
 }
 .commentsContent .child {
     border-left: 1px dotted #DDDDFF;
@@ -841,7 +849,7 @@ display: block;
     text-decoration: none;
 }
 .collapsed .expand:hover {
-    background-color: #336699;
+    background-color: #336699 !important;
     color: white;
     text-decoration: none;	
 }

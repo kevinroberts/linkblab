@@ -34,7 +34,7 @@ class Zend_View_Helper_BuildSortingOptions {
 
 		// If this is the home page
 		if ($controller == 'index' && $action == 'index') {
-			if (isset($params['sort'])) {
+			if (isset($params['sort']) && $params['sort'] !== 'index') {
 				
 				$tmpContent .= $sortOps[$params['sort']];
 				unset($sortOps[$params['sort']]);
@@ -66,7 +66,7 @@ EOT;
 			$sortOps[$key] = str_replace('index|',$cat.'|', $value);
 		}
 		
-	  if (isset($params['sort'])) {
+		if (isset($params['sort']) && $params['sort'] !== 'index') {
 				
 				$tmpContent .= $sortOps[$params['sort']];
 				unset($sortOps[$params['sort']]);

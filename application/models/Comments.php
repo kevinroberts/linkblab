@@ -3,9 +3,11 @@
 class Application_Model_Comments
 {
 	public $blabName, $content, $count, $loggedIn, $user;
+	public static $utils, $submitterUID;
 	
 	public function __construct($currentBlab = 'linkblab.com')
 	{
+		self::$utils = new Application_Model_Utils ();
 		$this->blabName = $currentBlab;
 		$this->content = '';
 		/*if (is_array($options)) {
@@ -22,22 +24,50 @@ class Application_Model_Comments
         }
 	}
 	
-	private function displayName($userID, $CSSclass = '') {
+	private function displayName($userID) {
 		
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$select = $db->select();
 		$select->from('users');
 		$select->where("id = ?", $userID);
-		$stmt = $db->query($select);
-		$result = $stmt->fetchAll();
-		$username = $result[0]['username'];
-		if (empty($CSSclass)) {
-			return '<a href="/user/'.$username.'">'.$username.'</a>'.PHP_EOL;
-		}
-		else {
-			return '<a class="'.$CSSclass.'" href="/user/'.$username.'">'.$username.'</a>'.PHP_EOL;
+		$select->limit(1);
+		$result = $db->fetchRow($select);
+		$username = $result['username'];
+		$CSSclass = 'author';
+		$userAttrib = '';
+		
+		if (self::$submitterUID == $userID) {
+			$CSSclass .= " submitter";
+			$userAttrib .= "<a href=\"/user/$username\" title=\"submitter\" class=\"submitter\">S</a>";
 		}
 		
+		if (!empty($userAttrib)) {
+			$userAttribs = "<span class=\"userattrs\"> [$userAttrib] </span>";
+		}
+
+		$userLink = '<a class="'.$CSSclass.'" href="/user/'.$username.'">'.$username.'</a>'.PHP_EOL;
+		return array( 
+		"link" => $userLink,
+		"attrib" => (isset($userAttribs)) ? $userAttribs : ''
+		);
+		
+	}
+	
+	private function formatComment($com) {
+		$comm = self::$utils->docodaOutput($com, preg_split("/[\s,]+/", DECODACOMMENT));
+		$comm = str_replace("<br /><br />", "<br />", $comm);
+		return $comm;
+	}
+	
+	public function getSubmitterUserID($linkID) {
+		$db = Zend_Db_Table::getDefaultAdapter();
+		// Get submitter user's id:
+		$select = $db->select();
+		$select->from('links');
+		$select->where("id = ?", $linkID);
+		$select->limit(1);
+		$result = $db->fetchRow($select);
+		self::$submitterUID = $result['user_id'];
 	}
 	
 	/**
@@ -51,9 +81,20 @@ class Application_Model_Comments
 	 */
 	public function getAllComments($linkID, $orderby = null, $commentID = null) {
 		
+		$db = Zend_Db_Table::getDefaultAdapter();
+		// Get submitter user's id:
+		$this->getSubmitterUserID($linkID);
+		
+		$select = $db->select();
+		$select->from('links');
+		$select->where("id = ?", $linkID);
+		$select->limit(1);
+		$result = $db->fetchRow($select);
+		self::$submitterUID = $result['user_id'];
+		
 		$orderby = (is_null($orderby)) ? 'hot DESC' : $orderby;
 		$content = '';
-		$db = Zend_Db_Table::getDefaultAdapter();
+		
 		$select = $db->select();
 		$select->from("comments", array('id', 'comment', 'up_votes', 'down_votes', 'votes', 'date_added', 'user_id', 'link_id', 'parent_id', 'controversy', 'hot'));
 		if (!is_null($commentID)) {
@@ -176,68 +217,65 @@ class Application_Model_Comments
 		$votes = $comment["votes"];
 		$user_id = $comment["user_id"];
 		
-		$userName = $this->displayName($user_id, 'author submitter');
-		$utils = new Application_Model_Utils();
+		$userName = $this->displayName($user_id);
+		self::$utils = new Application_Model_Utils();
 		$votes = ($votes == 1) ? $votes.' point' : $votes.' points'; 
 		$numberOfChildren = $this->countChildCommments($comment["id"]);
 		$numberOfChildren = ($numberOfChildren == 1) ? $numberOfChildren.' child' : $numberOfChildren.' children'; 
 		
-		$comm = $utils->docodaOutput($com, preg_split("/[\s,]+/", DECODACOMMENT));
-		$comm = str_replace(PHP_EOL, "", $comm);
-		$comm = str_replace("<br /><br />", "<br />", $comm);
+		$comm = $this->formatComment($com);
 		
 		// If this comment has more than 3 downvotes lets hide it
 		$hideToggle = (($up_votes - $down_votes) < -3) ? 'style="display: none;"' : 'style="display: block;"';
 		$showToggle = (($up_votes - $down_votes) < -3) ? 'style="display: block;"' : 'style="display: none;"';
-		$timePast = $utils->TimeSince(strtotime($comment["date_added"]));
+		$timePast = self::$utils->TimeSince(strtotime($comment["date_added"]));
 		$timeAgo = (($up_votes - $down_votes) < -3) ? ' (comment score below threshold) <span style="display:none;">'.$timePast.'</span>' : $timePast;
 		
-		$this->content .= <<<EOT
-<div id="comment-$id" class="comment">		
-		<div $hideToggle class="midcol">
-		<a onclick="commentVoteAction($(this), 1, $id)" title="vote this comment up" class="ui-state-default ui-corner-all" id="recent-link328-up"><span class="ui-icon ui-icon-circle-arrow-n"></span></a>
-		<a onclick="commentVoteAction($(this), 2, $id)" title="vote this comment down" class="ui-state-default ui-corner-all" id="recent-link328-down"><span class="ui-icon ui-icon-circle-arrow-s"></span></a>
-		</div>
-	<div class="entry">
-			<div $showToggle class="collapsed">
-			
-			$userName
-						<span class="userattrs"> [<a href="/r/testingmang/comments/efqk3/great_jquery_linkselect_plugin/" title="submitter" class="submitter">S</a>,<a href="/r/testingmang/about/moderators" title="moderator of /r/testingmang, speaking officially" class="moderator">M</a>]</span>
-						<span class="score dislikes">$down_votes</span>
-						<span class="score likes">$up_votes</span>
-						<span class="score total">$votes</span>
-						$timeAgo
-			
-			<a title="expand" onclick="return showComment($(this))" class="expand" href="#">[+] ($numberOfChildren)</a>
+		$this->content .= "
+		<div id=\"comment-$id\" class=\"comment\">		
+				<div $hideToggle class=\"midcol\">
+				<a onclick=\"commentVoteAction($(this), 1, $id)\" title=\"vote this comment up\" class=\"ui-state-default ui-corner-all\" id=\"recent-link328-up\"><span class=\"ui-icon ui-icon-circle-arrow-n\"></span></a>
+				<a onclick=\"commentVoteAction($(this), 2, $id)\" title=\"vote this comment down\" class=\"ui-state-default ui-corner-all\" id=\"recent-link328-down\"><span class=\"ui-icon ui-icon-circle-arrow-s\"></span></a>
+				</div>
+			<div class=\"entry\">
+					<div $showToggle class=\"collapsed\">
+					
+					{$userName['link']}
+					{$userName['attrib']}
+								<span class=\"score dislikes\">$down_votes</span>
+								<span class=\"score likes\">$up_votes</span>
+								<span class=\"score total\">$votes</span>
+								$timeAgo
+					
+					<a title=\"expand\" onclick=\"return showComment($(this))\" class=\"expand\" href=\"#\">[+] ($numberOfChildren)</a>
+						
+					</div>
+				<div $hideToggle class=\"noncollapsed\">
+				<p class=\"tagline\">
+					{$userName['link']}
+					{$userName['attrib']}
+					<span class=\"score dislikes\">$down_votes</span>
+					<span class=\"score likes\">$up_votes</span>
+					<span class=\"score total\">$votes</span>
+					$timeAgo 
+					<a title=\"collapse\" onclick=\"return hideComment($(this))\" class=\"expand\" href=\"#\">[-]</a>
+				</p>
+				<div class=\"md\">
+					<div>
+					$comm
+					</div>
+					
+				</div>
+				<div style=\"display: none;\" class=\"usertext-edit\"><div><textarea name=\"text\">$com</textarea></div></div>
+				<ul class=\"flat-list buttons\">
+				<li class=\"first\"><a rel=\"nofollow\" class=\"bylink\" href=\"/b/$blab/comment/$id\">permalink</a></li>
 				
-			</div>
-		<div $hideToggle class="noncollapsed">
-		<p class="tagline">
-			$userName
-			<span class="userattrs"> [<a href="/r/testingmang/comments/efqk3/great_jquery_linkselect_plugin/" title="submitter" class="submitter">S</a>,<a href="/r/testingmang/about/moderators" title="moderator of /r/testingmang, speaking officially" class="moderator">M</a>]</span>
-			<span class="score dislikes">$down_votes</span>
-			<span class="score likes">$up_votes</span>
-			<span class="score total">$votes</span>
-			$timeAgo 
-			<a title="collapse" onclick="return hideComment($(this))" class="expand" href="#">[-]</a>
-		</p>
-		<div class="md">
-			<div>
-			$comm
+				</ul>
+			 </div>
 			</div>
 			
-		</div>
-		<div style="display: none;" class="usertext-edit"><div><textarea name="text">$com</textarea></div></div>
-		<ul class="flat-list buttons">
-		<li class="first"><a rel="nofollow" class="bylink" href="/b/$blab/comment/$id">permalink</a></li>
-		
-		</ul>
-	 </div>
-	</div>
-	
-	</div>
-    <div class="clearleft"></div>
-EOT;
+			</div>
+		    <div class=\"clearleft\"></div>";
 		
 	}
 	
@@ -253,68 +291,64 @@ EOT;
 		$votes = $comment["votes"];
 		$user_id = $comment["user_id"];
 		
-		$userName = $this->displayName($user_id, 'author submitter');
-		$utils = new Application_Model_Utils();
+		$userName = $this->displayName($user_id);
 		$votes = ($votes == 1) ? $votes.' point' : $votes.' points'; 
 		$numberOfChildren = $this->countChildCommments($comment["id"]);
 		$numberOfChildren = ($numberOfChildren == 1) ? $numberOfChildren.' child' : $numberOfChildren.' children'; 
 		
-		$comm = $utils->docodaOutput($com, preg_split("/[\s,]+/", DECODACOMMENT));
-		$comm = str_replace(PHP_EOL, "", $comm);
-		$comm = str_replace("<br /><br />", "<br />", $comm);
+		$comm = $this->formatComment($com);
 		
 		// If this comment has more than 3 downvotes lets hide it
 		$hideToggle = (($up_votes - $down_votes) < -3) ? 'style="display: none;"' : 'style="display: block;"';
 		$showToggle = (($up_votes - $down_votes) < -3) ? 'style="display: block;"' : 'style="display: none;"';
-		$timePast = $utils->TimeSince(strtotime($comment["date_added"]));
+		$timePast = self::$utils->TimeSince(strtotime($comment["date_added"]));
 		$timeAgo = (($up_votes - $down_votes) < -3) ? ' (comment score below threshold) <span style="display:none;">'.$timePast.'</span>' : $timePast;
 		
-		$this->content .= <<<EOT
-<div id="comment-$id" class="comment">		
-		<div $hideToggle class="midcol">
-		<a onclick="commentVoteAction($(this), 1, $id)" title="vote this comment up" class="ui-state-default ui-corner-all" id="recent-link328-up"><span class="ui-icon ui-icon-circle-arrow-n"></span></a>
-		<a onclick="commentVoteAction($(this), 2, $id)" title="vote this comment down" class="ui-state-default ui-corner-all" id="recent-link328-down"><span class="ui-icon ui-icon-circle-arrow-s"></span></a>
-		</div>
-	<div class="entry">
-			<div $showToggle class="collapsed">
-			
-			$userName
-						<span class="userattrs"> [<a href="/r/testingmang/comments/efqk3/great_jquery_linkselect_plugin/" title="submitter" class="submitter">S</a>,<a href="/r/testingmang/about/moderators" title="moderator of /r/testingmang, speaking officially" class="moderator">M</a>]</span>
-						<span class="score dislikes">$down_votes</span>
-						<span class="score likes">$up_votes</span>
-						<span class="score total">$votes</span>
-						$timeAgo
-			
-			<a title="expand" onclick="return showComment($(this))" class="expand" href="#">[+] ($numberOfChildren)</a>
+		$this->content .= "
+		<div id=\"comment-$id\" class=\"comment\">		
+				<div $hideToggle class=\"midcol\">
+				<a onclick=\"commentVoteAction($(this), 1, $id)\" title=\"vote this comment up\" class=\"ui-state-default ui-corner-all\" id=\"recent-link328-up\"><span class=\"ui-icon ui-icon-circle-arrow-n\"></span></a>
+				<a onclick=\"commentVoteAction($(this), 2, $id)\" title=\"vote this comment down\" class=\"ui-state-default ui-corner-all\" id=\"recent-link328-down\"><span class=\"ui-icon ui-icon-circle-arrow-s\"></span></a>
+				</div>
+			<div class=\"entry\">
+					<div $showToggle class=\"collapsed\">
+					
+					{$userName['link']}
+					{$userName['attrib']}
+								<span class=\"score dislikes\">$down_votes</span>
+								<span class=\"score likes\">$up_votes</span>
+								<span class=\"score total\">$votes</span>
+								$timeAgo
+					
+					<a title=\"expand\" onclick=\"return showComment($(this))\" class=\"expand\" href=\"#\">[+] ($numberOfChildren)</a>
+						
+					</div>
+				<div $hideToggle class=\"noncollapsed\">
+				<p class=\"tagline\">
+					{$userName['link']}
+					{$userName['attrib']}
+					<span class=\"score dislikes\">$down_votes</span>
+					<span class=\"score likes\">$up_votes</span>
+					<span class=\"score total\">$votes</span>
+					$timeAgo 
+					<a title=\"collapse\" onclick=\"return hideComment($(this))\" class=\"expand\" href=\"#\">[-]</a>
+				</p>
+				<div class=\"md\">
+					<div>
+					$comm
+					</div>
+					
+				</div>
+				<ul class=\"flat-list buttons\">
+				<li class=\"first\"><a rel=\"nofollow\" class=\"bylink\" href=\"/b/$blab/comment/$id\">permalink</a></li>
 				
-			</div>
-		<div $hideToggle class="noncollapsed">
-		<p class="tagline">
-			$userName
-			<span class="userattrs"> [<a href="/r/testingmang/comments/efqk3/great_jquery_linkselect_plugin/" title="submitter" class="submitter">S</a>,<a href="/r/testingmang/about/moderators" title="moderator of /r/testingmang, speaking officially" class="moderator">M</a>]</span>
-			<span class="score dislikes">$down_votes</span>
-			<span class="score likes">$up_votes</span>
-			<span class="score total">$votes</span>
-			$timeAgo 
-			<a title="collapse" onclick="return hideComment($(this))" class="expand" href="#">[-]</a>
-		</p>
-		<div class="md">
-			<div>
-			$comm
+				</ul>
+			 </div>
 			</div>
 			
-		</div>
-		<ul class="flat-list buttons">
-		<li class="first"><a rel="nofollow" class="bylink" href="/b/$blab/comment/$id">permalink</a></li>
-		
-		</ul>
-	 </div>
-	</div>
-	
-	</div>
-    <div class="clearleft"></div>
-EOT;
-		
+			</div>
+		    <div class=\"clearleft\"></div>";
+    	
 	}
 	
 	
@@ -344,7 +378,6 @@ EOT;
 	private function db_create_comment($comment, $linkID, $userID, $parentID = null) {
 		
 		$db = Zend_Db_Table::getDefaultAdapter();
-		$utils = new Application_Model_Utils();
 		$up_votes = 1;
 		$down_votes = 0;
 		$votes = 1;
@@ -357,8 +390,8 @@ EOT;
 	        'user_id' => $userID,
 			'link_id' => $linkID,
 			'parent_id' => new Zend_Db_Expr('NULL'),
-			'controversy' => $utils->_controversy(1, 0),
-			'hot' => $utils->confidence(1, 0)
+			'controversy' => self::$utils->_controversy(1, 0),
+			'hot' => self::$utils->confidence(1, 0)
 	        );
 		$db->insert('comments',$data);
 		$returnID = $db->lastInsertId("comments", "id");

@@ -22,8 +22,8 @@ class Zend_View_Helper_BuildCommentPage {
 		self::$linkMapper = new Application_Model_LinksMapper ( );
 		$auth = Zend_Auth::getInstance ();
 		if ($auth->hasIdentity ()) {
-			$this->loggedIn = true;
-			$this->userID = $auth->getIdentity ()->id;
+			self::$loggedIn = true;
+			$this->userID = $auth->getIdentity()->id;
 		}
 		// Include other comment and link related view helpers
 		include_once ("displayName.php");
@@ -53,7 +53,7 @@ class Zend_View_Helper_BuildCommentPage {
 		
 		$this->content .= '<div class="link singleLink">';
 		
-		if ($this->loggedIn) {
+		if (self::$loggedIn) {
 			$linkbuilder = new Zend_View_Helper_linkBuilder ( );
 			$this->content .= $linkbuilder->linkBuilder ( self::$link->id, self::$link->downvotes, self::$link->votes, self::$link->upvotes );
 		} else {
@@ -108,7 +108,24 @@ class Zend_View_Helper_BuildCommentPage {
 			// no link was found
 			return '<div class="link" style="color: red;">There is nothing to see here...</div>';
 		}
-		
+		$commentForm = '
+			<a href="#" class="hideForm" onclick="return hideForm($(this))" title="collapse this form">[- Add Comment]</a>
+			<a href="#" class="hideForm" onclick="return openRichEditor($(this))" title="open rich text editor"><span style="display: inline-block; position: relative; top: 2px;" class="ui-icon ui-icon-newwin"></span>Rich Text Editor</a>
+			<form id="form-' . $linkID . '" name="newCommentForm" method="post" onsubmit="return post_comment($(this), \'parent\')" class="usertext cloneable" action="">
+				<div style="" class="usertext-edit">
+					<div>
+						<textarea name="text" cols="1" rows="1"></textarea>
+					</div>
+					<div class="bottom-area">
+					<div style="display:none;" class="form_errors"></div>
+						<div class="usertext-buttons">
+						    <input type="hidden" value="' . $linkID . '" name="link_id">
+							<button class="save" type="submit">submit</button>
+							<span class="status" style="display: none;">submitting...</span>
+						</div>
+					</div>
+				</div>
+			</form>';
 		// If there are comments associated with this link:	
 		if (self::$numberComments > 0) {
 			$howManyTitle = (self::$numberComments > 1) ? 'All ' . self::$numberComments . ' Comments' : "All Comments";
@@ -130,29 +147,9 @@ class Zend_View_Helper_BuildCommentPage {
 				$hideDefault = false;
 			}
 			
-			// If User is logged in Output New Comment Form:
+			// If User is not logged => do not Output New Comment Form:
+			if (self::$loggedIn == false && $hideDefault !== false) {
 			$commentForm = '';
-			if ($this->loggedIn && $hideDefault == false) {
-				$commentForm = '
-			<a href="#" class="hideForm" onclick="return hideForm($(this))" title="collapse this form">[- Add Comment]</a>
-			<a href="#" class="hideForm" onclick="return openRichEditor($(this))" title="open rich text editor"><span style="display: inline-block; position: relative; top: 2px;" class="ui-icon ui-icon-newwin"></span>Rich Text Editor</a>
-			<form id="form-' . $linkID . '" name="newCommentForm" method="post" onsubmit="return post_comment($(this), \'parent\')" class="usertext cloneable" action="">
-				<div style="" class="usertext-edit">
-					<div>
-						<textarea name="text" cols="1" rows="1"></textarea>
-					</div>
-					<div class="bottom-area">
-					<div style="display:none;" class="form_errors"></div>
-						<div class="usertext-buttons">
-						    <input type="hidden" value="' . $linkID . '" name="link_id">
-							<button class="save" type="submit">submit</button>
-							<span class="status" style="display: none;">submitting...</span>
-						</div>
-					</div>
-				</div>
-			</form>
-			';
-			
 			}
 			
 			/*
@@ -168,6 +165,7 @@ class Zend_View_Helper_BuildCommentPage {
 			
 		</div>";
 		} else { // no comments have been submitted: output empty template
+			$commentForm = (self::$loggedIn == false) ? '' : $commentForm;
 			$this->content .= "
 			<div class=\"commentsContent\">
 				<div class=\"commentsTitlebar\">

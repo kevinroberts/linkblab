@@ -363,6 +363,11 @@ class Application_Model_Utils
 		}
       }
       
+    /**
+     * @param $ups
+     * @param $downs
+     * @return the computed confidence value for comment ranking
+     */
     public function confidence ($ups, $downs) {
     	$n = $ups + $downs;
     	
@@ -375,18 +380,30 @@ class Application_Model_Utils
     
      // This function will change new lines (line breaks) 
     // to <br/> and it allows you to limit the amount of brs allowed at any point in time.
-	public function nl2br_limit($string, $num = 10){
-		$dirty = preg_replace('/\r/', '', $string);
-		$clean = preg_replace('/\n{4,}/', str_repeat('<br/>', $num), preg_replace('/\r/', '', $dirty));
-		   
-		return nl2br($clean);
+	public function nl2br_limit($string, $num = 2){
+		$string = preg_replace('/\n/', '<br/>', preg_replace('/(\s{'.$num.'})\s+/','$1', $string));
+    	return $string;
 	}
+	
+	/**
+	 * @param $string
+	 * @param $class the html class to be applied
+	 * @return string multiple line breaks converted to paragraph tags
+	 */
+	public function nl2p($string, $class='') {
+        $class_attr = ($class!=='') ? ' class="'.$class.'"' : '';
+        return
+            '<p'.$class_attr.'>'
+            .preg_replace('#(<br\s*?/?>\s*?){2,}#', '</p>'."\n".'<p'.$class_attr.'>', $string)
+            .'</p>';
+    }
+    
+
 	
 	public function docodaOutput ($input, $allowedTags = NULL, $purify = true) {
 				if (is_null($allowedTags)) {
 					$allowedTags = preg_split("/[\s,]+/", DECODAPOST);
 				}
-												
 				$code = new Decoda($input, $allowedTags);
 				$options = array(
 					"clickable" => false,
@@ -401,6 +418,11 @@ class Application_Model_Utils
 				else {
 					$clean_html = $code->parse(true);
 				}
+				// get rid of excessive line breaks
+				$clean_html = self::nl2p($clean_html, 'baseP');
+				/*
+				$clean_html = preg_replace('/(<br\s*\/?>\s*){3,}/', "<br />", $clean_html);
+				*/
 				
 				return $clean_html;		
 	}
