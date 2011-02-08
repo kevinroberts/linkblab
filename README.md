@@ -12,15 +12,14 @@ TODO
 
 - Putting "NSFW" in some subblabs automatically (toggle in blab settings?).
 - alt. Name for karma -- cred? 
-
 - Implement Reply Comment
 - Implement Vote Comment
-- Implement Edit own Comment
 - Implement recent viewed links functionality for sidebar
 - Implement User Profile Page
 
 
 To Change for Production
 ----------------------
+
 - Remove all references to linkblab.local
 - check line 17 of decoda.php on live site

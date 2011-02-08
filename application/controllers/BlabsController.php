@@ -2,6 +2,7 @@
 
 class BlabsController extends Zend_Controller_Action
 {
+	public static $utils;
 
     protected function moveBlabsDown($count, $firstItem)
     {
@@ -54,6 +55,8 @@ class BlabsController extends Zend_Controller_Action
 
     public function init()
     {
+    	self::$utils = new Application_Model_Utils();
+    	
         /* Initialize action controller here */
                                                                 		/* custom route --> see bootstrap file
                                                                 		 * 
@@ -72,7 +75,6 @@ class BlabsController extends Zend_Controller_Action
     public function indexAction()
     {
         $page = $this->_getParam('page',1);
-                                            	$utils = new Application_Model_Utils();
                                             	$auth = Zend_Auth::getInstance();
                                             	$this->view->loggedIn = false;
                                             	if ($auth->hasIdentity())
@@ -80,8 +82,8 @@ class BlabsController extends Zend_Controller_Action
                                         			$this->view->loggedIn = true;
                                         			$userID = $auth->getIdentity()->id;
                                         		}
-                                        		$sortNumber = (isset($_GET['list'])) ? $utils->XssCleaner($_GET['list']) : '';
-                                        		$sortType = 	(isset($_GET['sort'])) ? $utils->XssCleaner($_GET['sort']) : '';	
+                                        		$sortNumber = (isset($_GET['list'])) ? self::$utils->XssCleaner($_GET['list']) : '';
+                                        		$sortType = 	(isset($_GET['sort'])) ? self::$utils->XssCleaner($_GET['sort']) : '';	
                                         			switch ($sortNumber) {
                                         				case '10':
                                         				$sortNumber = 10;
@@ -156,14 +158,13 @@ class BlabsController extends Zend_Controller_Action
 
     public function displayAction()
     {
-        $utils = new Application_Model_Utils();
                 $commentPage = $this->_request->getParam('comments');
                 $commentPagePerm = $this->_request->getParam('comment');
                     	// Check if this is a valid comment page request (it is not empty and has a numeric value)
                     	$isCommentPage = (!empty($commentPage)) ? ((is_numeric($commentPage)) ? true : false) : false;
                     	$isCommentPagePerm = (!empty($commentPagePerm)) ? ((is_numeric($commentPagePerm)) ? true : false) : false;
                     	if ($isCommentPage || $isCommentPagePerm) {
-                    		$this->view->token = $utils->form_token(true);
+                    		$this->view->token = self::$utils->form_token(true);
                 			$this->view->commentPage = ($isCommentPage) ? $commentPage : $commentPagePerm;
                 			if ($isCommentPagePerm)
                 			$this->view->permLink = true;
@@ -187,7 +188,7 @@ class BlabsController extends Zend_Controller_Action
                         	$this->view->loggedIn = true;
                             $userID = $auth->getIdentity()->id;
                 		}
-                		//$this->view->token = $utils->form_token(true); // create unique token for dynamic login form
+                		//$this->view->token = self::$utils->form_token(true); // create unique token for dynamic login form
                         // Check if this the requested blab exists:
                         $db = Zend_Db_Table::getDefaultAdapter();
                         $select = $db->select()->from("blabs", array("id","title"))->where("title = ?", $category);
@@ -259,10 +260,9 @@ class BlabsController extends Zend_Controller_Action
                                                          *    reason: User must be logged in to create new Blabs
                                                          */
                                                              $auth = Zend_Auth::getInstance();
-                                                             $utils = new Application_Model_Utils();
                                                                                     	if (!$auth->hasIdentity())
                                                                                 		{
-                                                                                			return $this->_redirect("/auth/login?msg=2&r=".$utils->urlsafe_b64encode($utils->curPageURL()));
+                                                                                			return $this->_redirect("/auth/login?msg=2&r=".self::$utils->urlsafe_b64encode(self::$utils->curPageURL()));
                                                                                 			//header('Location: http://'.$_SERVER['SERVER_NAME'].'/auth/login?msg=2&r='.urlencode($this->curPageURL()));
                                                                                 			 //$this->_helper->redirector('/auth/login?r='.urlencode($this->curPageURL()));
                                                                                 		}
@@ -332,8 +332,7 @@ class BlabsController extends Zend_Controller_Action
                                                 	 	return $this->_redirect("/index/notfound");
                                                 	 }
                                             	
-                                                $utils = new Application_Model_Utils();
-                                                $userID = $utils->XssCleaner($this->_request->getParam('user'));
+                                                $userID = self::$utils->XssCleaner($this->_request->getParam('user'));
                                                 $blabId = null;
                                                 
                                                 // redirect if no user was specified
@@ -346,7 +345,7 @@ class BlabsController extends Zend_Controller_Action
                                                 
                                                 if ($action == "removeBlab") {
                                                	// action is to remove blab from user's homepage
-                                                	$blabId = $utils->XssCleaner($this->_request->getParam('removeBlab'));
+                                                	$blabId = self::$utils->XssCleaner($this->_request->getParam('removeBlab'));
                                                 	// see if user is the same one logged in
                                         			if ($loggedInId == $userID) {
                                         				// user is the same add the blab to front page	
@@ -404,7 +403,7 @@ class BlabsController extends Zend_Controller_Action
                                                 }
                                                 else {
                                                 // action is addBlab
-                                                $blabId = $utils->XssCleaner($this->_request->getParam('addBlab'));
+                                                $blabId = self::$utils->XssCleaner($this->_request->getParam('addBlab'));
                                                 	if ($loggedInId == $userID) {
                                         			// user is the same add the blab to front page	
                                                 	$db = Zend_Db_Table::getDefaultAdapter();
@@ -465,10 +464,9 @@ class BlabsController extends Zend_Controller_Action
                                         *    reason: User must be logged in to submit new links
                                         */
                                         $auth = Zend_Auth::getInstance();
-                                        $utils = new Application_Model_Utils();
                                 		if (!$auth->hasIdentity())
                                         {
-                                        	return $this->_redirect("/auth/login?msg=2&r=".$utils->urlsafe_b64encode($utils->curPageURL()));
+                                        	return $this->_redirect("/auth/login?msg=2&r=".self::$utils->urlsafe_b64encode(self::$utils->curPageURL()));
                                         	//header('Location: http://'.$_SERVER['SERVER_NAME'].'/auth/login?msg=2&r='.urlencode($this->curPageURL()));
                                         }
                                         $isSelf = false; // is this a self post?
@@ -489,8 +487,8 @@ class BlabsController extends Zend_Controller_Action
                                          		$form->addError("You must enter a URL for your submission");
                                          	}
                                          	// Check if the requested blab is read-only
-                                         	$blabID = $utils->getBlabId($data['blab']);
-                                         	if ($utils->isReadOnly && $user->id !== $utils->userID) 
+                                         	$blabID = self::$utils->getBlabId($data['blab']);
+                                         	if (self::$utils->isReadOnly && $user->id !== self::$utils->userID) 
                                          	{
                                          		$form->addError("Sorry, the Blab ".$data['blab']." has been set to read-only by its founder");
                                          	}
@@ -498,12 +496,14 @@ class BlabsController extends Zend_Controller_Action
                                          	if ($form->isValid($data))
                                 			{
                                 				if (!empty($data["description"])) {
-                										$description = $data["description"];
+                										 $description = $data["description"];
+                										 // Strip any HTML from description
+														$description = self::$utils->strip_html($description);
                                 				}
                                 				// Form submission is valid - create the new link
                                 				$insertCols = array(
                         							"UserID" => $user->id,
-                                                    "Title" => $utils->XssCleaner($data["title"]),
+                                                    "Title" => self::$utils->XssCleaner($data["title"]),
                                                     "LinkUrl" => (!empty($data["link_url"])) ? $data["link_url"] : new Zend_Db_Expr('NULL'),
                                                     "Description" => (!empty($data["description"])) ? $description : new Zend_Db_Expr('NULL'),
                                 					"DateCreated" => date('Y-m-d H:i:s'),
@@ -513,8 +513,8 @@ class BlabsController extends Zend_Controller_Action
                                 					"BlabID" => $blabID,
                                 					"IsNsfw" => (strpos($data["title"], "NSFW") === false) ? 0 : 1, // if title contains nsfw then mark this link as such
                                 					"IsSelf" => ($isSelf) ? 1 : 0,
-                                					"Hot" => $utils->_hot(1, 0, time()),
-                                					"Controversy" => $utils->_controversy(1, 0),
+                                					"Hot" => self::$utils->_hot(1, 0, time()),
+                                					"Controversy" => self::$utils->_controversy(1, 0),
                                 					"TimesReported" => 0
                                                     );
                                                     if (!empty($data["link_url"])) {
@@ -549,8 +549,7 @@ class BlabsController extends Zend_Controller_Action
                             	//The request parameter "term" gets added to that URL
                             	
                             	$auth = Zend_Auth::getInstance();
-                            	$utils = new Application_Model_Utils();
-                            	//$token = $utils->XssCleaner($this->_request->getParam('token'));
+                            	//$token = self::$utils->XssCleaner($this->_request->getParam('token'));
                             	$token = $this->_request->getParam('token');
                             	
                              	 	if(!($this->_request->isXmlHttpRequest()) || !($auth->hasIdentity()) || empty($token)) {
@@ -561,7 +560,7 @@ class BlabsController extends Zend_Controller_Action
                             		$user = $auth->getIdentity();
                             		$validToken = sha1('7a8b6A894D4CBzaAEE0'.$user->username.date('D', time() ));
                             		
-                            		$term = (isset($_GET['term'])) ? $utils->XssCleaner($_GET['term']) : ''; // get posted content
+                            		$term = (isset($_GET['term'])) ? self::$utils->XssCleaner($_GET['term']) : ''; // get posted content
                             		
                             		$this->_helper->layout->disableLayout();
                           	    	$this->_helper->viewRenderer->setNoRender();
@@ -601,7 +600,6 @@ class BlabsController extends Zend_Controller_Action
     public function voteAction()
     {
         $auth = Zend_Auth::getInstance();
-                        $utils = new Application_Model_Utils();
                         if(!($this->_request->isXmlHttpRequest())) {
                         // form can only be accessed through ajax 
                         return $this->_redirect("/index/notfound");
@@ -638,7 +636,7 @@ class BlabsController extends Zend_Controller_Action
                         		
                         		switch ($voteType) {
                         			case 'upVote':
-                        				$result = $utils->submitVote($userID, $data['link'], $voteType);
+                        				$result = self::$utils->submitVote($userID, $data['link'], $voteType);
                  
                         				if ($result['success']) {
                         				$voteResult = array(
@@ -656,7 +654,7 @@ class BlabsController extends Zend_Controller_Action
                 			
                         				break;
                         			case 'downVote':
-                        				$result = $utils->submitVote($userID, $data['link'], $voteType);
+                        				$result = self::$utils->submitVote($userID, $data['link'], $voteType);
                         				
                         				if ($result['success']) {
                         				$voteResult = array(
@@ -737,14 +735,10 @@ class BlabsController extends Zend_Controller_Action
              // GET POSTED COMMENT INFORMATION
              $data = $this->_request->getPost();
              
-             // Strip any HTML from comment
-             $filter = new Zend_Filter_StripTags();
-             $data['text'] = $filter->filter($data['text']);
-             
              
              $userID = $auth->getIdentity()->id;
              
-             if (isset($data['text']) && isset($data['link_id']) && isset($data['type'])) {
+             if (isset($data['text']) && isset($data['type'])) {
              	if (strlen($data['text']) > 10000) {
              		// this comment is too long
              				$Result = array(
@@ -755,11 +749,20 @@ class BlabsController extends Zend_Controller_Action
             		$jsonData = Zend_Json::encode($Result);
               		return $this->_response->appendBody($jsonData);
              	}
-            	   // Save new comment to DB and return insert ID (comment ID):
-            	   $commentType = $data['type'];
+            	// Save new comment to DB and return insert ID (comment ID):
+            	$commentType = $data['type'];
+            	
+            	// Strip any HTML from comments
+             	$data['text'] = self::$utils->strip_html($data['text']);
             	   
              	   switch ($commentType) {
                         			case 'parent':
+                        				if (!isset($data['link_id'])) {
+                        				 $Result = array(
+                        				'message' => 'error! there was a problem processing your request',
+                        				'success' =>  false  );
+                        				 break;
+                        				}
                         				$data['comment'] = $data['text'];
                         				$data['link_id'] = $data['link_id'];
                         				$data['user_id'] = $userID;
@@ -768,7 +771,7 @@ class BlabsController extends Zend_Controller_Action
                         				if ($result['success']) {
                         				$Result = array(
                         				'message' => $result["message"],
-                        				'comment' => $data['comment'], // return decoda result
+                        				'comment' => $comments->formatComment($data['comment']), // return decoda result
                         				'success' =>  true,
                         				'commentID' => $result["id"]         	
                        			 		);
@@ -781,6 +784,28 @@ class BlabsController extends Zend_Controller_Action
                         					
                         				}
                 			
+                        				break;
+                        			case 'edit' :
+                        				$data['comment'] = $data['text'];
+                        				$data['commentID'] = $data['commentID'];
+                        				$data['user_id'] = $userID;
+                        				$result = $comments->submitComment($commentType, $data);
+                        				
+                        				if ($result['success']) {
+											$Result = array(
+	                        				'message' => "saved!",
+	                        				'comment' =>  $comments->formatComment($data['comment']), // return decoda result
+	                        				'success' =>  true,
+	                        				'commentID' => $data["commentID"]
+	                       			 		);
+                        				}
+                        				else {
+	                        				 $Result = array(
+	                        				'message' => 'error! ' . $result["message"],
+	                        				'success' =>  false    	
+	                       			 		);
+                        				}
+                        				
                         				break;
                         			default: break;
                         		}
@@ -813,9 +838,8 @@ class BlabsController extends Zend_Controller_Action
            $this->_helper->viewRenderer->setNoRender();
              // GET POSTED INFORMATION
            $data = $this->_request->getPost();
-           $filter = new Zend_Filter_StripTags();
            
-           $data = $filter->filter($data['data']);
+           $data = self::$utils->XssCleaner($data['data']);
            $data = $comments->formatComment($data);
            $content = <<<EOT
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0//EN" "http://www.w3.org/TR/REC-html40/strict.dtd">
@@ -833,15 +857,18 @@ background: none repeat scroll 0pt 0pt rgb(255, 255, 255);
 #comment-1 {
 	margin-top: 10px;
 }
+ol, ul {
+   padding: 0 15px 15px 40px;
+}
 </style>
 </head>
 <body>
 
-<div class="comment" id="comment-1">		
+<div class="comment" id="comment-0">		
 		<div class="midcol" style="display: block;">
 		<a id="recent-link328-up" class="ui-state-default ui-corner-all"><span class="ui-icon ui-icon-circle-arrow-n"></span></a>
 		<a id="recent-link328-down" class="ui-state-default ui-corner-all"><span class="ui-icon ui-icon-circle-arrow-s"></span></a>
-		</div>
+		</div>	
 	<div class="entry">
 
 		<div class="noncollapsed" style="display: block;">

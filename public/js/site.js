@@ -305,6 +305,22 @@ function addClass(ele,cls) {
 		return false;
  }
  
+ function toggle_edit(ele, commentID) {
+	 var editForm = $('#formEdit-'+commentID);
+	 if (editForm.hasClass("closed")) {
+		 editForm.removeClass("closed");
+		 editForm.show();
+		 ele.hide();
+	 }
+	 else {
+		editForm.addClass("closed");
+		editForm.hide();
+		$('.edit-usertext').show();
+
+	 }
+	 return false;
+}
+ 
  function post_comment(comForm, type) {
 	 var err = comForm.find(".form_errors");
 	 var status = comForm.find(".status"); 
@@ -346,10 +362,46 @@ function addClass(ele,cls) {
 		    				err.text(response.message);
 		    				err.show();
 		    				var texarea = comForm.find("textarea");
-		    				
+		    				var username = $("#loginLink").text();
 		    				// Insert this new comment on top of all other comments:
 		    				comForm.after('<div class="comment" id="comment-'+response.commentID+'">'+
-		    						texarea.val()+'</div>');
+		    				'<div class="midcol" style="display: block;">'+
+		    				'<a id="com-'+response.commentID+'-up" class="ui-state-default ui-corner-all" title="vote this comment up" onclick="commentVoteAction($(this), 1, '+response.commentID+')"><span class="ui-icon ui-icon-circle-arrow-n voted"></span></a>'+
+		    				'<a id="com-'+response.commentID+'-down" class="ui-state-default ui-corner-all" title="vote this comment down" onclick="commentVoteAction($(this), 2, '+response.commentID+')"><span class="ui-icon ui-icon-circle-arrow-s"></span></a>'+
+		    				'</div>'+
+		    				'<div class="entry">'+
+		    				'<div class="collapsed" style="display: none;">'+
+		    				'<a href="/user/'+username+'" class="author">'+username+'</a>&nbsp;'+
+		    				'<span class="score dislikes">0</span>'+
+		    				'<span class="score likes">1</span>'+
+		    				'<span class="score total">1 point</span>'+
+		    				'&nbsp;1 second ago&nbsp;'+
+		    				'<a href="#" class="expand" onclick="return showComment($(this))" title="expand">[+] (0 children)</a>'+
+		    				'</div> <div class="noncollapsed" style="display: block;">'+
+		    				'<p class="tagline">'+
+		    				'<a href="/user/'+username+'" class="author">'+username+'</a>&nbsp;'+
+		    				'<span class="score dislikes">0</span>'+
+		    				'<span class="score likes">1</span>'+
+		    				'<span class="score total">1 point</span>'+
+		    				'&nbsp;1 second ago&nbsp;'+
+		    				'<a href="#" class="expand" onclick="return hideComment($(this))" title="collapse">[-]</a>'+
+		    				'</p>'+
+		    				'<div class="md">'+
+		    				'<div>'+
+		    				response.comment+
+		    				'</div>'+
+		    				'</div>'+
+		    				'<div class="usertext-comment-edit" style="display: none;">'+
+		    				'<div><textarea name="text" class="">'+
+		    				texarea.val()+
+		    				'</textarea>'+
+		    				'</div> </div>'+
+		    				'<ul class="flat-list buttons">'+
+		    				'<li class="first"><a href="/b/self/comment/'+response.commentID+'" class="bylink" rel="nofollow">permalink</a></li>'+
+		    				'</ul>'+
+		    				'</div>'+
+		    				'</div>'+
+		    				'</div>');
 		    				texarea.val('');
 		    			}
 		    			else if (response.error == 'login')
@@ -369,6 +421,62 @@ function addClass(ele,cls) {
 		    	  
 		      }
 		 		 
+	 }
+	 else if (type == 'edit') {
+		 var values = comForm.serializeArray();
+	      jQuery.each(values, function(i, field){
+	          if (field.name == "text") {
+	        	  if (field.value == '') {
+	        		  err.text('Woah there buddy! Enter some text first');
+	        		  err.show(); 
+	        		  valid = false;
+	        	  }
+	        	 
+	          }
+	          if (field.name == "commentID") {
+	        	  if (field.value == '' || isNaN(field.value) ) {
+	        		  err.text('Invalid comment. Please Try again');
+	        		  err.show(); 
+	        		  valid = false;
+	        	  }
+	          }
+	        });
+	      // Comment valid -- now post it
+	      if (valid) {
+	    	  status.show();
+	    	  sBtn.attr('disabled', '1'); // disable the submit button until ajax is finished
+	    		$.ajax( {
+					type : "POST",
+					url : "/blabs/comment",
+					data : comForm.serialize() + "&type="+type,
+					success : function(data) {
+					var response = jQuery.parseJSON( data );
+	    			if (response.success == true)
+	    			{
+	    				err.text(response.message);
+	    				err.show();
+	    				var texarea = comForm.find("textarea");
+	    				var oldText = comForm.prev(".md");
+	    				var username = $("#loginLink").text();
+	    				// Insert this new comment on top of all other comments:
+	    				//comForm.after();
+	    				oldText.html(response.comment); // add the decoda encoded result
+	    				toggle_edit(comForm, response.commentID);
+	    			}
+	    			else if (response.error == 'login')
+	    			{
+	    				showLogin('You must be logged in to comment. <span style="font-size:small">no account yet?: <a href="/auth/signup">sign up!</a></span>');
+	    			}
+	    			else {
+	    				err.text("Error: " + response.message);
+	    				err.show();
+	    			}
+	    			status.hide();
+	    			sBtn.removeAttr('disabled');
+					}
+				
+				});
+	      }
 	 }
 	 return false;
 	 
@@ -396,9 +504,14 @@ function addClass(ele,cls) {
 	 
 	  $('#search').defaultValue({'value':' Search Linkblab'});
 
-	  $(".decoda-spoilerBody").click(function(event) {
-		  event.preventDefault();
+	  $(".decoda-spoilerBody-blk").click(function(event) {
 		  if( window.console ) console.log("Spoiler Clicked");
+		  
+		  if(event.preventDefault) { 
+			  event.preventDefault(); }
+		  else
+			  event.returnValue = false;
+		  return false;
 		});
 
 		$("#sortOptionsDropdown").linkselect({

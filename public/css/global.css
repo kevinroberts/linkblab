@@ -897,8 +897,9 @@ left: 3px;
 	
 }
 .noncollapsed .author.submitter {
-    background-color: #5F99CF;
+    background-color: #0055DF;
      -moz-border-radius: 3px 3px 3px 3px;
+     -webkit-border-radius: 3px 3px 3px 3px; 
     border-radius: 3px 3px 3px 3px;
     color: white;
     padding: 0 2px;
@@ -964,4 +965,10 @@ a[href$="/spoiler"]:hover {
 .collapsedForm {
 	display: inline-block;
 	margin-bottom: 10px;
+}
+.usertext-comment-edit {
+	margin: 15px 0 2px 0;	
+}
+.usertext button {
+    margin: 5px 5px 10px 0;
 }

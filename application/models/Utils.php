@@ -140,9 +140,9 @@ class Application_Model_Utils
 		$string = trim($string);
 		
 		// Prevent potential Unicode codec problems
-		$string = utf8_decode($string);
+		//$string = utf8_decode($string);
 		
-		//Htmlize HTML-specific characters
+		//encode HTML-specific characters
 		$string = htmlentities($string, ENT_NOQUOTES);
 		$string = str_replace("#", "&#35;", $string);
 		$string = str_replace("%", "&#37;", $string);
@@ -418,8 +418,12 @@ class Application_Model_Utils
 				else {
 					$clean_html = $code->parse(true);
 				}
+				// only add p tags to content with more than 2 line breaks
+				if (substr_count($clean_html, '<br />') > 2) 
+				{
 				// get rid of excessive line breaks
 				$clean_html = self::nl2p($clean_html, 'baseP');
+				}
 				/*
 				$clean_html = preg_replace('/(<br\s*\/?>\s*){3,}/', "<br />", $clean_html);
 				*/
@@ -440,6 +444,20 @@ public function urlsafe_b64decode($string) {
         $data .= substr('====', $mod4);
     }
     return base64_decode($data);
+}
+
+public function strip_html($text) {
+             $text = str_replace(array("->" , "=>", " > ", ">>", " < ", ">>", "<>"),
+             					 array("-&gt;", "=&gt;", " &gt; ", "&gt;&gt;", " &lt; ", "&lt;&lt;", "&lt;&gt;"), $text );
+             $text = preg_replace("@<\?@", "#?#", $text);
+             $text = preg_replace("@<!--@", "#!--#", $text);
+             $filter = new Zend_Filter_StripTags();
+             $text = $filter->filter($text);
+             $text = preg_replace("@#\?#@", "<?", $text);
+             $text = preg_replace("@#!--#@", "<!--", $text);
+             $text = str_replace(array("-&gt;", "=&gt;", " &gt; ", "&gt;&gt;", " &lt; ", "&lt;&lt;", "&lt;&gt;"),
+             					 array("->" , "=>", " > ", ">>", " < ", ">>", "<>"), $text );
+             return $text;
 }
 	
 

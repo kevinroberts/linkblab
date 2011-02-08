@@ -160,7 +160,12 @@ sdklj';
 		}
 		
 	}
+		echo '<br /><br /><br />';
+	    echo substr_count(nl2br($msg), '<br />');
+	    echo '<br /><br /><br />';
+	    echo $utils->XssCleaner(nl2br($msg));
     $this->view->msg = preg_replace($pattern2, " <br /> ", nl2br($msg));
+
     }
     
 

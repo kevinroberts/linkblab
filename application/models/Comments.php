@@ -220,7 +220,8 @@ class Application_Model_Comments
 		$down_votes = $comment["down_votes"];
 		$votes = $comment["votes"];
 		$user_id = $comment["user_id"];
-		
+		// is this the user's own comment?
+		$commentEdit = $this->build_own_comment_controls($com, $user_id, $id);
 		$userName = $this->displayName($user_id);
 		self::$utils = new Application_Model_Utils();
 		$votes = ($votes == 1) ? $votes.' point' : $votes.' points'; 
@@ -234,12 +235,13 @@ class Application_Model_Comments
 		$showToggle = (($up_votes - $down_votes) < -3) ? 'style="display: block;"' : 'style="display: none;"';
 		$timePast = self::$utils->TimeSince(strtotime($comment["date_added"]));
 		$timeAgo = (($up_votes - $down_votes) < -3) ? ' (comment score below threshold) <span style="display:none;">'.$timePast.'</span>' : $timePast;
+		$isEdit = ($this->is_modified($id) == true) ? ' <label title="this comment has been edited">*</label>' : ''; 
 		
 		$this->content .= "
 		<div id=\"comment-$id\" class=\"comment\">		
 				<div $hideToggle class=\"midcol\">
-				<a onclick=\"commentVoteAction($(this), 1, $id)\" title=\"vote this comment up\" class=\"ui-state-default ui-corner-all\" id=\"recent-link328-up\"><span class=\"ui-icon ui-icon-circle-arrow-n\"></span></a>
-				<a onclick=\"commentVoteAction($(this), 2, $id)\" title=\"vote this comment down\" class=\"ui-state-default ui-corner-all\" id=\"recent-link328-down\"><span class=\"ui-icon ui-icon-circle-arrow-s\"></span></a>
+				<a onclick=\"commentVoteAction($(this), 1, $id)\" title=\"vote this comment up\" class=\"ui-state-default ui-corner-all\" id=\"com-$id-up\"><span class=\"ui-icon ui-icon-circle-arrow-n\"></span></a>
+				<a onclick=\"commentVoteAction($(this), 2, $id)\" title=\"vote this comment down\" class=\"ui-state-default ui-corner-all\" id=\"com-$id-down\"><span class=\"ui-icon ui-icon-circle-arrow-s\"></span></a>
 				</div>
 			<div class=\"entry\">
 					<div $showToggle class=\"collapsed\">
@@ -249,7 +251,7 @@ class Application_Model_Comments
 								<span class=\"score dislikes\">$down_votes</span>
 								<span class=\"score likes\">$up_votes</span>
 								<span class=\"score total\">$votes</span>
-								$timeAgo
+								$timeAgo $isEdit
 					
 					<a title=\"expand\" onclick=\"return showComment($(this))\" class=\"expand\" href=\"#\">[+] ($numberOfChildren)</a>
 						
@@ -261,7 +263,7 @@ class Application_Model_Comments
 					<span class=\"score dislikes\">$down_votes</span>
 					<span class=\"score likes\">$up_votes</span>
 					<span class=\"score total\">$votes</span>
-					$timeAgo 
+					$timeAgo $isEdit
 					<a title=\"collapse\" onclick=\"return hideComment($(this))\" class=\"expand\" href=\"#\">[-]</a>
 				</p>
 				<div class=\"md\">
@@ -270,10 +272,10 @@ class Application_Model_Comments
 					</div>
 					
 				</div>
-				<div style=\"display: none;\" class=\"usertext-edit\"><div><textarea name=\"text\">$com</textarea></div></div>
+					{$commentEdit['forms']}
 				<ul class=\"flat-list buttons\">
 				<li class=\"first\"><a rel=\"nofollow\" class=\"bylink\" href=\"/b/$blab/comment/$id\">permalink</a></li>
-				
+				{$commentEdit['buttons']}
 				</ul>
 			 </div>
 			</div>
@@ -281,6 +283,36 @@ class Application_Model_Comments
 			</div>
 		    <div class=\"clearleft\"></div>";
 		
+	}
+	
+	private function build_own_comment_controls($comment, $userID, $commentID) {
+
+		$content = array("forms" => "", "buttons" => "");
+		
+		if ($this->user->id == $userID) {
+		$content = array( "forms" =>  "
+		<form style=\"display:none;\" action=\"\" class=\"closed cloneable\" onsubmit=\"return post_comment($(this), 'edit')\" method=\"post\" name=\"newCommentForm\" id=\"formEdit-$commentID\">
+		<div class=\"usertext usertext-comment-edit\">
+			
+		<div><textarea name=\"text\">$comment</textarea></div>
+			<div class=\"form_errors\" style=\"display: none;\"></div>
+			<div class=\"bottom-area\">
+			<div class=\"usertext-buttons\">
+						    <input type=\"hidden\" name=\"commentID\" value=\"$commentID\">
+							<button type=\"submit\" class=\"save\">save</button>
+							<button class=\"cancel\" onclick=\"return toggle_edit($(this), $commentID)\" type=\"button\">cancel</button>
+							<span style=\"display: none;\" class=\"status\">submitting...</span>
+			</div>
+			</div>
+		</div>
+		</form>
+		
+		",
+		"buttons" => "<li><a class=\"edit-usertext\" onclick=\"return toggle_edit($(this), $commentID)\" href=\"#\">edit</a></li>
+					  <li><a class=\"delete-usertext\" onclick=\"return toggle_delete($(this))\" href=\"javascript:void(0)\">delete</a></li>");
+		}
+		
+		return $content;
 	}
 	
 	private function loggedOutComment ($comment) {
@@ -301,7 +333,7 @@ class Application_Model_Comments
 		$numberOfChildren = ($numberOfChildren == 1) ? $numberOfChildren.' child' : $numberOfChildren.' children'; 
 		
 		$comm = $this->formatComment($com);
-		
+		$isEdit = ($this->is_modified($id) == true) ? ' <label title="this comment has been edited">*</label>' : ''; 
 		// If this comment has more than 3 downvotes lets hide it
 		$hideToggle = (($up_votes - $down_votes) < -3) ? 'style="display: none;"' : 'style="display: block;"';
 		$showToggle = (($up_votes - $down_votes) < -3) ? 'style="display: block;"' : 'style="display: none;"';
@@ -311,8 +343,8 @@ class Application_Model_Comments
 		$this->content .= "
 		<div id=\"comment-$id\" class=\"comment\">		
 				<div $hideToggle class=\"midcol\">
-				<a onclick=\"commentVoteAction($(this), 1, $id)\" title=\"vote this comment up\" class=\"ui-state-default ui-corner-all\" id=\"recent-link328-up\"><span class=\"ui-icon ui-icon-circle-arrow-n\"></span></a>
-				<a onclick=\"commentVoteAction($(this), 2, $id)\" title=\"vote this comment down\" class=\"ui-state-default ui-corner-all\" id=\"recent-link328-down\"><span class=\"ui-icon ui-icon-circle-arrow-s\"></span></a>
+				<a onclick=\"commentVoteAction($(this), 1, $id)\" title=\"vote this comment up\" class=\"ui-state-default ui-corner-all\" id=\"com-$id-up\"><span class=\"ui-icon ui-icon-circle-arrow-n\"></span></a>
+				<a onclick=\"commentVoteAction($(this), 2, $id)\" title=\"vote this comment down\" class=\"ui-state-default ui-corner-all\" id=\"com-$id-up\"><span class=\"ui-icon ui-icon-circle-arrow-s\"></span></a>
 				</div>
 			<div class=\"entry\">
 					<div $showToggle class=\"collapsed\">
@@ -322,7 +354,7 @@ class Application_Model_Comments
 								<span class=\"score dislikes\">$down_votes</span>
 								<span class=\"score likes\">$up_votes</span>
 								<span class=\"score total\">$votes</span>
-								$timeAgo
+								$timeAgo $isEdit
 					
 					<a title=\"expand\" onclick=\"return showComment($(this))\" class=\"expand\" href=\"#\">[+] ($numberOfChildren)</a>
 						
@@ -334,7 +366,7 @@ class Application_Model_Comments
 					<span class=\"score dislikes\">$down_votes</span>
 					<span class=\"score likes\">$up_votes</span>
 					<span class=\"score total\">$votes</span>
-					$timeAgo 
+					$timeAgo $isEdit
 					<a title=\"collapse\" onclick=\"return hideComment($(this))\" class=\"expand\" href=\"#\">[-]</a>
 				</p>
 				<div class=\"md\">
@@ -373,10 +405,46 @@ class Application_Model_Comments
                	);
                                 
 				break;
+           case 'edit' :
+           		$comment = $data['comment'];
+                $commentID = $data['commentID'];
+                $userID = $data['user_id'];
+				$result = $this->db_update_comment($comment, $commentID, $userID);
+                $results = array(
+                	'message' => 'Success - comment updated! ',
+                	'success' =>  true,
+                	'commentID' => $commentID         	
+               	);
+               	break;
+           	
             default: break;
      }
 		
 		return $results;
+	}
+	
+	public function is_modified ($commentID) {
+		$db = Zend_Db_Table::getDefaultAdapter();
+		
+		$select = $db->select();
+		$select->from('comments', array("id", "date_modified"));
+		$select->where("id = ?", $commentID);
+		$select->limit(1);
+		$result = $db->fetchRow($select);
+		
+		if (is_null($result['date_modified']) || empty($result['date_modified']) ) 
+			return false;
+		else
+			return true;
+	}
+	
+	private function db_update_comment ($comment, $commentID, $userID) {
+			$db = Zend_Db_Table::getDefaultAdapter();
+			$updateData = array(
+				'comment'             => $comment,
+				'date_modified'      => new Zend_Db_Expr('NOW()')
+                );
+            return $db->update('comments', $updateData, 'id = '.$commentID); 
 	}
 	
 	private function db_create_comment($comment, $linkID, $userID, $parentID = null) {
