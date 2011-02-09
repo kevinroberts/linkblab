@@ -1,0 +1,4 @@
+#  ignore Mac specific files
+.DS_Store
+
+public/images/captchas/*
