@@ -105,6 +105,16 @@ ul.nav a:hover, ul.nav a:active, ul.nav a:focus { /* this changes the background
 	background: #6F7D94;
 	color: #FFF;
 }
+#LinkBlabLogo {
+	clear: right; display: inline;
+}
+#LinkBlabLogo:visited {
+	text-decoration: none;
+}
+#LinkBlabLogo img {
+	background: #8090AB; width: 253px;
+	
+}
 
 #selected a {
 	background: #6F7D94;

@@ -309,7 +309,7 @@ class Application_Model_Comments
 		
 		",
 		"buttons" => "<li><a class=\"edit-usertext\" onclick=\"return toggle_edit($(this), $commentID)\" href=\"#\">edit</a></li>
-					  <li><a class=\"delete-usertext\" onclick=\"return toggle_delete($(this))\" href=\"javascript:void(0)\">delete</a></li>");
+					  <li><a class=\"delete-usertext\" onclick=\"return toggle_delete($(this), $commentID)\" href=\"javascript:void(0)\">delete</a></li>");
 		}
 		
 		return $content;

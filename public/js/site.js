@@ -391,13 +391,27 @@ function addClass(ele,cls) {
 		    				response.comment+
 		    				'</div>'+
 		    				'</div>'+
-		    				'<div class="usertext-comment-edit" style="display: none;">'+
-		    				'<div><textarea name="text" class="">'+
+		    				'<form style="display:none;" action="" class="closed cloneable" onsubmit="return post_comment($(this), \'edit\')" method="post" name="newCommentForm" id="formEdit-'+response.commentID+'">'+
+		    				'<div class="usertext usertext-comment-edit">'+
+		    				'<div><textarea name="text">'+
 		    				texarea.val()+
 		    				'</textarea>'+
-		    				'</div> </div>'+
+		    				'</div>'+
+		    				'<div class="form_errors" style="display: none;"></div>'+
+		    				'<div class="bottom-area">'+ 
+		    				'<div class="usertext-buttons">'+
+		    				'<input type="hidden" name="commentID" value="'+response.commentID+'">'+
+		    				'<button type="submit" class="save">save</button>' +
+		    				'<button class="cancel" onclick="return toggle_edit($(this), '+response.commentID+')" type="button">cancel</button>' +
+		    				'<span style="display: none;" class="status">submitting...</span>' +
+		    				'</div>' +
+		    				'</div>' +
+		    				'</div>' +
+		    				'</form>' +
 		    				'<ul class="flat-list buttons">'+
 		    				'<li class="first"><a href="/b/self/comment/'+response.commentID+'" class="bylink" rel="nofollow">permalink</a></li>'+
+		    				'<li><a class="edit-usertext" onclick="return toggle_edit($(this), '+response.commentID+')" href="#">edit</a></li>'+
+		    				'<li><a class="delete-usertext" onclick="return toggle_delete($(this), '+response.commentID+')" href="#">delete</a></li>'+
 		    				'</ul>'+
 		    				'</div>'+
 		    				'</div>'+
