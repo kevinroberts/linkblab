@@ -262,9 +262,7 @@ class BlabsController extends Zend_Controller_Action
                                                              $auth = Zend_Auth::getInstance();
                                                                                     	if (!$auth->hasIdentity())
                                                                                 		{
-                                                                                			return $this->_redirect("/auth/login?msg=2&r=".self::$utils->urlsafe_b64encode(self::$utils->curPageURL()));
-                                                                                			//header('Location: http://'.$_SERVER['SERVER_NAME'].'/auth/login?msg=2&r='.urlencode($this->curPageURL()));
-                                                                                			 //$this->_helper->redirector('/auth/login?r='.urlencode($this->curPageURL()));
+                                                                                			return $this->_redirect("/login?msg=2&r=".self::$utils->urlsafe_b64encode(self::$utils->curPageURL()));
                                                                                 		}
                                                              $user = $auth->getIdentity();
                                                              $request = $this->getRequest();
@@ -466,8 +464,7 @@ class BlabsController extends Zend_Controller_Action
                                         $auth = Zend_Auth::getInstance();
                                 		if (!$auth->hasIdentity())
                                         {
-                                        	return $this->_redirect("/auth/login?msg=2&r=".self::$utils->urlsafe_b64encode(self::$utils->curPageURL()));
-                                        	//header('Location: http://'.$_SERVER['SERVER_NAME'].'/auth/login?msg=2&r='.urlencode($this->curPageURL()));
+                                        	return $this->_redirect("/login?msg=2&r=".self::$utils->urlsafe_b64encode(self::$utils->curPageURL()));
                                         }
                                         $isSelf = false; // is this a self post?
                                         $user = $auth->getIdentity();

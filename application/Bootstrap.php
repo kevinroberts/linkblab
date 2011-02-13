@@ -164,29 +164,27 @@ EOT;
         //$view->headScript()->appendScript("var age = 0;", $type = 'text/javascript', $attrs = array());
  		
  		// Get the requested URL to determine if controller specific scripts are needed:
- 		$reqURL = $_SERVER["REQUEST_URI"];
+ 		$reqURL = parse_url($_SERVER["REQUEST_URI"]);
  		// Extract Contoller
- 		$reqURL = ltrim($reqURL, "/");
- 		
+ 		$reqURL = ltrim($reqURL['path'], "/");
+ 		$reqURL = ($reqURL == 'login') ? $reqURL.'/' : $reqURL;
  		// If trailing slashes still exist --> extract controller name
  		if (strpos($reqURL, "/")) {
  		 	$reqURL = explode("/", $reqURL);
  			$controller = $reqURL[0];
  			$action = $reqURL[1];
  			// If we are at the auth controller or at the blabs controller (action create) add the following
- 			if ($controller == 'auth' || ($controller == 'blabs' && ($action == "create" || $action == 'submit'))) {
+ 			if ($controller == 'auth' || $controller == 'login' || ($controller == 'blabs' && ($action == "create" || $action == 'submit'))) {
  	    	$script = <<<EOT
 $(document).ready(function(){
 	$(document).uiforms();
 	$('#searchForm').removeClass('uiforms-form ui-widget ui-corner-all');
-	$('#searchForm input').removeClass('uiforms-input ui-state-default ui-corner-all uiforms-text uiforms-submit');
 	$('#searchForm input').focus(function() {
 		$('#searchForm input').removeClass('ui-state-focus');
 		});
 	$('#searchForm input').hover(function() {
 		$('#searchForm input').removeClass('ui-state-hover');
 		});
-	
 });
 EOT;
  				$view->headScript()->appendScript($script, $type = 'text/javascript', $attrs = array());

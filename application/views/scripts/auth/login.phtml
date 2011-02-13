@@ -3,7 +3,9 @@
 $this->headTitle('- Login');
 $this->headScript()->appendFile("/js/jquery.validate.js", $type = 'text/javascript', $attrs = array());
 $this->headScript()->appendFile("/js/jquery.uiforms.js", $type = 'text/javascript', $attrs = array());
-
+$this->headLink()->headLink(array('rel' => 'canonical',
+                                  'href' => $this->baseUrl.'/login'),
+                                  'PREPEND');
 ?>
 <script type="text/javascript">
 <!--

@@ -96,7 +96,7 @@ class AuthController extends Zend_Controller_Action
         Zend_Auth::getInstance()->clearIdentity();
         Zend_Session::expireSessionCookie();
                 		//$this->_helper->redirector('index?msg=1'); // back to login page
-                		header('Location: http://'.$_SERVER['SERVER_NAME'].'/auth/login?msg=1');
+                		$this->_redirect('/login?msg=1');
                 		die();
     }
 
@@ -401,9 +401,9 @@ class AuthController extends Zend_Controller_Action
                                 		    'password_reset_token'      => new Zend_Db_Expr('NULL'),
 											'password_reset_expires'  =>  new Zend_Db_Expr('NULL')
                                 		    );
-            				$n = $db->update('users', $updateData, 'id = '.$results[0]['id'].'');  
-            				
-            				header('Location: http://'.$_SERVER['SERVER_NAME'].'/auth/login?msg=3');
+            				$n = $db->update('users', $updateData, 'id = '.$results[0]['id'].'');
+            				  
+            				$this->_redirect('/login?msg=3');
 						}
 					}
                 						

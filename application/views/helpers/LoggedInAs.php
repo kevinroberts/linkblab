@@ -39,10 +39,10 @@ class Zend_View_Helper_LoggedInAs extends Zend_View_Helper_Abstract {
         $controller = $request->getControllerName();
         $action = $request->getActionName();
         if(($controller == 'auth' && ($action == 'login' || $action == 'signUp')) || $controller == 'index') {
-            $loginUrl = "/auth/login";
+            $loginUrl = "/login";
         	return 'Welcome <a id="loginLink" name="logged_out" title="register for an account" href="/auth/signup">Guest</a> | <a href="'.$loginUrl.'">Login</a>  | <a href="/auth/signup">Register</a> ';
         }
-        $loginUrl = "/auth/login?r=".$utils->urlsafe_b64encode($utils->curPageURL());
+        $loginUrl = "/login?r=".$utils->urlsafe_b64encode($utils->curPageURL());
         return 'Welcome <a id="loginLink" name="logged_out" title="register for an account" href="/auth/signup">Guest</a> | <a href="'.$loginUrl.'">Login</a>  | <a href="/auth/signup">Register</a> ';
 		
 	}
