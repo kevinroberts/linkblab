@@ -280,7 +280,6 @@ function addClass(ele,cls) {
 	  childComments.hide();
 	  collapsedDiv.show();
 	  return false;
-	  
   }
   
  function showComment(elm) {
@@ -303,6 +302,50 @@ function addClass(ele,cls) {
 		$('#dynamicLogin').dialog('open');
 		$('#dynUsername').focus();
 		return false;
+ }
+ 
+ function toggle_delete(ele, commentID) {
+	 if ($("#dialog-confirm").length == 0) {
+	 $("#dynamicLogin").after('<div id="dialog-confirm" title="Delete your comment?"> <p> <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>	Your comment will be permanently deleted; Are you sure?	</p>	</div>	 ');
+	 }
+	 var comment = $("#comment-"+commentID);
+		$( "#dialog-confirm" ).dialog({
+			resizable: true,
+			width: 430,
+			modal: true,
+			buttons: {
+				"Delete Comment": function() {
+					$( this ).dialog( "close" );
+					comment.fadeOut('slow', function() {
+						comment.remove();
+						  });
+		    		$.ajax( {
+						type : "POST",
+						url : "/blabs/comment",
+						data : "type=delete&commentID="+commentID,
+						success : function(data) {
+						var response = jQuery.parseJSON( data );
+		    			if (response.success == true)
+		    			{
+		    			}
+		    			else if (response.error == 'login')
+		    			{
+		    				showLogin('You must be logged in to delete. <span style="font-size:small">no account yet?: <a href="/auth/signup">sign up!</a></span>');
+		    			}
+		    			else {
+		    			}
+						}
+					
+					});
+				},
+				Cancel: function() {
+					$( this ).dialog( "close" );
+				}
+			}
+		});
+		
+		return false;
+	 
  }
  
  function toggle_edit(ele, commentID) {
@@ -615,7 +658,6 @@ function addClass(ele,cls) {
 					}
 					if (password.val().length == 0 || token.length == 0)
 					{
-						alert(token.length);
 						password.addClass("ui-state-error");
 						passwordMsg.text("* required");
 						bValid = false;

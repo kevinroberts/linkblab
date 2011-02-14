@@ -100,7 +100,7 @@ class Application_Model_Comments
 		$content = '';
 		
 		$select = $db->select();
-		$select->from("comments", array('id', 'comment', 'up_votes', 'down_votes', 'votes', 'date_added', 'user_id', 'link_id', 'parent_id', 'controversy', 'hot'));
+		$select->from("comments", array('id', 'comment', 'up_votes', 'down_votes', 'votes', 'date_added', 'deleted', 'user_id', 'link_id', 'parent_id', 'controversy', 'hot'));
 		if (!is_null($commentID)) {
 		$select->where("id = ?", $commentID);
 		}
@@ -122,7 +122,8 @@ class Application_Model_Comments
 			"down_votes" => $comment["down_votes"],
 			"votes" => $comment["votes"],
 			"user_id" => $comment["user_id"],
-			"date_added" =>$comment["date_added"]			
+			"date_added" =>$comment["date_added"],
+			"deleted" => ($comment["deleted"] == 0) ? false : true			
 			);
 		
 		 $this->getChildComments($comment["id"], $comment, $orderby);
@@ -133,7 +134,10 @@ class Application_Model_Comments
 	}
 	
 	public function displaySingleComment($comment) {
-		if ($this->loggedIn) {
+		if ($comment['deleted']) {
+			$this->deletedComment($comment);
+		}
+		else if ($this->loggedIn) {
 			$this->loggedInComment($comment);			
 		}
 		else
@@ -150,7 +154,7 @@ class Application_Model_Comments
 		$orderby = (is_null($orderby)) ? 'hot DESC' : $orderby;
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$select = $db->select();
-		$select->from("comments", array('id', 'comment', 'up_votes', 'down_votes', 'votes', 'date_added', 'user_id', 'link_id', 'parent_id', 'controversy', 'hot'));
+		$select->from("comments", array('id', 'comment', 'up_votes', 'down_votes', 'votes', 'date_added', 'deleted', 'user_id', 'link_id', 'parent_id', 'controversy', 'hot'));
 		$select->where("parent_id = ?", $commentID);
 		$select->order($orderby);
 		$results = $db->fetchAll($select);
@@ -166,7 +170,8 @@ class Application_Model_Comments
 				"down_votes" => $comment["down_votes"],
 				"votes" => $comment["votes"],
 				"user_id" => $comment["user_id"],
-				"date_added" =>$comment["date_added"]			
+				"date_added" =>$comment["date_added"],
+				"deleted" => ($comment["deleted"] == 0) ? false : true	
 				);
 				$this->displaySingleComment($childComment);
 				// Recursively grab all children of this comment 
@@ -309,7 +314,7 @@ class Application_Model_Comments
 		
 		",
 		"buttons" => "<li><a class=\"edit-usertext\" onclick=\"return toggle_edit($(this), $commentID)\" href=\"#\">edit</a></li>
-					  <li><a class=\"delete-usertext\" onclick=\"return toggle_delete($(this), $commentID)\" href=\"javascript:void(0)\">delete</a></li>");
+					  <li><a class=\"delete-usertext\" onclick=\"return toggle_delete($(this), $commentID)\" href=\"#\">delete</a></li>");
 		}
 		
 		return $content;
@@ -322,6 +327,7 @@ class Application_Model_Comments
 		$blab = $this->blabName;
 		$id = $comment["id"]; 
 		$com = $comment["comment"];
+		$comm = $this->formatComment($com);
 		$up_votes = $comment["up_votes"];
 		$down_votes = $comment["down_votes"];
 		$votes = $comment["votes"];
@@ -332,7 +338,7 @@ class Application_Model_Comments
 		$numberOfChildren = $this->countChildCommments($comment["id"]);
 		$numberOfChildren = ($numberOfChildren == 1) ? $numberOfChildren.' child' : $numberOfChildren.' children'; 
 		
-		$comm = $this->formatComment($com);
+		
 		$isEdit = ($this->is_modified($id) == true) ? ' <label title="this comment has been edited">*</label>' : ''; 
 		// If this comment has more than 3 downvotes lets hide it
 		$hideToggle = (($up_votes - $down_votes) < -3) ? 'style="display: none;"' : 'style="display: block;"';
@@ -385,6 +391,74 @@ class Application_Model_Comments
 			</div>
 		    <div class=\"clearleft\"></div>";
     	
+	}
+	
+	private function deletedComment($comment) {
+		if (!is_array($comment))
+			return false;
+		
+		$blab = $this->blabName;
+		$id = $comment["id"]; 
+		$com = $comment["comment"];
+		$comm = '[deleted]';
+		$up_votes = $comment["up_votes"];
+		$down_votes = $comment["down_votes"];
+		$votes = $comment["votes"];
+		$user_id = $comment["user_id"];
+		
+		$userName = array("link" => '[deleted]', "attrib" => '');
+		$votes = ($votes == 1) ? $votes.' point' : $votes.' points'; 
+		$numberOfChildren = $this->countChildCommments($comment["id"]);
+		$numberOfChildren = ($numberOfChildren == 1) ? $numberOfChildren.' child' : $numberOfChildren.' children'; 
+		
+		// If this comment has more than 3 downvotes lets hide it
+		$hideToggle = 'style="display: block;"';
+		$showToggle = 'style="display: none;"';
+		$timePast = self::$utils->TimeSince(strtotime($comment["date_added"]));
+		$timeAgo = (($up_votes - $down_votes) < -3) ? ' (comment score below threshold) <span style="display:none;">'.$timePast.'</span>' : $timePast;
+		
+		$this->content .= "
+		<div id=\"comment-$id\" class=\"comment\">		
+				<div class=\"midcol\">
+				</div>
+			<div class=\"entry\">
+					<div $showToggle class=\"collapsed\">
+					
+					{$userName['link']}
+					{$userName['attrib']}
+								<span class=\"score dislikes\"> </span>
+								<span class=\"score likes\"> </span>
+								<span class=\"score total\"> </span>
+								$timeAgo
+					
+					<a title=\"expand\" onclick=\"return showComment($(this))\" class=\"expand\" href=\"#\">[+] ($numberOfChildren)</a>
+						
+					</div>
+				<div $hideToggle class=\"noncollapsed\">
+				<p class=\"tagline\">
+					{$userName['link']}
+					{$userName['attrib']}
+					<span class=\"score dislikes\"> </span>
+					<span class=\"score likes\"> </span>
+					<span class=\"score total\"> </span>
+					$timeAgo 
+					<a title=\"collapse\" onclick=\"return hideComment($(this))\" class=\"expand\" href=\"#\">[-]</a>
+				</p>
+				<div class=\"md\">
+					<div class=\"deleted\">
+					$comm
+					</div>
+					
+				</div>
+				<ul class=\"flat-list buttons\">
+				<li class=\"first\"><a rel=\"nofollow\" class=\"bylink\" href=\"/b/$blab/comment/$id\">permalink</a></li>
+				
+				</ul>
+			 </div>
+			</div>
+			
+			</div>
+		    <div class=\"clearleft\"></div>";
 	}
 	
 	

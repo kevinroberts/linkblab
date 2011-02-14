@@ -1,5 +1,4 @@
 <?php
-
 class BlabsController extends Zend_Controller_Action
 {
 	public static $utils;
@@ -704,6 +703,7 @@ class BlabsController extends Zend_Controller_Action
 
     public function commentAction()
     {
+    	$db = Zend_Db_Table::getDefaultAdapter();
         $auth = Zend_Auth::getInstance();
                  $comments = new Application_Model_Comments();
                         if(!($this->_request->isXmlHttpRequest())) {
@@ -735,6 +735,25 @@ class BlabsController extends Zend_Controller_Action
              
              $userID = $auth->getIdentity()->id;
              
+             if (isset($data['type']) && isset($data['commentID'])) {
+             	// check if this is the user's own comment
+             	$select = $db->select()->from("comments", array("user_id"))
+                ->where("id = ".$data["commentID"])
+                ->limit(1);
+                $results = $db->fetchRow($select);
+             	
+             	if ($data['type'] == 'delete' && is_numeric($data['commentID']) && $userID == $results['user_id']) {
+             	
+				$updateVal = array(
+                'deleted'      => 1,
+                );
+                $update = $db->update("comments", $updateVal, "id = ".$data["commentID"]);
+                $Result = array(
+                   'success' =>  true
+                    );
+                return $this->_response->appendBody(Zend_Json::encode($Result));
+             	}
+             }
              if (isset($data['text']) && isset($data['type'])) {
              	if (strlen($data['text']) > 10000) {
              		// this comment is too long
@@ -903,6 +922,3 @@ EOT;
 
 
 }
-
-
-

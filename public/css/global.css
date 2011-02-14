@@ -982,3 +982,11 @@ a[href$="/spoiler"]:hover {
 .usertext button {
     margin: 5px 5px 10px 0;
 }
+.deleted {
+    background-color: #F0F0F0;
+    color: gray;
+    display: inline-block;
+    padding-left: 5px;
+    padding-right: 5px;	
+}
+}
