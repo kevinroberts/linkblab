@@ -281,6 +281,7 @@ class Application_Model_Comments
 				<ul class=\"flat-list buttons\">
 				<li class=\"first\"><a rel=\"nofollow\" class=\"bylink\" href=\"/b/$blab/comment/$id\">permalink</a></li>
 				{$commentEdit['buttons']}
+				<li class=\"first\"><a title=\"reply to this comment\" onclick=\"return reply_toggle($(this), $id)\" href=\"#\">reply</a></li>
 				</ul>
 			 </div>
 			</div>

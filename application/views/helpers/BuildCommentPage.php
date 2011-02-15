@@ -115,7 +115,7 @@ class Zend_View_Helper_BuildCommentPage {
 			<form id="form-' . $linkID . '" name="newCommentForm" method="post" onsubmit="return post_comment($(this), \'parent\')" class="usertext cloneable" action="">
 				<div style="" class="usertext-edit">
 					<div>
-						<textarea name="text" cols="1" rows="1"></textarea>
+						<textarea class="newCommentArea" name="text" cols="1" rows="1"></textarea>
 					</div>
 					<div class="bottom-area">
 					<div style="display:none;" class="form_errors"></div>
