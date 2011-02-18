@@ -801,9 +801,38 @@ class BlabsController extends Zend_Controller_Action
                         				}
                 			
                         				break;
+                        			case 'reply' :
+             	  					 if (!isset($data['link_id']) || !isset($data['comment_id'])) {
+                        				 $Result = array(
+                        				'message' => 'error! there was a problem processing your request',
+                        				'success' =>  false  );
+                        				 break;
+                        				}
+             	  						$data['comment'] = $data['text'];
+                        				$data['link_id'] = $data['link_id'];
+                        				$data['comment_id'] = $data['comment_id'];
+                        				$data['user_id'] = $userID;
+                        				$result = $comments->submitComment($commentType, $data);
+                 
+                        				if ($result['success']) {
+                        				$Result = array(
+                        				'message' => $result["message"],
+                        				'comment' => $comments->formatComment($data['comment']), // return decoda result
+                        				'success' =>  true,
+                        				'commentID' => $result["id"]         	
+                       			 		);
+                        				}
+                        				else {
+                        				 $Result = array(
+                        				'message' => 'error! ' . $result["message"],
+                        				'success' =>  false    	
+                       			 		);		
+                        					
+                        				}
+                        				break;
                         			case 'edit' :
                         				$data['comment'] = $data['text'];
-                        				$data['commentID'] = $data['commentID'];
+                        				$data['comment_id'] = $data['comment_id'];
                         				$data['user_id'] = $userID;
                         				$result = $comments->submitComment($commentType, $data);
                         				

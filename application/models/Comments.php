@@ -3,7 +3,7 @@
 class Application_Model_Comments
 {
 	public $blabName, $content, $count, $loggedIn, $user;
-	public static $utils, $submitterUID;
+	public static $utils, $submitterUID, $linkID;
 	
 	public function __construct($currentBlab = 'linkblab.com')
 	{
@@ -88,7 +88,7 @@ class Application_Model_Comments
 		$db = Zend_Db_Table::getDefaultAdapter();
 		// Get submitter user's id:
 		$this->getSubmitterUserID($linkID);
-		
+		self::$linkID = $linkID;
 		$select = $db->select();
 		$select->from('links');
 		$select->where("id = ?", $linkID);
@@ -281,8 +281,23 @@ class Application_Model_Comments
 				<ul class=\"flat-list buttons\">
 				<li class=\"first\"><a rel=\"nofollow\" class=\"bylink\" href=\"/b/$blab/comment/$id\">permalink</a></li>
 				{$commentEdit['buttons']}
-				<li class=\"first\"><a title=\"reply to this comment\" onclick=\"return reply_toggle($(this), $id)\" href=\"#\">reply</a></li>
+				<li class=\"first\"><a class=\"reply-usertext\" title=\"reply to this comment\" onclick=\"return toggle_reply($(this), $id)\" href=\"#\">reply</a></li>
 				</ul>
+				<form style=\"display:none;\" action=\"\" class=\"closed cloneable\" onsubmit=\"return post_comment($(this), 'reply')\" method=\"post\" name=\"newCommentForm\" id=\"formReply-$id\">
+					<div class=\"usertext usertext-comment-reply\">
+					<div><textarea name=\"text\"></textarea></div>
+					<div class=\"form_errors\" style=\"display: none;\"></div>
+					<div class=\"bottom-area\">
+					<div class=\"usertext-buttons\">
+						    <input type=\"hidden\" name=\"comment_id\" value=\"$id\">
+						    <input type=\"hidden\" name=\"link_id\" value=\"".self::$linkID."\">
+							<button type=\"submit\" class=\"save\">save</button>
+							<button class=\"cancel\" onclick=\"return toggle_reply($(this), $id)\" type=\"button\">cancel</button>
+							<span style=\"display: none;\" class=\"status\">submitting...</span>
+					</div>
+					</div>
+					</div>
+				</form>
 			 </div>
 			</div>
 			
@@ -297,14 +312,14 @@ class Application_Model_Comments
 		
 		if ($this->user->id == $userID) {
 		$content = array( "forms" =>  "
-		<form style=\"display:none;\" action=\"\" class=\"closed cloneable\" onsubmit=\"return post_comment($(this), 'edit')\" method=\"post\" name=\"newCommentForm\" id=\"formEdit-$commentID\">
+		<form style=\"display:none;\" action=\"\" class=\"closed cloneable\" onsubmit=\"return post_comment($(this), 'edit')\" method=\"post\" name=\"editCommentForm\" id=\"formEdit-$commentID\">
 		<div class=\"usertext usertext-comment-edit\">
 			
 		<div><textarea name=\"text\">$comment</textarea></div>
 			<div class=\"form_errors\" style=\"display: none;\"></div>
 			<div class=\"bottom-area\">
 			<div class=\"usertext-buttons\">
-						    <input type=\"hidden\" name=\"commentID\" value=\"$commentID\">
+						    <input type=\"hidden\" name=\"comment_id\" value=\"$commentID\">
 							<button type=\"submit\" class=\"save\">save</button>
 							<button class=\"cancel\" onclick=\"return toggle_edit($(this), $commentID)\" type=\"button\">cancel</button>
 							<span style=\"display: none;\" class=\"status\">submitting...</span>
@@ -480,9 +495,17 @@ class Application_Model_Comments
                	);
                                 
 				break;
+           case 'reply':
+           		$result = $this->db_create_comment($data['comment'], $data['link_id'], $data['user_id'], $data['comment_id']);
+           		$results = array(
+                'message' => 'Success - comment saved! ',
+                'success' =>  true,
+                'id' => $result         	
+               	);
+           		break;
            case 'edit' :
            		$comment = $data['comment'];
-                $commentID = $data['commentID'];
+                $commentID = $data['comment_id'];
                 $userID = $data['user_id'];
 				$result = $this->db_update_comment($comment, $commentID, $userID);
                 $results = array(
@@ -536,7 +559,7 @@ class Application_Model_Comments
 			'date_added' => new Zend_Db_Expr('NOW()'),
 	        'user_id' => $userID,
 			'link_id' => $linkID,
-			'parent_id' => new Zend_Db_Expr('NULL'),
+			'parent_id' => (is_null($parentID)) ? new Zend_Db_Expr('NULL') : $parentID,
 			'controversy' => self::$utils->_controversy(1, 0),
 			'hot' => self::$utils->confidence(1, 0)
 	        );

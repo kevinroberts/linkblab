@@ -785,7 +785,8 @@ span.linkselectDisabled {
 .md {
     font-size: small;
     max-width: 60em;
-    overflow: auto;
+    overflow-x: inherit;
+    overflow-y: none;
 }
 .decoda-quote {
 	background: url("/images/quotes.png") no-repeat scroll left top transparent;
@@ -976,7 +977,7 @@ a[href$="/spoiler"]:hover {
 	display: inline-block;
 	margin-bottom: 10px;
 }
-.usertext-comment-edit {
+.usertext-comment-edit, .usertext-comment-reply  {
 	margin: 15px 0 2px 0;	
 }
 .usertext button {

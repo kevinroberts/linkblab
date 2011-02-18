@@ -364,6 +364,23 @@ function addClass(ele,cls) {
 	 return false;
 }
  
+ function toggle_reply(ele, commentID) {
+	 var replyForm = $('#formReply-'+commentID); 
+	 if (replyForm.hasClass("closed")) {
+		 replyForm.removeClass("closed");
+		 replyForm.show();
+		 replyForm.find("textarea").focus();
+		 ele.hide();
+	 }
+	 else {
+		replyForm.addClass("closed");
+		replyForm.hide();
+		$('.reply-usertext').show();
+
+	 }
+	 return false;
+ }
+ 
  function post_comment(comForm, type) {
 	 var err = comForm.find(".form_errors");
 	 var status = comForm.find(".status"); 
@@ -371,7 +388,7 @@ function addClass(ele,cls) {
 	 var valid = true;
 	 err.hide();
 	 // If this a new parent comment
-	 if (type == 'parent') {
+	 if (type == 'parent' || type == "reply") {
 		 	  var values = comForm.serializeArray();
 		      jQuery.each(values, function(i, field){
 		          if (field.name == "text") {
@@ -380,9 +397,14 @@ function addClass(ele,cls) {
 		        		  err.show(); 
 		        		  valid = false;
 		        	  }
+		        	  if (field.value.length > 10000) {
+		        		  err.text('Your comment is too long. Keep it under 10,000 characters.');
+		        		  err.show(); 
+		        		  valid = false;
+		        	  }
 		        	 
 		          }
-		          if (field.name == "link_id") {
+		          if (field.name == "link_id" || field.name == "comment_id") {
 		        	  if (field.value == '' || isNaN(field.value) ) {
 		        		  err.text('Invalid comment. Try again');
 		        		  err.show(); 
@@ -407,7 +429,12 @@ function addClass(ele,cls) {
 		    				var texarea = comForm.find("textarea");
 		    				var username = $("#loginLink").text();
 		    				// Insert this new comment on top of all other comments:
-		    				comForm.after('<div class="comment" id="comment-'+response.commentID+'">'+
+		    				$child = ''; $child2 = '';
+		    				if (type == "reply") {
+		    					$child = "<div style=\"padding-top: 10px; border-left: 1px dotted #DDF;\"> ";
+		    					$child2 = " </div>";
+		    				}
+		    				comForm.after($child+'<div class="comment" id="comment-'+response.commentID+'">'+
 		    				'<div class="midcol" style="display: block;">'+
 		    				'<a id="com-'+response.commentID+'-up" class="ui-state-default ui-corner-all" title="vote this comment up" onclick="commentVoteAction($(this), 1, '+response.commentID+')"><span class="ui-icon ui-icon-circle-arrow-n voted"></span></a>'+
 		    				'<a id="com-'+response.commentID+'-down" class="ui-state-default ui-corner-all" title="vote this comment down" onclick="commentVoteAction($(this), 2, '+response.commentID+')"><span class="ui-icon ui-icon-circle-arrow-s"></span></a>'+
@@ -458,8 +485,12 @@ function addClass(ele,cls) {
 		    				'</ul>'+
 		    				'</div>'+
 		    				'</div>'+
-		    				'</div>');
+		    				'</div>'+$child2);
 		    				texarea.val('');
+		    				if (type == "reply") {
+		    					comForm.hide();
+		    					comForm.addClass('closed');
+		    				}
 		    			}
 		    			else if (response.error == 'login')
 		    			{
@@ -485,6 +516,11 @@ function addClass(ele,cls) {
 	          if (field.name == "text") {
 	        	  if (field.value == '') {
 	        		  err.text('Woah there buddy! Enter some text first');
+	        		  err.show(); 
+	        		  valid = false;
+	        	  }	        	  
+	        	  if (field.value.length > 10000) {
+	        		  err.text('Your comment is too long. Keep it under 10,000 characters.');
 	        		  err.show(); 
 	        		  valid = false;
 	        	  }
@@ -535,6 +571,7 @@ function addClass(ele,cls) {
 				});
 	      }
 	 }
+
 	 return false;
 	 
 	 
