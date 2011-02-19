@@ -120,7 +120,7 @@ class Zend_View_Helper_BuildCommentPage {
 					<div class="bottom-area">
 					<div style="display:none;" class="form_errors"></div>
 						<div class="usertext-buttons">
-						    <input type="hidden" value="' . $linkID . '" name="linkID">
+						    <input type="hidden" value="' . $linkID . '" name="link_id">
 							<button class="save" type="submit">submit</button>
 							<span class="status" style="display: none;">submitting...</span>
 						</div>
