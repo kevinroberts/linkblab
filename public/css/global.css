@@ -195,10 +195,8 @@ ul.nav a:hover, ul.nav a:active, ul.nav a:focus { /* this changes the background
 	display:block;
 }
 
-
 #loginMenu {
 clear:right;
-
 float:right;
 margin-top:26px;
 padding:0;
@@ -823,6 +821,9 @@ display: block;
 .comment {
     margin-left: 10px;
     margin-bottom: 10px;
+}
+div.comment.removed {
+	margin-left: 20px;
 }
 .comment .collapsed {
     color: gray !important;

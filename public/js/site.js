@@ -386,6 +386,7 @@ function addClass(ele,cls) {
 	 var status = comForm.find(".status"); 
 	 var sBtn = comForm.find("button");
 	 var valid = true;
+	 var link_id = 0;
 	 err.hide();
 	 // If this a new parent comment
 	 if (type == 'parent' || type == "reply") {
@@ -406,10 +407,12 @@ function addClass(ele,cls) {
 		          }
 		          if (field.name == "link_id" || field.name == "comment_id") {
 		        	  if (field.value == '' || isNaN(field.value) ) {
-		        		  err.text('Invalid comment. Try again');
-		        		  err.show(); 
+		        		  err.text('error! there was a problem processing your request');
+		        		  err.show();
 		        		  valid = false;
 		        	  }
+		        	  if (field.name == "link_id")
+		        		  link_id = field.value;
 		          }
 		        });
 		      // Comment valid -- now post it
@@ -482,6 +485,19 @@ function addClass(ele,cls) {
 		    				'<li class="first"><a href="/b/self/comment/'+response.commentID+'" class="bylink" rel="nofollow">permalink</a></li>'+
 		    				'<li><a class="edit-usertext" onclick="return toggle_edit($(this), '+response.commentID+')" href="#">edit</a></li>'+
 		    				'<li><a class="delete-usertext" onclick="return toggle_delete($(this), '+response.commentID+')" href="#">delete</a></li>'+
+		    				'<li class="first"><a class="reply-usertext" title="reply to this comment" onclick="return toggle_reply($(this), '+response.commentID+')" href="#">reply</a></li>'+
+		    				'<form style="display:none;" action="" class="closed cloneable" onsubmit="return post_comment($(this), \'reply\')" method="post" name="newCommentForm" id="formReply-'+response.commentID+'">'+
+		    				'<div class="usertext usertext-comment-reply">'+
+		    				'<div><textarea name="text"></textarea></div>'+
+		    				'<div class="form_errors" style="display: none;"></div>'+
+		    				'<div class="bottom-area">'+
+		    				'<div class="usertext-buttons">'+
+		    				'<input type="hidden" name="comment_id" value="'+response.commentID+'">'+
+		    				'<input type="hidden" name="link_id" value="'+link_id+'">'+
+		    				'<button type="submit" class="save">save</button>'+
+		    				'<button class="cancel" onclick="return toggle_reply($(this), '+response.commentID+')" type="button">cancel</button>'+
+		    				'<span style="display: none;" class="status">submitting...</span>'+
+		    				'</div> </div> </div> </form>'+
 		    				'</ul>'+
 		    				'</div>'+
 		    				'</div>'+

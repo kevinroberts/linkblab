@@ -135,6 +135,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     	//require_once ('/models/BigOrNot_CookieManager.php');
     	require_once('../library/decoda/decoda.php');
     	require_once('../library/htmlpurifier/HTMLPurifier.standalone.php');
+    	require_once('../library/Browser.php');
     	
     	Zend_Registry::set("rememberMeSeconds",  $this->getOption('remember_me_seconds')); // set default time a session should be persistant
     	// Set allowed markup constants
@@ -143,23 +144,35 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
         $IE = '.content { margin-right: -1px; } /* this 1px negative margin can be placed on any of the columns in this layout with the same corrective effect. */'.PHP_EOL;
     	$IE.= 'ul.nav a { zoom: 1; }  /* the zoom property gives IE the hasLayout trigger it needs to correct extra whiltespace between the links */';
-    	$IE2 = <<<EOT
-.thumbnail {
-width:inherit;
-}
-EOT;
+    	$IE2 = ".thumbnail {
+					width:inherit;
+					}
+				#loginMenu {
+				clear: none;
+				margin-top: 45px;
+				margin-right: -65px;
+				}";
     	$this->bootstrap('view');
     	$view = $this->getResource('view');
     	$view->headMeta()->appendHttpEquiv('Content-Language', 'en-US');
         $view->headMeta()->appendHttpEquiv('Cache-Control', 'public, no-transform, must-revalidate');
 		$view->headMeta()->appendHttpEquiv('expires', date('r', time()+(86400*30)));
         $view->doctype('XHTML1_STRICT');
-       // $utils = new Application_Model_Utils();
-  	//	$view->token = $utils->form_token(true);	
         
         $view->headTitle('LinkBlab');
- 		$view->headStyle()->appendStyle($IE, array('conditional' => 'lt IE 7'));
+        $browser = new Browser();
+        if ($browser->getBrowser() == Browser::BROWSER_IE) {
+        $view->headStyle()->appendStyle($IE, array('conditional' => 'lt IE 7'));
  		$view->headStyle()->appendStyle($IE2, array('conditional' => 'lte IE 9'));
+        $view->headScript()->appendFile("/js/jquery-1.4.4.min.js");
+        $view->headScript()->appendFile("/js/jquery-ui-latest.min.js");
+        }
+        else {
+        // This is not IE
+        	$view->headScript()->appendFile("/js/jquery-latest.min.js");
+        	$view->headScript()->appendFile("/js/jquery-ui-latest.min.js");
+        }
+ 		
  		$view->headScript()->appendFile("/js/site.js");
         //$view->headScript()->appendScript("var age = 0;", $type = 'text/javascript', $attrs = array());
  		

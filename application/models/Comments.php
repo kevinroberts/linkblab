@@ -434,7 +434,7 @@ class Application_Model_Comments
 		$timeAgo = (($up_votes - $down_votes) < -3) ? ' (comment score below threshold) <span style="display:none;">'.$timePast.'</span>' : $timePast;
 		
 		$this->content .= "
-		<div id=\"comment-$id\" class=\"comment\">		
+		<div id=\"comment-$id\" class=\"comment removed\">		
 				<div class=\"midcol\">
 				</div>
 			<div class=\"entry\">
