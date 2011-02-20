@@ -500,7 +500,7 @@ class BlabsController extends Zend_Controller_Action
                                 				// Form submission is valid - create the new link
                                 				$insertCols = array(
                         							"UserID" => $user->id,
-                                                    "Title" => self::$utils->XssCleaner($data["title"]),
+                                                    "Title" => self::$utils->XssCleaner(trim($data["title"])),
                                                     "LinkUrl" => (!empty($data["link_url"])) ? $data["link_url"] : new Zend_Db_Expr('NULL'),
                                                     "Description" => (!empty($data["description"])) ? $description : new Zend_Db_Expr('NULL'),
                                 					"DateCreated" => date('Y-m-d H:i:s'),
@@ -527,7 +527,7 @@ class BlabsController extends Zend_Controller_Action
                                                  $link = new Application_Model_Link($insertCols);
                                                  $mapper = new Application_Model_LinksMapper();
                                                  $mapper->save($link);
-                                            	 return $this->_redirect('/b/'.strtolower($data['blab']));
+                                            	 return $this->_redirect('/b/'.strtolower($data['blab']).'/comments/'.$mapper->lastInsertID.'/'.$link->urlTitle);
                                 			}
                                 			else {
                                 				$toBlab = $data['blab'];
@@ -970,7 +970,7 @@ ol, ul {
 
 <div class="comment" id="comment-0">		
 		<div class="midcol" style="display: block;">
-		<a id="recent-link328-up" class="ui-state-default ui-corner-all"><span class="ui-icon ui-icon-circle-arrow-n"></span></a>
+		<a id="recent-link328-up" class="ui-state-default ui-corner-all"><span class="ui-icon ui-icon-circle-arrow-n voted"></span></a>
 		<a id="recent-link328-down" class="ui-state-default ui-corner-all"><span class="ui-icon ui-icon-circle-arrow-s"></span></a>
 		</div>	
 	<div class="entry">
@@ -980,9 +980,9 @@ ol, ul {
 			<a href="JavaScript:void(0);" class="author submitter">you</a>
 
 			<span class="userattrs"> [<a class="submitter" title="submitter" href="JavaScript:void(0);">S</a>]</span>
-			<span class="score dislikes">0</span>
-			<span class="score likes">1</span>
-			<span class="score total">1 point</span>
+			<span class="score downVotes">0</span>
+			<span class="score upVotes">1</span>
+			<span class="score total voted">1 point</span>
 			just now
 			<a href="JavaScript:void(0);" class="expand" title="collapse">[-]</a>
 		</p>

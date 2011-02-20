@@ -657,6 +657,12 @@ position: relative;
 top:-20px;
 font-size: 12px;
 }
+.commentSortOptions {
+display: inline-block;
+position: relative;
+left: 5px;
+font-size: 12px;
+}
 /*
  * define styles for linkselect plug-in
  */

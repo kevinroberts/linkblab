@@ -578,7 +578,9 @@ public function strip_html($text) {
  *     $anal - If set to *true*, will remove all non-alphanumeric characters.
  */
 public function urlsafe_title($string, $force_lowercase = true, $anal = false) {
-	 $strip = array( "&gt;", "&lt;", "&amp;", "&aacute;", "~", "`", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "=", "+", "[", "{", "]",
+return $this->friendly_url($string);
+
+/*	 $strip = array( "&gt;", "&lt;", "&amp;", "&aacute;", "~", "`", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "=", "+", "[", "{", "]",
                    "}", "\\", "|", ";", ":", "\"", "'", "&#8216;", "&#8217;", "&#8220;", "&#8221;", "&#8211;", "&#8212;",
                    "—", "–", ",", "<", ".", ">", "/", "?");
     $clean = trim(str_replace($strip, "", strip_tags($string)));
@@ -588,9 +590,36 @@ public function urlsafe_title($string, $force_lowercase = true, $anal = false) {
         (function_exists('mb_strtolower')) ?
             mb_strtolower($clean, 'UTF-8') :
             strtolower($clean) :
-        $clean;
+        $clean;*/
 	
 }
+
+public function friendly_url($url) {
+	// everything to lower and no spaces begin or end
+	$url = strtolower(trim($url));
+ 
+	//replace accent characters, depends your language is needed
+	//$url=$this->replace_accents($url);
+ 
+	// decode html maybe needed if there's html I normally don't use this
+	//$url = html_entity_decode($url,ENT_QUOTES,'UTF8');
+    $strip = array( "&gt;", "&lt;", "&amp;", "&aacute;",
+                   "&#8216;", "&#8217;", "&#8220;", "&#8221;", "&#8211;", "&#8212;",
+                   "—", "–");
+    $url = str_replace($strip, "", $url);
+	// adding - for spaces and union characters
+	$find = array(' ', '&', '\r\n', '\n', '+',',');
+	$url = str_replace ($find, '-', $url);
+ 
+	//delete and replace rest of special chars
+	$find = array('/[^a-z0-9\-<>]/', '/[\-]+/', '/<[^>]*>/');
+	$repl = array('', '-', '');
+	$url = preg_replace ($find, $repl, $url);
+ 
+	//return the friendly url
+	return $url; 
+}
+
 	
 	
 }

@@ -14,7 +14,7 @@ class Zend_View_Helper_BuildCommentPage {
 	// standard variables
 	public static $content = '', $loggedIn = false, $userID, $blabInfo, $numberComments;
 	// object variables
-	public static $utils, $link, $linkMapper, $linkBlabs, $howMany, $reportBtn, $displayName;
+	public static $utils, $link, $linkMapper, $linkBlabs, $howMany, $reportBtn, $displayName, $sort;
 	
 	public function __construct() {
 		self::$utils = new Application_Model_Utils ( );
@@ -31,6 +31,8 @@ class Zend_View_Helper_BuildCommentPage {
 		include_once ("displayHowManyComments.php");
 		include_once ("BuildReportButton.php");
 		include_once ("linkBuilder.php");
+		include_once ("BuildSortingOptions.php");
+		self::$sort = new Zend_View_Helper_BuildSortingOptions();
 		self::$linkBlabs = new Zend_View_Helper_displayBlab ( );
 		self::$howMany = new Zend_View_Helper_displayHowManyComments ( );
 		self::$reportBtn = new Zend_View_Helper_BuildReportButton ( );
@@ -47,7 +49,7 @@ class Zend_View_Helper_BuildCommentPage {
 		
 		// $linkBlab fills an array with [0] = blab title, [1] = anchor link to blab
 		self::$blabInfo = self::$linkBlabs->displayBlab ( self::$link->blabID, 1 );
-		$linkURL = (self::$link->isSelf == 1) ? '/b/' . self::$blabInfo [0] . '/comments/' . self::$link->id : self::$link->linkurl;
+		$linkURL = (self::$link->isSelf == 1) ? '/b/' . self::$blabInfo [0] . '/comments/' . self::$link->id.'/'.self::$link->urlTitle : self::$link->linkurl;
 		
 		self::$numberComments = self::$howMany->displayHowManyComments ( self::$link->id );
 		
@@ -86,11 +88,41 @@ class Zend_View_Helper_BuildCommentPage {
 		if (self::$link->isNsfw == 1) {
 			$this->content .= '<li class="ui-corner-all nsfw-stamp stamp"> <acronym title="Adult content: Not Safe For Work">NSFW</acronym> </li>';
 		}
-		$this->content .= '<li class="first">' . '<a target="_parent" href="/b/' . self::$blabInfo [0] . '/comments/' . self::$link->id . '" class="comments">' . self::$numberComments . ' comments</a>' . '</li>' . '<li>' . self::$reportBtn->buildReportButton ( self::$link->id ) . '</li>' . '</ul>' . '</div>';
+		$this->content .= '<li class="first">' . '<a target="_parent" href="/b/' . self::$blabInfo [0] . '/comments/' . self::$link->id .'/'.self::$link->urlTitle. '" class="comments">' . self::$numberComments . ' comments</a>' . '</li>' . '<li>' . self::$reportBtn->buildReportButton ( self::$link->id ) . '</li>' . '</ul>' . '</div>';
 		
 		$this->content .= '</div><!-- end link --> <div class="clrLeft"></div>';
 		return true;
 	
+	}
+	
+	public function getDefaultSort() {
+		$frontController = Zend_Controller_Front::getInstance();
+		$request = $frontController->getRequest();
+		$controller = $request->getControllerName();
+		$action = $request->getActionName();
+		$params = $request->getParams();
+		$sort = 'hot DESC';
+		switch ($params['sort']) {
+			case 'hot':
+				$sort = 'hot DESC';
+				break;
+			case 'controversial':
+				$sort = 'controversy DESC';
+				break;
+			case 'new':
+				$sort = 'date_added DESC';
+				break;
+			case 'old':
+				$sort = 'date_added ASC';
+				break;
+			case 'top':
+				$sort = 'votes DESC';
+				break;
+			default: 
+				break;
+		}
+		
+		return $sort;
 	}
 	
 	/** 	
@@ -107,7 +139,7 @@ class Zend_View_Helper_BuildCommentPage {
 			return '<div class="link" style="color: red;">There is nothing to see here...</div>';
 		}
 		
-		$commentURL = "/b/".self::$blabInfo[0]."/comments/".self::$link->id;
+		$commentURL = "/b/".self::$blabInfo[0]."/comments/".self::$link->id.'/'.self::$link->urlTitle;
 		
 		$commentForm = '
 			<a href="#" class="hideForm" onclick="return hideForm($(this))" title="collapse this form">[- Add Comment]</a>
@@ -129,6 +161,7 @@ class Zend_View_Helper_BuildCommentPage {
 			</form>';
 		// If there are comments associated with this link:	
 		if (self::$numberComments > 0) {
+			$sortingOptions = self::$sort->buildSortingOptions(true);
 			$howManyTitle = (self::$numberComments > 1) ? 'All ' . self::$numberComments . ' Comments' : "All Comments";
 			$cModel = new Application_Model_Comments ( self::$blabInfo [0] );
 			// If this is a permalink to one comment:
@@ -136,6 +169,7 @@ class Zend_View_Helper_BuildCommentPage {
 				// hide the new comment form by default for permalink pages:
 				$hideDefault = true;
 				$commentContent = $cModel->getAllComments ( $linkID, null, $commentID );
+				
 				$howManyTitle = "
 				<div>
 					<div style=\"padding: 0pt 0.7em;\" class=\"ui-state-highlight ui-corner-all\"> 
@@ -144,7 +178,7 @@ class Zend_View_Helper_BuildCommentPage {
 					</div>
 				</div>";
 			} else {
-				$commentContent = $cModel->getAllComments ( $linkID );
+				$commentContent = $cModel->getAllComments ( $linkID, $this->getDefaultSort() );
 				$hideDefault = false;
 			}
 			
@@ -158,8 +192,9 @@ class Zend_View_Helper_BuildCommentPage {
 		 */
 		$this->content .= "
 		<div class=\"commentsContent\">
+		<a id=\"commentsArea\" name=\"commentsArea\" style=\"\"></a> 
 			<div class=\"commentsTitlebar\">
-			$howManyTitle
+			$howManyTitle $sortingOptions
 			</div>
 			$commentForm
 			$commentContent

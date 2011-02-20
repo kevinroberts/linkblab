@@ -107,16 +107,20 @@ EOT;
 		$controller = $request->getControllerName();
 		$action = $request->getActionName();
 		$params = $request->getParams();
-		$sortOps = array(
-		"hot" => '<option value="'.urlencode($utils->curPageURL()).'||hot">best</option>',
-		"controversial" => '<option value="'.urlencode($utils->curPageURL()).'|controversial">controversial</option>',
-		"new" => '<option value="'.urlencode($utils->curPageURL()).'||new">newest comments</option>',
-		"old" => '<option value="'.urlencode($utils->curPageURL()).'||old">oldest comments</option>',
-		"top" => '<option value="'.urlencode($utils->curPageURL()).'||top">top rated</option>'
-		);
+		
+
 		
 		// If this is a comments page
 		if ($controller == 'blabs' && $action == 'display' && isset($params['comments']) && !isset($params['comment'])) {
+		$url = '/b/'.$params['category'].'/comments/'.$params['comments'].'/'.$params['title'];
+			$sortOps = array(
+		"hot" => '<option value="'.$url.'|hot">best</option>',
+		"controversial" => '<option value="'.$url.'|controversial">controversial</option>',
+		"new" => '<option value="'.$url.'|new">newest comments</option>',
+		"old" => '<option value="'.$url.'|old">oldest comments</option>',
+		"top" => '<option value="'.$url.'|top">top rated</option>'
+		);
+			
 			if (isset($params['sort']) && $params['sort'] !== 'index') {
 				
 				$tmpContent .= $sortOps[$params['sort']];
@@ -144,7 +148,7 @@ EOT;
 		}
 		// else if this is a permalink comment page
 		else if ($controller == 'blabs' && $action == 'display' && !isset($params['comments']) && isset($params['comment'])) {
-			
+		$content = '';	
 			
 		}
 		

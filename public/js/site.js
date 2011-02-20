@@ -786,6 +786,14 @@ function addClass(ele,cls) {
 				}
 	  		}
 		});
+		
+		$("#commentSortOptionsDropdown").linkselect({
+			change: function(li, value, text){
+				var g = value.split("|");
+				var url = unescape(g[0]) + '/' + g[1] + '#commentsArea';
+			    window.location.href = url;
+	  		}
+		});
 		$('input#title, input#link_url').focus(function() {
 			if ($(this).css( 'width') !== '510px') {  //toggle this only once
 			$(this).animate({
