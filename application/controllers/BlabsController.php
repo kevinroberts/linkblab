@@ -168,7 +168,8 @@ class BlabsController extends Zend_Controller_Action
                 			if ($isCommentPagePerm)
                 			$this->view->permLink = true;
                     	}
-                    	else // else render normal blab page with links
+                    	// ELSE: This is a normal blab page with links
+                    	else 
                     	{
                     	    	
                         $sort = $this->_request->getParam('sort'); $sortNumber = 25;

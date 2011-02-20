@@ -28,16 +28,29 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 		);
 		
 		 $router->addRoute('b', $route);
-		 
+		
 	   $route = new Zend_Controller_Router_Route (
        'b/:category/comments/:comments',
         array('controller' => 'blabs',
           'action'     => 'display', 
           'category'   => 'pics',
-          'comments' => 8 )
+          'comments' => 5 )
 		);
 		
-		 $router->addRoute('bComments', $route);
+		$router->addRoute('bComments', $route);
+	/*
+	 * Add custom route for comments with a title
+	 */
+	   $route = new Zend_Controller_Router_Route (
+       'b/:category/comments/:comments/:title',
+        array('controller' => 'blabs',
+          'action'     => 'display', 
+          'category'   => 'pics',
+          'comments' => 8,
+        	'title' => 'london-1949-pic' )
+		);
+		
+		$router->addRoute('bComments', $route);
 	   
 	    $route = new Zend_Controller_Router_Route (
        'b/:category/comment/:comment',

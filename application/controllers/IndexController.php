@@ -101,70 +101,8 @@ class IndexController extends Zend_Controller_Action
     public function testAction()
     {
         $utils = new Application_Model_Utils();
-                $msg = '
-        tempus. Pellentesque sed enim. Sed a lorem dapibus imperdiet faucibus orci dui, dictum ut, sagittis eleifend. Nulla massa. Vivamus laoreet fermentum. Morbi eleifend. Sed lobortis velit. Pellentesque habitant morbi tristique dapibus, libero a auctor auctor neque scelerisque sed, tempus ultrices, gravida justo, hendrerit wisi. Morbi sodales arcu,  
-        
-        dapibus nisl. Donec suscipit
-
-        
-        vitae, ligula. Fusce ullamcorper varius laoreet. Nam ut leo at eros. Donec nec nisl. Nam dictum quis, egestas sit amet neque. Suspendisse rutrum vel, pellentesque adipiscing laoreet, tortor turpis, et malesuada aliquet, arcu sed aliquet elit. Mauris lobortis tincidunt enim. Mauris nunc odio et lacus scelerisque fermentum erat. Sed
-        
-        Phasellus vestibulum et, commodo est pretium bibendum dui.
-
-        
-        
-        
-        
-        In pharetra. Donec tortor ante eu tortor eget metus sed lorem pretium pellentesque. Proin at magna arcu, eget dolor sit amet leo lacus, faucibus orci luctus orci, in faucibus orci dictum accumsan. Quisque eu lectus. Morbi laoreet, lacus nulla vitae tellus felis augue turpis, accumsan nunc. Quisque in ligula nulla, at ligula. Curabitur ornare vel, dignissim id, libero. Cras ut sem. Aenean ut quam. Nullam suscipit in, commodo pede convallis tellus. Integer faucibus quis, luctus arcu elementum eleifend, metus et ultrices posuere quis, orci. Suspendisse potenti. Vivamus magna. Donec nunc. Donec non
-        
-        
-        
-        
-        
-        
-        aptent taciti sociosqu ad litora torquent per inceptos hymenaeos. Nunc a elit laoreet viverra. Mauris luctus et magnis dis parturient montes, nascetur ridiculus mus. Pellentesque sem eget orci luctus tellus sodales dignissim turpis. Proin dui vel nulla. Maecenas pharetra sit amet augue. Morbi laoreet, purus consectetuer adipiscing wisi. Morbi urna elit, sit amet, consectetuer lobortis dapibus, felis blandit vestibulum ipsum. Curabitur ut vehicula libero a lectus. Sed et lacus vehicula enim nec eros. Suspendisse fringilla odio. Ut sodales dignissim eu, ornare risus. Fusce suscipit lectus. Vestibulum id ipsum. Fusce imperdiet sed, urna. Phasellus tellus felis non mi non magna. Mauris        
-[code lang="php" hl="15"]/**
- * Parse the default markup depending on the allowed
- * @param string $string
- * @return string
- */
-protected function parseDefaults($string) {
-	if (empty($this->allowed)) {
-		$code = $this->markupCode;
-		$result = $this->markupResult;
-	} else {
-		$code = array();
-		$result = array();
-		foreach ($this->markupCode as $tag => $regex) {
-			if (in_array($tag, $this->allowed)) {
-				$code[$tag] = $this->markupCode[$tag];
-				$result[$tag] = $this->markupResult[$tag];
-			}
-		}
-	}
-	
-	$string = preg_replace($code, $result, $string);
-	return $string;
-}[/code]
-
-faskjdlkf 
-sdklj';
-    //$clean_html = preg_replace('#[<br />?]{2,}#ms', "<br />", $clean_html);
-    $pattern = '#^\[code(.*?)\[/code\]$#ms';
-    $pattern2 = '/(<br\s*\/?>\s*){3,}/';
-	$matches = null;
-	$i = preg_match_all($pattern2, nl2br($msg), $matches);
-	foreach ($matches as $m) {
-		foreach ($m as $v) {
-			echo $utils->XssCleaner($v);
-		}
-		
-	}
-		echo '<br /><br /><br />';
-	    echo substr_count(nl2br($msg), '<br />');
-	    echo '<br /><br /><br />';
-	    echo $utils->XssCleaner(nl2br($msg));
-    $this->view->msg = preg_replace($pattern2, " <br /> ", nl2br($msg));
+        $msg = "London, 1949 (PIC)";
+    	$this->view->msg = $utils->urlsafe_title($msg);
 
     }
     

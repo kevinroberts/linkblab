@@ -9,6 +9,7 @@ class Application_Model_Link
 	protected $_downvotes;
 	protected $_votes;
 	protected $_title;
+	protected $_urlTitle;
 	protected $_description;
 	protected $_dateCreated;
 	protected $_blabID;
@@ -70,7 +71,12 @@ class Application_Model_Link
 	public function getLinkUrl() {
 		return $this->_linkurl;
 	}
-
+	/**
+	 * @return the $_urlTitle
+	 */
+	public function getUrlTitle() {
+		return $this->_urlTitle;
+	}
 	/**
 	 * @return the $_domain
 	 */
@@ -156,6 +162,11 @@ class Application_Model_Link
 	public function setTitle($title) {
       $this->_title = $title;
       return $this;
+	}
+	
+	public function setUrlTitle($urlTitle) {
+		$this->_urlTitle = $urlTitle;
+		return $this;
 	}
 		
 	/**

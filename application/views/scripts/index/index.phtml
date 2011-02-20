@@ -26,7 +26,7 @@ $this->headScript()->appendScript($script, $type = 'text/javascript', $attrs = a
 <div id="promotedAndUpcoming" class="link">
 	<?php foreach ($this->upcoming as $link):
 	$linkBlab = $this->displayBlab($link->blabID, 1); // returns an array with [0] = blab title, [1] = anchor link to blab
-	$linkURL = ($link->isSelf == 1) ? '/b/'.$linkBlab[0].'/comments/'.$link->id : $link->linkurl;
+	$linkURL = ($link->isSelf == 1) ? '/b/'.$linkBlab[0].'/comments/'.$link->id.'/'.$link->urlTitle : $link->linkurl;
  	?>	
 <div class="link">
 		<?php if ($this->loggedIn) {?>
@@ -52,7 +52,7 @@ $this->headScript()->appendScript($script, $type = 'text/javascript', $attrs = a
 				<acronym title="Adult content: Not Safe For Work">NSFW</acronym></li>
 				<?php } ?>
 				<li class="first">
-					<a target="_parent" href="/b/<?php echo $linkBlab[0].'/comments/'.$link->id; ?>" class="comments"><?php echo $this->displayHowManyComments($link->id); ?> comments</a>
+					<a target="_parent" href="/b/<?php echo $linkBlab[0].'/comments/'.$link->id.'/'.$link->urlTitle; ?>" class="comments"><?php echo $this->displayHowManyComments($link->id); ?> comments</a>
 				</li>
 				<li>
 					<?php echo $this->buildReportButton($link->id); ?>
@@ -96,7 +96,7 @@ $i = 1 + (25 * ($this->pagenumber -1));
 
 foreach ($this->paginator as $link):
 $linkBlab = $this->displayBlab($link->blabID, 1); // returns an array with [0] = blab title, [1] = anchor link to blab
-$linkURL = ($link->isSelf == 1) ? '/b/'.$linkBlab[0].'/comments/'.$link->id : $link->linkurl;
+$linkURL = ($link->isSelf == 1) ? '/b/'.$linkBlab[0].'/comments/'.$link->id.'/'.$link->urlTitle : $link->linkurl;
 ?>
 <div class="link">
 <span style="width: 2.2ex;" class="listNumber"><?php echo $i; ?></span>	
@@ -123,7 +123,7 @@ $linkURL = ($link->isSelf == 1) ? '/b/'.$linkBlab[0].'/comments/'.$link->id : $l
 				<acronym title="Adult content: Not Safe For Work">NSFW</acronym></li>
 				<?php } ?>
 				<li class="first">
-					<a target="_parent" href="/b/<?php echo $linkBlab[0].'/comments/'.$link->id; ?>" class="comments"><?php echo $this->displayHowManyComments($link->id); ?> comments</a>
+					<a target="_parent" href="/b/<?php echo $linkBlab[0].'/comments/'.$link->id.'/'.$link->urlTitle; ?>" class="comments"><?php echo $this->displayHowManyComments($link->id); ?> comments</a>
 				</li>
 				<li>
 					<?php echo $this->buildReportButton($link->id); ?>
