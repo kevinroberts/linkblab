@@ -43,7 +43,8 @@ class Application_Model_LinksMapper
         	'is_nsfw' => $link->getIsNsfw(), // is this link considered NSFW?
         	'is_self' => $link->getIsSelf(), // is this a self-post?
         	'hot' => $link->getHot(),
-        	'times_reported' => $link->getTimesReported()
+        	'times_reported' => $link->getTimesReported(),
+        	'url_safe_title' => $link->getUrlTitle()
         );
 
  
@@ -89,12 +90,11 @@ class Application_Model_LinksMapper
                   ->setIsNsfw($row->is_nsfw)
                   ->setIsSelf($row->is_self)
                   ->setHot($row->hot)
-                  ->setUrlTitle($utils->urlsafe_title($row->title))
+                  ->setUrlTitle($row->url_safe_title)
                   ->setTimesReported($row->times_reported);
     }
     
     public function fetchAll($limit = null, $blabID = null, $domain = null, $orderBy = null, $where = null) {
-    	$utils = new Application_Model_Utils();
     	$defaultOrder = (is_null($orderBy)) ? array('hot DESC', 'date_created DESC') : array($orderBy, 'date_created DESC'); // set up user specified order criteria
     	$where = (is_null($where)) ? "DATE_SUB(CURDATE(),INTERVAL 180 DAY) <= date_created" : $where; // customize where condition or use default link < 180 days
     	if (!is_null($limit) && is_null($blabID) && is_null($domain)) { // all links with limit
@@ -128,7 +128,7 @@ class Application_Model_LinksMapper
                   ->setIsNsfw($row->is_nsfw)
                   ->setIsSelf($row->is_self)
                   ->setHot($row->hot)
-                  ->setUrlTitle($utils->urlsafe_title($row->title))
+                  ->setUrlTitle($row->url_safe_title)
                   ->setTimesReported($row->times_reported);
             $links[] = $link;
     		

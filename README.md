@@ -13,8 +13,6 @@ TODO
 
 - Putting "NSFW" in some subblabs automatically (toggle in blab settings?).
 - alt. Name for karma -- cred? 
-- Implement Reply Comment
-- Implement Vote Comment
 - Implement recent viewed links functionality for sidebar
 - Implement User Profile Page
 

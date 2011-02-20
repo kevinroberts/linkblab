@@ -42,15 +42,17 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 	 * Add custom route for comments with a title
 	 */
 	   $route = new Zend_Controller_Router_Route (
-       'b/:category/comments/:comments/:title',
+       'b/:category/comments/:comments/:title/:sort',
         array('controller' => 'blabs',
           'action'     => 'display', 
           'category'   => 'pics',
           'comments' => 8,
-        	'title' => 'london-1949-pic' )
+        	'title' => 'london-1949-pic',
+        'sort' => 'hot' )
 		);
 		
-		$router->addRoute('bComments', $route);
+		$router->addRoute('bCommentsTitle', $route);
+		
 	   
 	    $route = new Zend_Controller_Router_Route (
        'b/:category/comment/:comment',
@@ -182,7 +184,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         }
         else {
         // This is not IE
-        	$view->headScript()->appendFile("/js/jquery-latest.min.js");
+        	$view->headScript()->appendFile("/js/jquery-1.4.4.min.js");
         	$view->headScript()->appendFile("/js/jquery-ui-latest.min.js");
         }
  		

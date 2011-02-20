@@ -512,7 +512,8 @@ class BlabsController extends Zend_Controller_Action
                                 					"IsSelf" => ($isSelf) ? 1 : 0,
                                 					"Hot" => self::$utils->_hot(1, 0, time()),
                                 					"Controversy" => self::$utils->_controversy(1, 0),
-                                					"TimesReported" => 0
+                                					"TimesReported" => 0,
+                                					"UrlTitle" => self::$utils->urlsafe_title($data['title'])
                                                     );
                                                     if (!empty($data["link_url"])) {
                                                     	$insertCols["LinkUrl"] = $data["link_url"];

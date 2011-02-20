@@ -578,7 +578,7 @@ public function strip_html($text) {
  *     $anal - If set to *true*, will remove all non-alphanumeric characters.
  */
 public function urlsafe_title($string, $force_lowercase = true, $anal = false) {
-	 $strip = array( "&gt;", "&lt;", "&amp;", "~", "`", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "=", "+", "[", "{", "]",
+	 $strip = array( "&gt;", "&lt;", "&amp;", "&aacute;", "~", "`", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "=", "+", "[", "{", "]",
                    "}", "\\", "|", ";", ":", "\"", "'", "&#8216;", "&#8217;", "&#8220;", "&#8221;", "&#8211;", "&#8212;",
                    "—", "–", ",", "<", ".", ">", "/", "?");
     $clean = trim(str_replace($strip, "", strip_tags($string)));
