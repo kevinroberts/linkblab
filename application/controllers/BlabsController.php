@@ -685,6 +685,63 @@ class BlabsController extends Zend_Controller_Action
                         	
                         	
                 
+                        } // else is this a vote for a comment? (does it have the 'comment' variable POSTED)
+                        else if (isset($data['comment']) && isset($data['type'])) {
+                            if (is_numeric($data['comment']) && is_numeric($data['type'])) {
+                        		$voteType = ($data['type'] == 1) ? 'upVote' : 'downVote';
+                        		
+                        		switch ($voteType) {
+                        			case 'upVote':
+                        				$result = self::$utils->submitCommentVote($userID, $data['comment'], $voteType);
+                 
+                        				if ($result['success']) {
+                        				$voteResult = array(
+                        				'message' => 'Success - upVote! ' . $result["message"],
+                        				'success' =>  true         	
+                       			 		);	
+                        				}
+                        				else {
+                        				 $voteResult = array(
+                        				'message' => 'error! ' . $result["message"],
+                        				'success' =>  false    	
+                       			 		);		
+                        					
+                        				}
+                			
+                        				break;
+                        			case 'downVote':
+                        				$result = self::$utils->submitCommentVote($userID, $data['comment'], $voteType);
+                        				
+                        				if ($result['success']) {
+                        				$voteResult = array(
+                        				'message' => 'Success - upVote! ' . $result["message"],
+                        				'success' =>  true         	
+                       			 		);	
+                        				}
+                        				else {
+                        				 $voteResult = array(
+                        				'message' => 'error! ' . $result["message"],
+                        				'success' =>  false    	
+                       			 		);		
+                        					
+                        				}
+                        				
+                        				break;
+                        			default: break;
+                        		}
+                        		
+                
+                        		
+                        	}
+                        	else {
+                        		 $voteResult = array(
+                        	'message' => 'You need to enter a valid comment number and type',
+                        	'success' =>  false ,
+                        	'error' => "param"
+                        		);
+                        	$jsonData = Zend_Json::encode($voteResult);
+                        	return $this->_response->appendBody($jsonData);
+                        	}
                         }
                         else {
                         // User needs to submit the correct parameters

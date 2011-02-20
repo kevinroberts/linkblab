@@ -218,6 +218,7 @@ class Application_Model_Comments
 	private function loggedInComment ($comment) {
 		if (!is_array($comment))
 			return false;
+		$db = Zend_Db_Table::getDefaultAdapter();
 		$blab = $this->blabName;
 		$id = $comment["id"]; 
 		$com = $comment["comment"]; 
@@ -228,12 +229,33 @@ class Application_Model_Comments
 		// is this the user's own comment?
 		$commentEdit = $this->build_own_comment_controls($com, $user_id, $id);
 		$userName = $this->displayName($user_id);
-		self::$utils = new Application_Model_Utils();
+
 		$votes = ($votes == 1) ? $votes.' point' : $votes.' points'; 
 		$numberOfChildren = $this->countChildCommments($comment["id"]);
 		$numberOfChildren = ($numberOfChildren == 1) ? $numberOfChildren.' child' : $numberOfChildren.' children'; 
 		
 		$comm = $this->formatComment($com);
+		
+		//set the vote status of this comment (down-voted or up-voted)
+		$select = $db->select();
+		$select->from("comment_history");
+		$select->where("user_id = ?", $this->user->id);
+		$select->where("comment_id = ?", $id);
+		$select->limit(1);
+		
+		$result = $db->fetchRow($select);
+		
+		$voteClass = "unVoted"; $downVoteSpan = ""; $upVoteSpan = "";
+		if(!empty($result)) {
+			if ($result['vote_up'] == 1) {
+				$voteClass = "voted";
+				$upVoteSpan = " voted";
+			}
+			else {
+				$voteClass = "downvoted";
+				$downVoteSpan = " downvoted";
+			}
+		}
 		
 		// If this comment has more than 3 downvotes lets hide it
 		$hideToggle = (($up_votes - $down_votes) < -3) ? 'style="display: none;"' : 'style="display: block;"';
@@ -245,17 +267,17 @@ class Application_Model_Comments
 		$this->content .= "
 		<div id=\"comment-$id\" class=\"comment\">		
 				<div $hideToggle class=\"midcol\">
-				<a onclick=\"commentVoteAction($(this), 1, $id)\" title=\"vote this comment up\" class=\"ui-state-default ui-corner-all\" id=\"com-$id-up\"><span class=\"ui-icon ui-icon-circle-arrow-n\"></span></a>
-				<a onclick=\"commentVoteAction($(this), 2, $id)\" title=\"vote this comment down\" class=\"ui-state-default ui-corner-all\" id=\"com-$id-down\"><span class=\"ui-icon ui-icon-circle-arrow-s\"></span></a>
+				<a onclick=\"commentVoteAction($(this), 1, $id)\" title=\"vote this comment up\" class=\"ui-state-default ui-corner-all\" id=\"com-$id-up\"><span class=\"ui-icon ui-icon-circle-arrow-n$upVoteSpan\"></span></a>
+				<a onclick=\"commentVoteAction($(this), 2, $id)\" title=\"vote this comment down\" class=\"ui-state-default ui-corner-all\" id=\"com-$id-down\"><span class=\"ui-icon ui-icon-circle-arrow-s$downVoteSpan\"></span></a>
 				</div>
 			<div class=\"entry\">
 					<div $showToggle class=\"collapsed\">
 					
 					{$userName['link']}
 					{$userName['attrib']}
-								<span class=\"score dislikes\">$down_votes</span>
-								<span class=\"score likes\">$up_votes</span>
-								<span class=\"score total\">$votes</span>
+								<span class=\"score downVotes\">$down_votes</span>
+								<span class=\"score upVotes\">$up_votes</span>
+								<span class=\"score total $voteClass\">$votes</span>
 								$timeAgo $isEdit
 					
 					<a title=\"expand\" onclick=\"return showComment($(this))\" class=\"expand\" href=\"#\">[+] ($numberOfChildren)</a>
@@ -265,9 +287,9 @@ class Application_Model_Comments
 				<p class=\"tagline\">
 					{$userName['link']}
 					{$userName['attrib']}
-					<span class=\"score dislikes\">$down_votes</span>
-					<span class=\"score likes\">$up_votes</span>
-					<span class=\"score total\">$votes</span>
+					<span class=\"score downVotes\">$down_votes</span>
+					<span class=\"score upVotes\">$up_votes</span>
+					<span class=\"score total $voteClass\">$votes</span>
 					$timeAgo $isEdit
 					<a title=\"collapse\" onclick=\"return hideComment($(this))\" class=\"expand\" href=\"#\">[-]</a>
 				</p>
@@ -373,9 +395,9 @@ class Application_Model_Comments
 					
 					{$userName['link']}
 					{$userName['attrib']}
-								<span class=\"score dislikes\">$down_votes</span>
-								<span class=\"score likes\">$up_votes</span>
-								<span class=\"score total\">$votes</span>
+								<span class=\"score downVotes\">$down_votes</span>
+								<span class=\"score upVotes\">$up_votes</span>
+								<span class=\"score total unVoted\">$votes</span>
 								$timeAgo $isEdit
 					
 					<a title=\"expand\" onclick=\"return showComment($(this))\" class=\"expand\" href=\"#\">[+] ($numberOfChildren)</a>
@@ -385,9 +407,9 @@ class Application_Model_Comments
 				<p class=\"tagline\">
 					{$userName['link']}
 					{$userName['attrib']}
-					<span class=\"score dislikes\">$down_votes</span>
-					<span class=\"score likes\">$up_votes</span>
-					<span class=\"score total\">$votes</span>
+					<span class=\"score downVotes\">$down_votes</span>
+					<span class=\"score upVotes\">$up_votes</span>
+					<span class=\"score total unVoted\">$votes</span>
 					$timeAgo $isEdit
 					<a title=\"collapse\" onclick=\"return hideComment($(this))\" class=\"expand\" href=\"#\">[-]</a>
 				</p>
@@ -442,9 +464,9 @@ class Application_Model_Comments
 					
 					{$userName['link']}
 					{$userName['attrib']}
-								<span class=\"score dislikes\"> </span>
-								<span class=\"score likes\"> </span>
-								<span class=\"score total\"> </span>
+								<span class=\"score downVotes\"> </span>
+								<span class=\"score upVotes\"> </span>
+								<span class=\"score total unVoted\"> </span>
 								$timeAgo
 					
 					<a title=\"expand\" onclick=\"return showComment($(this))\" class=\"expand\" href=\"#\">[+] ($numberOfChildren)</a>
@@ -454,9 +476,9 @@ class Application_Model_Comments
 				<p class=\"tagline\">
 					{$userName['link']}
 					{$userName['attrib']}
-					<span class=\"score dislikes\"> </span>
-					<span class=\"score likes\"> </span>
-					<span class=\"score total\"> </span>
+					<span class=\"score downVotes\"> </span>
+					<span class=\"score upVotes\"> </span>
+					<span class=\"score total unVoted\"> </span>
 					$timeAgo 
 					<a title=\"collapse\" onclick=\"return hideComment($(this))\" class=\"expand\" href=\"#\">[-]</a>
 				</p>

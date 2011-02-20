@@ -93,10 +93,23 @@ class AuthController extends Zend_Controller_Action
 
     public function logoutAction()
     {
-        Zend_Auth::getInstance()->clearIdentity();
+    	$auth = Zend_Auth::getInstance();
+    	if (!$auth->hasIdentity())
+        	{
+            	$this->_redirect('/');
+            	die();
+            }
+    	$returnTo = '';
+    	if (isset($_GET['r'])) {
+    		$returnTo = $_GET['r'];
+    	}
+        $auth->clearIdentity();
         Zend_Session::expireSessionCookie();
                 		//$this->_helper->redirector('index?msg=1'); // back to login page
-                		$this->_redirect('/login?msg=1');
+                		if (empty($returnTo))
+        				$this->_redirect('/login?msg=1');
+        				else
+        				$this->_redirect('/login?msg=1&r='.$returnTo);
                 		die();
     }
 

@@ -533,6 +533,9 @@ div.voted {
 	background-image: none !important;
 	color: Orangered !important;
 }
+.total.voted, .total.downvoted {
+	background-image: none !important;
+}
 div.downvoted
 	{
 	background-image: none !important;
@@ -882,10 +885,8 @@ div.comment.removed {
 .comment .score {
     font-size: x-small;
 }
-.dislikes, .likes {
-    display: none;
-}
-.likes .score.total {
+
+.score.total {
     display: inline;
 }
 .comment .midcol a {

@@ -305,7 +305,51 @@ class Application_Model_Utils
       	 else 
       	 	return false;
       }
-        
+      
+      public function voteComment($userID, $commentID, $vote) {
+      	$db = Zend_Db_Table::getDefaultAdapter();
+        // Get current number of upvotes / downvotes
+      	$select = $db->select();
+		$select->from("comments", array("id","up_votes", "down_votes", "votes"));
+		$select->where("id = ?", $commentID);
+		$select->limit(1);
+      	$result = $db->fetchRow($select);
+      	if (empty($result)) {
+      		return false; // no comment exists with that id
+      	}
+      	
+      	$upvotes = $result['up_votes'];
+      	$downvotes = $result['down_votes'];
+		$newVote = $result['votes'];
+      	
+      	if ($vote == true) {
+      		$newVote++; $upvotes++; //$downvotes--;
+      	}
+      	else {
+      		$newVote--; $downvotes++; //$upvotes--;
+      	}
+      	
+      	$newHot = $this->confidence($upvotes, $downvotes);
+      	      	
+      	$newControversy = $this->_controversy($upvotes, $downvotes);	
+      	
+      	// update the link
+				$data = array(
+           		 'up_votes'      => $upvotes,
+				 'down_votes'      => $downvotes,
+				 'votes'      => $newVote,
+				 'controversy'      => $newControversy,
+				 'hot'      => $newHot
+             	);
+         $update = $db->update('comments', $data, 'id = '.$commentID);
+      	 if ($update) {
+      	 	return true;
+      	 }
+      	 else 
+      	 	return false;
+      	
+      }
+      
       public function submitVote($userID, $linkID, $type) {
       	
       	$db = Zend_Db_Table::getDefaultAdapter();
@@ -361,6 +405,70 @@ class Application_Model_Utils
 					"message" => "New vote submited"
 				);
 		}
+      }
+     
+     /**
+     * submitCommentVote
+     * 	 handles both up and down votes on comments
+     * @param $userID|int - the current user ID whose initiating the vote
+     * @param $commentID|int - the comment ID to vote on
+     * @param $type - whether this is an up-vote or down-vote
+     * @return $result|array the computed confidence value for comment ranking
+     */
+	public function submitCommentVote($userID, $commentID, $type) {
+      	$db = Zend_Db_Table::getDefaultAdapter();
+      	
+      	$voteType = ($type == 'upVote') ? true : false;
+      	// Check if user has already voted on this link
+      	$select = $db->select();
+		$select->from("comment_history");
+		$select->where("user_id = ?", $userID);
+		$select->where("comment_id = ?", $commentID);
+		$select->limit(1);
+		
+		$result = $db->fetchRow($select);
+		
+		if(!empty($result)) {
+			// This comment was already voted on by this user, see if we need to update their vote
+			if ($result['vote_up'] == $voteType) {
+ 	 			// do not update; user is trying to use the same vote twice
+				return array(
+					"success" => false,
+					"message" => "You can not vote twice"
+				);
+			}
+			else {			
+				// update vote
+				$data = array(
+           		 'vote_up'      => ($voteType == true) ? 1 : 0
+             	);
+             	 $update = $db->update('comment_history', $data, 'id = '.$result['id']);
+        		 $results = $this->voteComment($userID, $commentID, $voteType);
+        		 return array(
+					"success" => true,
+					"message" => "vote success"
+				);
+			}
+		}
+		else {
+			// This is a new vote
+			
+			$data = array(
+	        'vote_up'      => ($voteType == true) ? 1 : 0,
+	        'comment_id' =>  $commentID,
+	        'user_id' => $userID,
+			'date_submitted' => new Zend_Db_Expr('NOW()')
+	        );
+	        $db->insert('comment_history',$data);
+			
+	        $results = $this->voteComment($userID, $commentID, $voteType);
+			 
+	        return array(
+					"success" => true,
+					"message" => "New vote submited"
+				);
+		}
+		
       }
       
     /**

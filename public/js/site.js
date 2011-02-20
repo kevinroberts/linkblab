@@ -52,9 +52,12 @@ function addClass(ele,cls) {
 		}
 	}
   
-  function checkIfVoted(elm, type) {
+  function checkIfVoted(elm, type, isLink) {
 	  if (type == 1){
-		  var scoreElm = elm.next("div").next("div");
+		  if (isLink)
+			  var scoreElm = elm.next("div").next("div");
+		  else
+			  var scoreElm = elm.parent(".midcol").next(".entry").children(".noncollapsed").children(".tagline").children(".total");
 		  if (scoreElm.hasClass("unVoted")) {
 			  return true;
 		  }
@@ -65,7 +68,10 @@ function addClass(ele,cls) {
 			  return false;
 	  }
 	  else {
-		  var scoreElm = elm.prev("div").prev("div");
+		  if (isLink)
+			  var scoreElm = elm.prev("div").prev("div");
+		  else
+			  var scoreElm = elm.parent(".midcol").next(".entry").children(".noncollapsed").children(".tagline").children(".total");
 		  if (scoreElm.hasClass("unVoted")) {
 			  return true;
 		  }
@@ -103,6 +109,31 @@ function addClass(ele,cls) {
 	  }
   }
   
+  function swapVoteClassComment(elm, type) {
+	  // swap relative to the vote anchor
+	  var scoreElm = elm.parent(".midcol").next(".entry").children(".noncollapsed").children(".tagline").children(".total");
+	  if (type == 1){
+		  scoreElm.removeClass("unVoted");
+		  scoreElm.addClass("voted");
+		  scoreElm.removeClass("downvoted");
+		  if (!(scoreElm.hasClass("unVoted"))) {
+			  //scoreElm.css("color", "orangered");
+		  }
+		  elm.children("span").addClass("voted");
+		  elm.children("span").removeClass("downvoted");
+	  }
+	  else {
+		  scoreElm.removeClass("unVoted");
+		  if (!(scoreElm.hasClass("unVoted"))) {
+			  //scoreElm.css("color", "#9494FF");
+		  }
+		  scoreElm.addClass("downvoted");
+		  scoreElm.removeClass("voted");
+		  elm.children("span").addClass("downvoted");
+		  elm.children("span").removeClass("voted");
+	  }
+  }
+  
   function animateVote(elm, type, points) {
 	  if (type == 1){
 		  var scoreElm = elm.next("div").next("div");
@@ -115,6 +146,24 @@ function addClass(ele,cls) {
 		  scoreElm.effect("highlight", {color:'#ff3a3a'}, 500); 
 	  }
   }
+  function animateVoteComment(elm, type, points) {
+	  var collapsedScore = elm.parent(".tagline").parent(".noncollapsed").prev(".collapsed").children(".total");
+	  if (points > 1 || points < 0)
+		  var pnt = " points";
+	  else
+		  var pnt = " point";
+	  if (type == 1){
+		  elm.html( points.toString() + pnt);
+		  collapsedScore.html( points.toString() + pnt);
+		  elm.effect("highlight", {color:'#53ff7b'}, 500); 
+	  }
+	  else {
+		  elm.html( points.toString() + pnt);
+		  collapsedScore.html( points.toString() + pnt);
+		  elm.effect("highlight", {color:'#ff3a3a'}, 500); 
+	  }
+	  
+  }
   
   function isLoggedIn() {
 	  var loginTxt = $("#loginLink").attr( "name" );
@@ -124,6 +173,106 @@ function addClass(ele,cls) {
 		return true; 
   }
   
+  function commentVoteAction(elm, type, number) {
+	  if (!isLoggedIn()) {
+		  showLogin('You must be logged in to vote. <span style="font-size:small">no account yet?: <a href="/auth/signup">sign up!</a></span>');
+		  return false;
+	  }
+	  var scoreElm = elm.parent(".midcol").next(".entry").children(".noncollapsed").children(".tagline").children(".total");
+	  if (type == 1) {
+		// this is an up vote:
+		// check if this comment has not been up-voted yet
+		  if (checkIfVoted(elm, type, false)) {
+				$.ajax( {
+					type : "POST",
+					url : "/blabs/vote",
+					data : "comment="+number+"&type="+type,
+					success : function(data) {
+					var response = jQuery.parseJSON( data );
+	    			if (response.success == true)
+	    			{
+	    				  swapVoteClassComment(elm, type);
+	    				  // check if the down vote link needs its class removed:
+	    				  var el2 = $("#com-" + number + "-down");
+	    					if (el2.children("span").hasClass("downvoted")) {
+	    						el2.children("span").removeClass("downvoted");
+	    					}
+	    				  var downPoints = scoreElm.prev("span").prev("span").text();
+	    				  downPoints = parseInt(downPoints);
+	    				  
+	    				  var upPoints = scoreElm.prev("span").text();
+	    				  upPoints = parseInt(upPoints);
+	    				  upPoints++;
+	    				  // update up votes with new amount
+	    				  scoreElm.prev("span").text(upPoints.toString());
+	    				  
+	    				  var points = upPoints - downPoints;
+
+	    				  // Animate the upvote.:
+	    				  animateVoteComment(scoreElm, type, points);
+	    			}
+	    			else if (response.error == 'login')
+	    			{
+	    				showLogin('You must be logged in to vote. <span style="font-size:small">no account yet?: <a href="/auth/signup">sign up!</a></span>');
+	    			}
+	    			else {
+	    				alert("Server AJAX error : " + response.message);    	
+	    			}
+					}
+				
+				});
+		  }
+	  }
+	  else {
+		    // else this is a down vote
+			// check if this link has not been down voted on yet
+			if (checkIfVoted(elm, type, false)) {
+				$.ajax( {
+					type : "POST",
+					url : "/blabs/vote",
+					data : "comment="+number+"&type="+type,
+					success : function(data) {
+					var response = jQuery.parseJSON( data );
+	    			if (response.success == true)
+	    			{
+	    				  swapVoteClassComment(elm, type);
+	    				  // check if the up vote link needs its class removed:
+	    				  var el2 = $("#com-" + number + "-up");
+	    					if (el2.children("span").hasClass("voted")) {
+	    						el2.children("span").removeClass("voted");
+	    					}
+	    				  
+	    				  var upPoints = scoreElm.prev("span").text();
+	    				  upPoints = parseInt(upPoints);
+	    				  
+	    				  var downPoints = scoreElm.prev("span").prev("span").text();
+	    				  downPoints = parseInt(downPoints); downPoints++;
+	    				  // update number of down votes with new amount
+	    				  scoreElm.prev("span").prev("span").text(downPoints.toString());
+	    				  
+	    				  var points = upPoints - downPoints;
+	    				  
+	    				  // Animate the downvote.:
+	    				  animateVoteComment(scoreElm, type, points);
+	    			}
+	    			else if (response.error == 'login')
+	    			{
+	    				showLogin('You must be logged in to vote. <span style="font-size:small">no account yet?: <a href="/auth/signup">sign up!</a></span>');
+	    			}
+	    			else {
+	    				alert("Server AJAX error : " + response.message);
+	    			}
+					}
+				
+				});
+				
+			}
+		  
+	  }
+	  
+	  return false;
+  }
+  
   function voteAction(elm, type, number) {
 	   
 	  if (!isLoggedIn()) {
@@ -131,11 +280,10 @@ function addClass(ele,cls) {
 		  return false;
 	  }
 	   
-	   if(type == 1) 
-		{
-	  // this is an up vote:
-		    // check if this link has not been up voted on yet
-			if (checkIfVoted(elm, type)) {
+	   if(type == 1) {
+		    // this is an up vote:
+		    // check if this link has not been up-voted yet
+			if (checkIfVoted(elm, type, true)) {
 			  
 				$.ajax( {
 					type : "POST",
@@ -182,7 +330,7 @@ function addClass(ele,cls) {
 		{
 		 // else this is a down vote
 			// check if this link has not been down voted on yet
-			if (checkIfVoted(elm, type)) {
+			if (checkIfVoted(elm, type, true)) {
 					$.ajax( {
 						type : "POST",
 						url : "/blabs/vote",
@@ -445,17 +593,17 @@ function addClass(ele,cls) {
 		    				'<div class="entry">'+
 		    				'<div class="collapsed" style="display: none;">'+
 		    				'<a href="/user/'+username+'" class="author">'+username+'</a>&nbsp;'+
-		    				'<span class="score dislikes">0</span>'+
-		    				'<span class="score likes">1</span>'+
-		    				'<span class="score total">1 point</span>'+
+		    				'<span class="score downVotes">0</span>'+
+		    				'<span class="score upVotes">1</span>'+
+		    				'<span class="score total voted">1 point</span>'+
 		    				'&nbsp;1 second ago&nbsp;'+
 		    				'<a href="#" class="expand" onclick="return showComment($(this))" title="expand">[+] (0 children)</a>'+
 		    				'</div> <div class="noncollapsed" style="display: block;">'+
 		    				'<p class="tagline">'+
 		    				'<a href="/user/'+username+'" class="author">'+username+'</a>&nbsp;'+
-		    				'<span class="score dislikes">0</span>'+
-		    				'<span class="score likes">1</span>'+
-		    				'<span class="score total">1 point</span>'+
+		    				'<span class="score downVotes">0</span>'+
+		    				'<span class="score upVotes">1</span>'+
+		    				'<span class="score total voted">1 point</span>'+
 		    				'&nbsp;1 second ago&nbsp;'+
 		    				'<a href="#" class="expand" onclick="return hideComment($(this))" title="collapse">[-]</a>'+
 		    				'</p>'+

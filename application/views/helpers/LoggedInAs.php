@@ -24,7 +24,7 @@ class Zend_View_Helper_LoggedInAs extends Zend_View_Helper_Abstract {
             $role = $auth->getIdentity()->role;
             /*$logoutUrl = $this->view->url(array('controller'=>'auth',
                 'action'=>'logout'), null, true);*/
-            $logoutUrl = "/auth/logout";
+            $logoutUrl = "/auth/logout?r=".$utils->urlsafe_b64encode($utils->curPageURL());
             $prefUrl = '/user/edit/username/'.$username;
             if ($role == "administrator")
             {
