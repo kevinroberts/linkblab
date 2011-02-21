@@ -15,7 +15,7 @@ TODO
 - alt. Name for karma -- cred? 
 - Implement recent viewed links functionality for sidebar
 - Implement User Profile Page
-
+- User page actions
 
 To Change for Production
 ----------------------
