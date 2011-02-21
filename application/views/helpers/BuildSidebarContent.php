@@ -171,8 +171,8 @@ EOT;
 	<table id="recentlyViewed" border="0" width="95%">
 	<tr>
 	<td class="viewedVote">
-	<a id="recent-link328-up" class="ui-state-default ui-corner-all" title="vote this link up" onclick="recentVoteAction(this, 1, 328)"><span class="ui-icon ui-icon-circle-arrow-n"></span></a>
-	<a id="recent-link328-down" class="ui-state-default ui-corner-all" title="vote this link down" onclick="recentVoteAction(this, 2, 328)"><span class="ui-icon ui-icon-circle-arrow-s"></span></a>
+	<a id="recent-link328-up" class="ui-state-default ui-corner-all" title="vote this link up" onclick="recentVoteAction($(this), 1, 328)"><span class="ui-icon ui-icon-circle-arrow-n"></span></a>
+	<a id="recent-link328-down" class="ui-state-default ui-corner-all" title="vote this link down" onclick="recentVoteAction($(this), 2, 328)"><span class="ui-icon ui-icon-circle-arrow-s"></span></a>
 	</td>
 	<td><a href="#">Calgary Police lay criminal charges against Calgary website operator for criticizing Police</a>
 	<br />
@@ -181,8 +181,8 @@ EOT;
 	</tr>
 	<tr>
 	<td class="viewedVote">
-	<a id="recent-link330-up" class="ui-state-default ui-corner-all" title="vote this link up" onclick="recentVoteAction(this, 1, 330)"><span class="ui-icon ui-icon-circle-arrow-n"></span></a>
-	<a id="recent-link330-down" class="ui-state-default ui-corner-all" title="vote this link down" onclick="recentVoteAction(this, 2, 330)"><span class="ui-icon ui-icon-circle-arrow-s"></span></a>
+	<a id="recent-link330-up" class="ui-state-default ui-corner-all" title="vote this link up" onclick="recentVoteAction($(this), 1, 330)"><span class="ui-icon ui-icon-circle-arrow-n"></span></a>
+	<a id="recent-link330-down" class="ui-state-default ui-corner-all" title="vote this link down" onclick="recentVoteAction($(this), 2, 330)"><span class="ui-icon ui-icon-circle-arrow-s"></span></a>
 	</td>
 	<td><a href="#">How do they keep doing these in one continuous shot?</a>
 	<br />
@@ -191,8 +191,8 @@ EOT;
 	</tr>
 		<tr>
 	<td class="viewedVote">
-	<a id="recent-link332-up" class="ui-state-default ui-corner-all" title="vote this link up" onclick="recentVoteAction(this, 1, 332)"><span class="ui-icon ui-icon-circle-arrow-n"></span></a>
-	<a id="recent-link332-down" class="ui-state-default ui-corner-all" title="vote this link down" onclick="recentVoteAction(this, 2, 332)"><span class="ui-icon ui-icon-circle-arrow-s"></span></a>
+	<a id="recent-link332-up" class="ui-state-default ui-corner-all" title="vote this link up" onclick="recentVoteAction($(this), 1, 332)"><span class="ui-icon ui-icon-circle-arrow-n"></span></a>
+	<a id="recent-link332-down" class="ui-state-default ui-corner-all" title="vote this link down" onclick="recentVoteAction($(this), 2, 332)"><span class="ui-icon ui-icon-circle-arrow-s"></span></a>
 	</td>
 	<td><a href="#">Jon Stewart's 'Rally to Restore Sanity' already outpacing Glenn Beck's rally</a>
 	<br />

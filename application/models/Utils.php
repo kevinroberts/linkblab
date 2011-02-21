@@ -389,15 +389,14 @@ class Application_Model_Utils
 		}
 		else {
 			// This is a new vote
-
 			$data = array(
 	        'vote_up'      => ($voteType == true) ? 1 : 0,
 	        'link_id' =>  $linkID,
 	        'user_id' => $userID,
 			'date_submitted' => new Zend_Db_Expr('NOW()')
 	        );
-	        $db->insert('link_history',$data);
-			
+	        $insertRslt = $db->insert('link_history',$data);
+	        
 	        $results = $this->vote($userID, $linkID, $voteType);
 			 
 	        return array(

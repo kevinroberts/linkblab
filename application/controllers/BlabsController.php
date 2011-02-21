@@ -623,15 +623,11 @@ class BlabsController extends Zend_Controller_Action
                         }
                         // GET POSTED VOTE INFORMATION
                         $data = $this->_request->getPost();
-                        /*$data = array(
-                        	'type' => $_GET['type'],
-                        	'link' => $_GET['link']
-                        );*/
+
                         $userID = $auth->getIdentity()->id;
                         if (isset($data['link']) && isset($data['type'])) {
                         	if (is_numeric($data['link']) && is_numeric($data['type'])) {
                         		$voteType = ($data['type'] == 1) ? 'upVote' : 'downVote';
-                        		
                         		switch ($voteType) {
                         			case 'upVote':
                         				$result = self::$utils->submitVote($userID, $data['link'], $voteType);
@@ -656,7 +652,7 @@ class BlabsController extends Zend_Controller_Action
                         				
                         				if ($result['success']) {
                         				$voteResult = array(
-                        				'message' => 'Success - upVote! ' . $result["message"],
+                        				'message' => 'Success - downVote! ' . $result["message"],
                         				'success' =>  true         	
                        			 		);	
                         				}
@@ -716,7 +712,7 @@ class BlabsController extends Zend_Controller_Action
                         				
                         				if ($result['success']) {
                         				$voteResult = array(
-                        				'message' => 'Success - upVote! ' . $result["message"],
+                        				'message' => 'Success - downVote! ' . $result["message"],
                         				'success' =>  true         	
                        			 		);	
                         				}

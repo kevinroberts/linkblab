@@ -68,7 +68,7 @@ class Zend_View_Helper_BuildCommentPage {
 		$spanClass = (self::$link->isSelf == 1) ? ' style="display:none;"' : '';
 		$this->content .= '<div class="entry">' . 
 
-		'<p class="title"><a href="' . $linkURL . '" class="title loggedin">' . self::$link->title . '</a>' . '&nbsp;<span' . $spanClass . ' class="domain">(<a title="see more links from this domain" href="/domain/' . self::$link->domain . '/">' . self::$link->domain . '</a>)</span></p>' . 
+		'<p class="title"><a href="' . $linkURL . '" class="title linkblab_link">' . self::$link->title . '</a>' . '&nbsp;<span' . $spanClass . ' class="domain">(<a title="see more links from this domain" href="/domain/' . self::$link->domain . '/">' . self::$link->domain . '</a>)</span></p>' . 
 
 		'<p class="tagline">submitted ' . self::$utils->TimeSince ( strtotime ( self::$link->dateCreated ) ) . ' ago by ' . self::$displayName->displayName ( self::$link->userID, "autho user-" . self::$link->userID ) . '<span class="userattrs"></span> to ' . self::$blabInfo [1] . '</p>';
 		// If this is a self post, output the description here:

@@ -147,6 +147,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 	
 	protected function _initResources()
     {
+    	date_default_timezone_set('America/Chicago');
     	//require_once ('/models/BigOrNot_CookieManager.php');
     	require_once('../library/decoda/decoda.php');
     	require_once('../library/htmlpurifier/HTMLPurifier.standalone.php');

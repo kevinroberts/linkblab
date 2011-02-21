@@ -1,58 +1,4 @@
-function addClass(ele,cls) {
-		if (!this.hasClass(ele,cls)) ele.className += " "+cls;
-	}
-
-	function removeClass(ele,cls) {
-		if (hasClass(ele,cls)) {
-	    	var reg = new RegExp('(\\s|^)'+cls+'(\\s|$)');
-			ele.className=ele.className.replace(reg,' ');
-		}
-	}
-	
-  function toggleClassname (el, newClassname, defaultClassname) {
-
-    if (hasClass( el, defaultClassname)){
-      var re = new RegExp("(^|\\s)" + defaultClassname + "(\\s|$)"); 
-      el.className = el.className.replace(re, ' '+ newClassname +' ');
-
-    } else if (hasClass( el, newClassname)){
-      var re = new RegExp("(^|\\s)" + newClassname + "(\\s|$)"); 
-      el.className = el.className.replace(re, ' '+ defaultClassname +' ');
-
-    } else
-      el.className += ' ' + newClassname;
-
-  }
-
-  function hasClass (obj, className) {
-
-	  if (typeof obj == 'undefined' || obj==null || !RegExp) { 
-	    return false; 
-	  }
-
-	  var re = new RegExp("(^|\\s)" + className + "(\\s|$)");
-	  if (typeof(obj)=="string") {
-	    return re.test(obj);
-	  }
-	  else if (typeof(obj)=="object" && obj.className) {
-	    return re.test(obj.className);
-	  }
-	  return false;
-	}
-	
-  
-  function addClass(element, value) {
-		if(!element.className) {
-			element.className = value;
-		} else {
-			newClassName = element.className;
-			newClassName+= " ";
-			newClassName+= value;
-			element.className = newClassName;
-		}
-	}
-  
-  function checkIfVoted(elm, type, isLink) {
+function checkIfVoted(elm, type, isLink) {
 	  if (type == 1){
 		  if (isLink)
 			  var scoreElm = elm.next("div").next("div");
@@ -388,34 +334,32 @@ function addClass(ele,cls) {
 	
 	if(type == 1)
 	{
-		if (!hasClass(elm.firstChild, "voted")) {
-		addClass(elm.firstChild, "voted", '');	
+		if (!elm.children("span").hasClass("voted")) {
+			elm.children("span").addClass("voted");	
 		points++;
 		$("#recent-link"+number+"-points").html( points.toString() + " points" );
 		$("#recent-link"+number+"-points").effect("highlight", {color:'#53ff7b'}, 1000);
 		}
-		var el2 = document.getElementById("recent-link" + number + "-down");
-		if (hasClass(el2.firstChild, "voted")) {
-			removeClass(el2.firstChild, "voted", '');
+		var el2 = $("#recent-link" + number + "-down");
+		if (el2.children("span").hasClass("downvoted")) {
+			el2.children("span").removeClass("downvoted");
 		}
-		//alert('You just upvoted story# ' + number);
 	}
 	else
 	{
-		if (!hasClass(elm.firstChild, "voted")) {
-			addClass(elm.firstChild, "voted", '');
+		if (!elm.children("span").hasClass("downvoted")) {
+			elm.children("span").addClass("downvoted");	
 			points--;
 			$("#recent-link"+number+"-points").html( points.toString() + " points" );
 			$("#recent-link"+number+"-points").effect("highlight", {color:'#ff3a3a'}, 1000);
 			}
-		var el2 = document.getElementById("recent-link" + number + "-up");
-		if (hasClass(el2.firstChild, "voted")) {
-			removeClass(el2.firstChild, "voted", '');
+		var el2 = $("#recent-link" + number + "-up");
+		if (el2.children("span").hasClass("voted")) {
+			el2.children("span").removeClass("voted");
 			}
-		//alert('You just downvoted story# ' + number);
 	}
 
-	  }
+}
   
   function hideComment(elm) {
 	  var noncollapsedDiv = elm.parent().parent(".noncollapsed");
@@ -580,12 +524,12 @@ function addClass(ele,cls) {
 		    				var texarea = comForm.find("textarea");
 		    				var username = $("#loginLink").text();
 		    				// Insert this new comment on top of all other comments:
-		    				$child = ''; $child2 = '';
+		    				$child1 = ''; $child2 = '';
 		    				if (type == "reply") {
-		    					$child = "<div style=\"padding-top: 10px; border-left: 1px dotted #DDF;\"> ";
+		    					$child1 = "<div style=\"padding-top: 10px; border-left: 1px dotted #DDF;\"> ";
 		    					$child2 = " </div>";
 		    				}
-		    				comForm.after($child+'<div class="comment" id="comment-'+response.commentID+'">'+
+		    				comForm.after($child1+'<div class="comment" id="comment-'+response.commentID+'">'+
 		    				'<div class="midcol" style="display: block;">'+
 		    				'<a id="com-'+response.commentID+'-up" class="ui-state-default ui-corner-all" title="vote this comment up" onclick="commentVoteAction($(this), 1, '+response.commentID+')"><span class="ui-icon ui-icon-circle-arrow-n voted"></span></a>'+
 		    				'<a id="com-'+response.commentID+'-down" class="ui-state-default ui-corner-all" title="vote this comment down" onclick="commentVoteAction($(this), 2, '+response.commentID+')"><span class="ui-icon ui-icon-circle-arrow-s"></span></a>'+

@@ -84,7 +84,7 @@ $linkURL = ($link->isSelf == 1) ? '/b/'.$linkBlab[0].'/comments/'.$link->id.'/'.
 			<a href="<?php echo $linkURL; ?>" class="thumbnail">&#8203;<img alt="" src="<?php echo $link->thumbnail; ?>" /></a>
 		<?php }?>
 		<div class="entry">
-			<p class="title"><a href="<?php echo $linkURL; ?>" class="title loggedin"><?php echo $link->title; ?></a> 
+			<p class="title"><a href="<?php echo $linkURL; ?>" class="title linkblab_link"><?php echo $link->title; ?></a> 
 			<span<?php echo ($link->isSelf == 1) ? ' style="display:none;"' : '' ?> class="domain">(<a title="see more links from this domain" href="/domain/<?php echo $link->domain; ?>/"><?php echo $link->domain; ?></a>)</span></p>	
 			<p class="tagline">submitted <?php echo $this->timeAgo(strtotime($link->dateCreated));?> by <?php echo $this->displayName($link->userID, "autho user-".$link->userID); ?><span class="userattrs"></span> to <?php echo $linkBlab[1]; ?></p>
 			<ul class="flat-list buttons">
