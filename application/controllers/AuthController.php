@@ -347,7 +347,7 @@ class AuthController extends Zend_Controller_Action
            	
             // Send the email
             $mail = new Zend_Mail();
-            $mail->setBodyText('As you requested, here is the link to reset your password:'.PHP_EOL.' http://linkblab.local/auth/reset?tk='.$resetToken.'');
+            $mail->setBodyText('As you requested, here is the link to reset your password:'.PHP_EOL.' http://linkblab.com/auth/reset?tk='.$resetToken.'');
 			$mail->setFrom('kevon202@gmail.com', 'Kevin Roberts');
 			$mail->addTo($sendTo, $results[0]['username']);
 			$mail->setSubject('LinkBlab Password Reset');
