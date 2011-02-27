@@ -1,5 +1,5 @@
 <?php
-$this->headTitle('- account '.$this->username);
+$this->headTitle(' - account '.$this->username);
 $this->headStyle()->appendStyle('@import "/css/table.css";');
 $this->headScript()->appendFile("/js/jquery.dataTables.min.js", $type = 'text/javascript', $attrs = array());
 ?>
@@ -109,7 +109,7 @@ $(document).ready(function() {
 		update : function () {
 		serial = $('#sortable').sortable('serialize');
 		$.ajax({
-			url: "/user/ajaxhandler/token/<?php echo sha1($this->username.date('D', time() )); ?>/a/order/",
+			url: "/user/ajaxhandler/token/<?php echo hash('sha256',$this->username.date('D', time() ).'SaK0fSa1t'); ?>/a/order/",
 			type: "post",
 			data: serial,
 			beforeSend: function(){

@@ -103,18 +103,20 @@ class IndexController extends Zend_Controller_Action
     	$msg = "";
     	$db = Zend_Db_Table::getDefaultAdapter();
     	$utils = new Application_Model_Utils();
-		$select = $db->select()->from("links")->where("title IS NOT NULL");
-		$results = $db->fetchAll($select);
-		
-		foreach($results as $row) {
-			$i = $utils->urlsafe_title($row['title']);
-		$data = array(
-			'url_safe_title'      => $i
-        );
-        $update = $db->update("links", $data, "id = ".$row["id"]);
-        $msg .= $i.PHP_EOL;
-			
-		}
+//		$select = $db->select()->from("links")->where("title IS NOT NULL");
+//		$results = $db->fetchAll($select);
+//		
+//		foreach($results as $row) {
+//			$i = $utils->urlsafe_title($row['title']);
+//		$data = array(
+//			'url_safe_title'      => $i
+//        );
+//        $update = $db->update("links", $data, "id = ".$row["id"]);
+//        $msg .= $i.PHP_EOL;
+//			
+//		}
+
+    	
     	
        
        

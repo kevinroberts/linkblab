@@ -1,5 +1,5 @@
 <?php
-$this->headTitle('- '.$this->username); 
+$this->headTitle(' - '.$this->username); 
 ?>
 
 <style>
@@ -90,7 +90,7 @@ $(document).ready(function() {
 
 <?php if ($this->loggedIn) { ?>
 
-<p>Welcome <?php echo $this->username; ?>: <a id="accountOptionsBtn" href="/user/edit/username/<?php echo $this->username; ?>">Edit My Account Options</a></p>
+<p>Welcome <?php echo $this->username; ?>: <a id="accountOptionsBtn" href="/user/edit/username/<?php echo $this->username; ?>">Manage Account Options</a></p>
 
 <!-- Logged in actions for this user  -->
 <div id="accountActivity">

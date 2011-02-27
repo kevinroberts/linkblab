@@ -10,11 +10,11 @@
  *
  * @uses viewHelper Zend_View_Helper
  */
-class Zend_View_Helper_BuildSidebarContent {
+class Zend_View_Helper_BuildSidebarContent extends Zend_View_Helper_Abstract {
 	// standard variables
 	public static $loggedIn = false, $username, $userID, $blabInfo, $numberComments, $content;
 	// object variables
-	public static $utils, $linkBlabs, $howMany, $displayName;
+	public static $utils, $linkBlabs, $displayName;
 	
 	public function __construct() {
 			$auth = Zend_Auth::getInstance ();
@@ -24,12 +24,8 @@ class Zend_View_Helper_BuildSidebarContent {
 			self::$userID = $auth->getIdentity()->id;
 		}
 		// Include other comment and link related view helpers
-		include_once ("displayBlab.php");
-		include_once ("displayHowManyComments.php");
-		include_once ("linkBuilder.php");
+
 		self::$content = '';
-		self::$linkBlabs = new Zend_View_Helper_displayBlab ( );
-		self::$howMany = new Zend_View_Helper_displayHowManyComments ( );
 		self::$utils = new Application_Model_Utils();
 	}
 	
@@ -38,7 +34,6 @@ class Zend_View_Helper_BuildSidebarContent {
 		// Handle Recently Viewed link output:
 		$recentLinks = (isset($_COOKIE['rec_links'])) ? urldecode($_COOKIE['rec_links']) : '';
 		if (!empty($recentLinks)) {
-			$linkBuilder = new Zend_View_Helper_linkBuilder();
 		
 			if (strpos($recentLinks, ";") !== false)
 				$recentLinks = explode(";", $recentLinks);
@@ -59,7 +54,7 @@ class Zend_View_Helper_BuildSidebarContent {
 		
 		foreach($recentLinks as $_id) {
 			$links->find($_id, $link);
-			$linkBlab = self::$linkBlabs->displayBlab($link->blabID, 1); // returns an array with [0] = blab title, [1] = anchor link to blab
+			$linkBlab = $this->view->displayBlab($link->blabID, 1); // returns an array with [0] = blab title, [1] = anchor link to blab
 			$linkURL = ($link->isSelf == 1) ? '/b/'.$linkBlab[0].'/comments/'.$link->id.'/'.$link->urlTitle : $link->linkurl;
 			$recentLinksContent .= "<tr>
 			<td class=\"viewedVote\">";
@@ -108,7 +103,7 @@ class Zend_View_Helper_BuildSidebarContent {
 			</td>
 			<td><a href=\"$linkURL\">".$link->title."</a>
 			<br />
-			<label title=\"".$link->votes."\" id=\"recent-link".$link->id."-points\">".$link->votes." points</label> | <a href=\"#\">".self::$howMany->displayHowManyComments($link->id)." comments</a>
+			<label title=\"".$link->votes."\" id=\"recent-link".$link->id."-points\">".$link->votes." points</label> | <a href=\"#\">".$this->view->displayHowManyComments($link->id)." comments</a>
 			</td>
 			</tr>";
 		}
@@ -147,7 +142,6 @@ class Zend_View_Helper_BuildSidebarContent {
 		{
 			$category = $params['category'];
 		}
-		
 		self::$content .= "
 	    <ul class=\"nav\">
 	      <li><a href=\"/submit\">Submit a Link</a></li>

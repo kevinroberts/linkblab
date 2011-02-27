@@ -148,10 +148,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 	protected function _initResources()
     {
     	date_default_timezone_set('America/Chicago');
-    	//require_once ('/models/BigOrNot_CookieManager.php');
-    	require_once('../library/decoda/decoda.php');
-    	require_once('../library/htmlpurifier/HTMLPurifier.standalone.php');
-    	require_once('../library/Browser.php');
+    	require_once('decoda/decoda.php');
+    	require_once('htmlpurifier/HTMLPurifier.standalone.php');
+    	require_once('Browser.php');
     	
     	Zend_Registry::set("rememberMeSeconds",  $this->getOption('remember_me_seconds')); // set default time a session should be persistant
     	// Set allowed markup constants
@@ -226,4 +225,3 @@ EOT;
     
 
 }
-
