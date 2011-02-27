@@ -44,8 +44,7 @@ class Zend_View_Helper_BuildCommentPage extends Zend_View_Helper_Abstract {
 		$this->content .= '<div class="link singleLink">';
 		
 		if (self::$loggedIn) {
-			$linkbuilder = new Zend_View_Helper_linkBuilder ( );
-			$this->content .= $linkbuilder->linkBuilder ( self::$link->id, self::$link->downvotes, self::$link->votes, self::$link->upvotes );
+			$this->content .= $this->view->linkBuilder ( self::$link->id, self::$link->downvotes, self::$link->votes, self::$link->upvotes );
 		} else {
 			$this->content .= '<div style="width: 5ex;" class="midcol unvoted">' . '<a id="link.' . self::$link->id . '-up" class="ui-state-default ui-corner-all" title="vote this link up" onclick="voteAction($(this), 1, ' . self::$link->id . ')"><span class="ui-icon ui-icon-circle-arrow-n"></span></a>' . '<div class="score downVotes">' . self::$link->downvotes . '</div>' . '<div class="score unVoted">' . self::$link->votes . '</div>' . '<div class="score upVotes">' . self::$link->upvotes . '</div>' . '<a id="link' . self::$link->id . '-down" class="ui-state-default ui-corner-all" title="vote this link down" onclick="voteAction($(this), 2, ' . self::$link->id . ')"><span class="ui-icon ui-icon-circle-arrow-s"></span></a>' . '</div>';
 		}
