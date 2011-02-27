@@ -11,10 +11,128 @@
  * @uses viewHelper Zend_View_Helper
  */
 class Zend_View_Helper_BuildSidebarContent {
+	// standard variables
+	public static $loggedIn = false, $username, $userID, $blabInfo, $numberComments, $content;
+	// object variables
+	public static $utils, $linkBlabs, $howMany, $displayName;
+	
+	public function __construct() {
+			$auth = Zend_Auth::getInstance ();
+		if ($auth->hasIdentity ()) {
+			self::$loggedIn = true;
+			self::$username = $auth->getIdentity()->username;
+			self::$userID = $auth->getIdentity()->id;
+		}
+		// Include other comment and link related view helpers
+		include_once ("displayBlab.php");
+		include_once ("displayHowManyComments.php");
+		include_once ("linkBuilder.php");
+		self::$content = '';
+		self::$linkBlabs = new Zend_View_Helper_displayBlab ( );
+		self::$howMany = new Zend_View_Helper_displayHowManyComments ( );
+		self::$utils = new Application_Model_Utils();
+	}
+	
 
+	private function buildRecentLinks() {
+		// Handle Recently Viewed link output:
+		$recentLinks = (isset($_COOKIE['rec_links'])) ? urldecode($_COOKIE['rec_links']) : '';
+		if (!empty($recentLinks)) {
+			$linkBuilder = new Zend_View_Helper_linkBuilder();
+		
+			if (strpos($recentLinks, ";") !== false)
+				$recentLinks = explode(";", $recentLinks);
+			else
+				$recentLinks = array($recentLinks);
+		
+		$count = count($recentLinks);
+		// Keep list under 5 links...
+		while ($count > 5) {
+			// remove oldest
+			unset($recentLinks[$count-1]);
+			$count--;
+		}
+		$links = new Application_Model_LinksMapper();
+		$link = new Application_Model_Link();
+		$recentLinksContent = '';
+		$db = Zend_Db_Table::getDefaultAdapter();
+		
+		foreach($recentLinks as $_id) {
+			$links->find($_id, $link);
+			$linkBlab = self::$linkBlabs->displayBlab($link->blabID, 1); // returns an array with [0] = blab title, [1] = anchor link to blab
+			$linkURL = ($link->isSelf == 1) ? '/b/'.$linkBlab[0].'/comments/'.$link->id.'/'.$link->urlTitle : $link->linkurl;
+			$recentLinksContent .= "<tr>
+			<td class=\"viewedVote\">";
+			
+			if (self::$loggedIn) {
+				$select = $db->select();
+				$select->from("link_history");
+				$select->where("user_id = ?", self::$userID);
+				$select->where("link_id = ?", $link->id);
+				$select->limit(1);
+		
+				$result = $db->fetchRow($select);
+		
+				if(!empty($result)) {
+					// This link was already voted on by this user, output the ui	
+		
+					if ($result['vote_up'] == 1) {
+						$recentLinksContent .= "
+						<a id=\"recent-link".$link->id."-up\" class=\"ui-state-default ui-corner-all\" title=\"vote this link up\" onclick=\"recentVoteAction($(this), 1, ".$link->id.")\"><span class=\"ui-icon ui-icon-circle-arrow-n voted\"></span></a>
+						<a id=\"recent-link".$link->id."-down\" class=\"ui-state-default ui-corner-all\" title=\"vote this link down\" onclick=\"recentVoteAction($(this), 2, ".$link->id.")\"><span class=\"ui-icon ui-icon-circle-arrow-s\"></span></a>";	
+					} else {
+						// User Down voted link
+					$recentLinksContent .= "
+						<a id=\"recent-link".$link->id."-up\" class=\"ui-state-default ui-corner-all\" title=\"vote this link up\" onclick=\"recentVoteAction($(this), 1, ".$link->id.")\"><span class=\"ui-icon ui-icon-circle-arrow-n\"></span></a>
+						<a id=\"recent-link".$link->id."-down\" class=\"ui-state-default ui-corner-all\" title=\"vote this link down\" onclick=\"recentVoteAction($(this), 2, ".$link->id.")\"><span class=\"ui-icon ui-icon-circle-arrow-s downvoted\"></span></a>";	
+						
+					}
+				}
+				else {
+					// User has not voted on this link yet
+					$recentLinksContent .= "
+					<a id=\"recent-link".$link->id."-up\" class=\"ui-state-default ui-corner-all\" title=\"vote this link up\" onclick=\"recentVoteAction($(this), 1, ".$link->id.")\"><span class=\"ui-icon ui-icon-circle-arrow-n\"></span></a>
+					<a id=\"recent-link".$link->id."-down\" class=\"ui-state-default ui-corner-all\" title=\"vote this link down\" onclick=\"recentVoteAction($(this), 2, ".$link->id.")\"><span class=\"ui-icon ui-icon-circle-arrow-s\"></span></a>
+					";
+				}
+				
+			}
+			else {
+			$recentLinksContent .= "
+			<a id=\"recent-link".$link->id."-up\" class=\"ui-state-default ui-corner-all\" title=\"vote this link up\" onclick=\"recentVoteAction($(this), 1, ".$link->id.")\"><span class=\"ui-icon ui-icon-circle-arrow-n\"></span></a>
+			<a id=\"recent-link".$link->id."-down\" class=\"ui-state-default ui-corner-all\" title=\"vote this link down\" onclick=\"recentVoteAction($(this), 2, ".$link->id.")\"><span class=\"ui-icon ui-icon-circle-arrow-s\"></span></a>
+			";
+			}
+			
+			$recentLinksContent .= "
+			</td>
+			<td><a href=\"$linkURL\">".$link->title."</a>
+			<br />
+			<label title=\"".$link->votes."\" id=\"recent-link".$link->id."-points\">".$link->votes." points</label> | <a href=\"#\">".self::$howMany->displayHowManyComments($link->id)." comments</a>
+			</td>
+			</tr>";
+		}
+	    
+		self::$content .= "
+			<h3 class=\"centerHeader\">Recently viewed links</h3>
+			<table id=\"recentlyViewed\" border=\"0\" width=\"95%\">
+				$recentLinksContent
+			<tr>
+			<td> </td>
+			<td class=\"clearbtn\"><a title=\"clear recently viewed link history\" onclick=\"return clearHistory()\" href=\"#\">clear</a></td>
+			</tr>
+			</table>";
+		return true;
+		}
+		else
+		return false;
+		
+		
+	}
+	
 	public function buildSidebarContent() {
-		$content = null;
-		$utils = new Application_Model_Utils();
+		
+		
 		$db = Zend_Db_Table::getDefaultAdapter();
 		$frontController = Zend_Controller_Front::getInstance();
 		$request = $frontController->getRequest();
@@ -30,19 +148,16 @@ class Zend_View_Helper_BuildSidebarContent {
 			$category = $params['category'];
 		}
 		
-				$content .= <<<EOT
-	    <ul class="nav">
-	      <li><a href="/submit">Submit a Link</a></li>
-	      <li><a href="/blabs/create">Create your own category</a></li>
-<!--	      <li><a href="#">Link three</a></li>-->
-<!--	      <li><a href="#">Link four</a></li>-->
+		self::$content .= "
+	    <ul class=\"nav\">
+	      <li><a href=\"/submit\">Submit a Link</a></li>
+	      <li><a href=\"/blabs/create\">Create your own category</a></li>
 	    </ul>
-	<div id="sidebarContent">
-EOT;
+		<div id=\"sidebarContent\">";
 
 		if ($controller == "user" && $action == "account") {
 				if (isset($params['username']))
-				$user = $utils->XssCleaner($params['username']);
+				$user = self::$utils->XssCleaner($params['username']);
 				$select = $db->select();
 				$select->from("users");
 				$select->where("username = ?", $user);
@@ -50,26 +165,25 @@ EOT;
 				$created = 'Not Created'; $lastLogin = 'Never';
 				if (count($results) > 0)
 				{
-				$created = $utils->TimeSince(strtotime($results[0]["date_created"]));
-				$lastLogin = $utils->TimeSince(strtotime($results[0]["last_login"]));
+				$created = self::$utils->TimeSince(strtotime($results[0]["date_created"]));
+				$lastLogin = self::$utils->TimeSince(strtotime($results[0]["last_login"]));
 				}
 
 				
-			$content .= <<<EOT
-<div class="titlebox">
-<h1><a href="/b/$user">$user</a></h1>
-<div class="bottom">
-Member for <span class="age">$created</span><br />
-Last login <span class="age">$lastLogin </span>
-</div>
-</div>
-EOT;
+			self::$content .= "
+			<div class=\"titlebox\">
+			<h1><a href=\"/b/$user\">$user</a></h1>
+			<div class=\"bottom\">
+			Member for <span class=\"age\">$created</span><br />
+			Last login <span class=\"age\">$lastLogin </span>
+			</div>
+			</div>";
 		}
 
 		if ($controller == 'blabs' && $action == 'display') {
 			// Display Blab specific content
 			// Change submit link to be blab specific (will pre-select this blab on the link creation form)
-			$content = str_replace('"/submit"', '"/submit/'.$category.'"', $content);
+			self::$content = str_replace('"/submit"', '"/submit/'.$category.'"', self::$content);
 			
 			$select = $db->select();
 			$select->from( array('b' => 'blabs'),
@@ -80,7 +194,7 @@ EOT;
 			$results = $db->fetchRow($select);
 			$description = $results['description'];
 			$founder = $results['username'];
-			$founded = $utils->TimeSince(strtotime($results['date_created']));
+			$founded = self::$utils->TimeSince(strtotime($results['date_created']));
 			
 			
 			$blabID = $results['id'];
@@ -95,116 +209,68 @@ EOT;
 			$select->where("m.value = ?", 1);
 			$results = $db->fetchAll($select);
 			
-			$auth = Zend_Auth::getInstance();
 			$LoggedInUsername = ''; $isMod = false;
-      		  if ($auth->hasIdentity()) {
-        		$LoggedInUsername = $auth->getIdentity()->username;
+      		  if (self::$loggedIn) {
+        		$LoggedInUsername = self::$username;
         	}
 			
 			
-			
-			$content.= <<<EOT
-<div class="titlebox">
-<h1><a href="/b/$category">$category</a></h1>
-<div class="usertext-body">
-$description
-</div>
-<div class="bottom">
-created by <a href="/user/$founder">$founder</a><span class="userattrs"></span><span class="age">$founded</span>
-</div>
-</div>
-<div class="sidecontentbox ">
-<h2>MODERATORS</h2>
-<div class="blabcontent">
-EOT;
+			self::$content.= "
+			<div class=\"titlebox\">
+			<h1><a href=\"/b/$category\">$category</a></h1>
+			<div class=\"usertext-body\">
+			$description
+			</div>
+			<div class=\"bottom\">
+			created by <a href=\"/user/$founder\">$founder</a><span class=\"userattrs\"></span><span class=\"age\">$founded</span>
+			</div>
+			</div>
+			<div class=\"sidecontentbox \">
+			<h2>MODERATORS</h2>
+			<div class=\"blabcontent\">";
 	foreach ($results as $row) {
-		$content .= '<a class="author" href="/user/'.$row['username'].'">'.$row['username'].'</a><span class="userattrs"></span>';
+		self::$content .= '<a class="author" href="/user/'.$row['username'].'">'.$row['username'].'</a><span class="userattrs"></span>';
 		$isMod = ($row['username'] == $LoggedInUsername) ? true : false;
 	}
 
-$content .= <<<EOT
-<a href="/message/compose?to=%23testingmang" id="mailLink" class="mailLink"><span class="ui-icon ui-icon-mail-closed"></span>send a message</a>
-</div>
-<div id="data_mailLink" style="display:none;">
-send the moderators of &quot;$category&quot; a message
-</div>
-</div>
-EOT;
-// Check if user is a moderator 
+	self::$content .= "
+	<a href=\"/index/notfound?t=notimpl\" id=\"mailLink\" class=\"mailLink\"><span class=\"ui-icon ui-icon-mail-closed\"></span>send a message</a>
+	</div>
+	<div id=\"data_mailLink\" style=\"display:none;\">
+	send the moderators of &quot;$category&quot; a message
+	</div>
+	</div>";
+	// Check if user is a moderator 
         if ($isMod) {
-       $content .= <<<EOT
-<div class="ismod">you are a moderator of this blab. (<a onclick="alert('are you sure?')" href="#">remove me</a>)</div>
-<div class="sidecontentbox ">
-<h2>ADMIN BOX</h2>
-<div class="blabcontent">
-<ul class="flat-vert icon-menu hover">
-<li><a href=
-"/blabs/edit/category/$category">
-<span class="blab-icons ui-icon ui-icon-pencil"></span>
-Blab settings</a></li>
-<li><a href=
-"/blabs/edit/category/$category/change/moderators">
-<span class="blab-icons ui-icon ui-icon-star"></span>
-edit moderators</a></li>
-</ul>
-</div>
-
-</div>
-EOT;
-        
+      	 self::$content .= "
+			<div class=\"ismod\">you are a moderator of this blab. (<a onclick=\"alert('are you sure?')\" href=\"#\">remove me</a>)</div>
+			<div class=\"sidecontentbox \">
+			<h2>ADMIN BOX</h2>
+			<div class=\"blabcontent\">
+			<ul class=\"flat-vert icon-menu hover\">
+			<li><a href=
+			\"/blabs/edit/category/$category\">
+			<span class=\"blab-icons ui-icon ui-icon-pencil\"></span>
+			Blab settings</a></li>
+			<li><a href=
+			\"/blabs/edit/category/$category/change/moderators\">
+			<span class=\"blab-icons ui-icon ui-icon-star\"></span>
+			edit moderators</a></li>
+			</ul>
+			</div>
+			
+			</div>";
         }
 
-		}
+	}
+	
+	$this->buildRecentLinks();
 		
-		$content2 = <<<EOT
-<p>
-controller: $controller
-<br />
-action: $action
-<br />
-category: $category 
-</p>
-EOT;
-
-		$content .= <<<EOT
-<h3 class="centerHeader">Recently viewed links</h3>
-	<table id="recentlyViewed" border="0" width="95%">
-	<tr>
-	<td class="viewedVote">
-	<a id="recent-link328-up" class="ui-state-default ui-corner-all" title="vote this link up" onclick="recentVoteAction($(this), 1, 328)"><span class="ui-icon ui-icon-circle-arrow-n"></span></a>
-	<a id="recent-link328-down" class="ui-state-default ui-corner-all" title="vote this link down" onclick="recentVoteAction($(this), 2, 328)"><span class="ui-icon ui-icon-circle-arrow-s"></span></a>
-	</td>
-	<td><a href="#">Calgary Police lay criminal charges against Calgary website operator for criticizing Police</a>
-	<br />
-	<label title="851" id="recent-link328-points">851 points</label> | <a href="#">320 comments</a>
-	</td>
-	</tr>
-	<tr>
-	<td class="viewedVote">
-	<a id="recent-link330-up" class="ui-state-default ui-corner-all" title="vote this link up" onclick="recentVoteAction($(this), 1, 330)"><span class="ui-icon ui-icon-circle-arrow-n"></span></a>
-	<a id="recent-link330-down" class="ui-state-default ui-corner-all" title="vote this link down" onclick="recentVoteAction($(this), 2, 330)"><span class="ui-icon ui-icon-circle-arrow-s"></span></a>
-	</td>
-	<td><a href="#">How do they keep doing these in one continuous shot?</a>
-	<br />
-	<label title="451" id="recent-link330-points">451 points</label> | <a href="#">320 comments</a>
-	</td>
-	</tr>
-		<tr>
-	<td class="viewedVote">
-	<a id="recent-link332-up" class="ui-state-default ui-corner-all" title="vote this link up" onclick="recentVoteAction($(this), 1, 332)"><span class="ui-icon ui-icon-circle-arrow-n"></span></a>
-	<a id="recent-link332-down" class="ui-state-default ui-corner-all" title="vote this link down" onclick="recentVoteAction($(this), 2, 332)"><span class="ui-icon ui-icon-circle-arrow-s"></span></a>
-	</td>
-	<td><a href="#">Jon Stewart's 'Rally to Restore Sanity' already outpacing Glenn Beck's rally</a>
-	<br />
-	<label title="851" id="recent-link332-points">851 points</label> | <a href="#">320 comments</a>
-	</td>
-	</tr>
-	</table>
-EOT;
 		
-		return $content."</div><!-- end sidebar content -->";
+		return self::$content."</div><!-- end sidebar content -->";
 		
 	}
+	
 	
 	
 }

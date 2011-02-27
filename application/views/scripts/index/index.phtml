@@ -40,10 +40,10 @@ $this->headScript()->appendScript($script, $type = 'text/javascript', $attrs = a
 			<a id="upcoming-link<?php echo $link->id; ?>-down" class="ui-state-default ui-corner-all" title="vote this link down" onclick="voteAction($(this), 2, <?php echo $link->id; ?>)"><span class="ui-icon ui-icon-circle-arrow-s"></span></a>
 		</div>
 		<?php } if (!(is_null($link->thumbnail))) {?>
-			<a href="<?php echo $linkURL; ?>" class="thumbnail">&#8203;<img alt="" src="<?php echo $link->thumbnail; ?>" /></a>
+			<a name="linkblab_link-<?php echo $link->id; ?>" href="<?php echo $linkURL; ?>" class="thumbnail linkblab_link">&#8203;<img alt="" src="<?php echo $link->thumbnail; ?>" /></a>
 		<?php }?>
 		<div class="entry">
-			<p class="title"><a href="<?php echo $linkURL; ?>" class="title linkblab_link"><?php echo $link->title; ?></a> 
+			<p class="title"><a name="linkblab_link<?php echo $link->id; ?>" href="<?php echo $linkURL; ?>" class="title linkblab_link"><?php echo $link->title; ?></a> 
 			<span<?php echo ($link->isSelf == 1) ? ' style="display:none;"' : '' ?> class="domain">(<a title="see more links from this domain" href="/domain/<?php echo $link->domain; ?>/"><?php echo $link->domain; ?></a>)</span></p>	
 			<p class="tagline">submitted <?php echo $this->timeAgo(strtotime($link->dateCreated));?> by <?php echo $this->displayName($link->userID, "autho user-".$link->userID); ?><span class="userattrs"></span> to <?php echo $linkBlab[1]; ?></p>
 			<ul class="flat-list buttons">
@@ -111,10 +111,10 @@ $linkURL = ($link->isSelf == 1) ? '/b/'.$linkBlab[0].'/comments/'.$link->id.'/'.
 			<a id="link<?php echo $link->id; ?>-down" class="ui-state-default ui-corner-all" title="vote this link down" onclick="voteAction($(this), 2, <?php echo $link->id; ?>)"><span class="ui-icon ui-icon-circle-arrow-s"></span></a>
 		</div>
 		<?php } if (!(is_null($link->thumbnail))) {?>
-			<a href="<?php echo $linkURL; ?>" class="thumbnail">&#8203;<img alt="<?php echo $link->urlTitle; ?>" src="<?php echo $link->thumbnail; ?>" /></a>
+			<a name="linkblab_link-<?php echo $link->id; ?>" href="<?php echo $linkURL; ?>" class="thumbnail linkblab_link">&#8203;<img alt="<?php echo $link->urlTitle; ?>" src="<?php echo $link->thumbnail; ?>" /></a>
 		<?php }?>
 		<div class="entry">
-			<p class="title"><a href="<?php echo $linkURL; ?>" class="title linkblab_link"><?php echo $link->title; ?></a> 
+			<p class="title"><a name="linkblab_link<?php echo $link->id; ?>" href="<?php echo $linkURL; ?>" class="title linkblab_link"><?php echo $link->title; ?></a> 
 			<span<?php echo ($link->isSelf == 1) ? ' style="display:none;"' : '' ?> class="domain">(<a title="see more links from this domain" href="/domain/<?php echo $link->domain; ?>/"><?php echo $link->domain; ?></a>)</span></p>	
 			<p class="tagline">submitted <?php echo $this->timeAgo(strtotime($link->dateCreated));?> by <?php echo $this->displayName($link->userID, "autho user-".$link->userID); ?><span class="userattrs"></span> to <?php echo $linkBlab[1]; ?></p>
 			<ul class="flat-list buttons">

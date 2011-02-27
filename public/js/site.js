@@ -1,3 +1,25 @@
+// Jquery Extentions
+(function($){
+    var _old = $.unique;
+    $.unique = function(arr){
+        // do the default behavior only if we got an array of elements
+        if (!!arr[0].nodeType){
+            return _old.apply(this,arguments);
+        } else {
+            // reduce the array to contain no dupes via grep/inArray
+            return $.grep(arr,function(v,k){
+                return $.inArray(v,arr) === k;
+            });
+        }
+    };
+})(jQuery);
+jQuery.log = function (msg) {
+	if( window.console )
+	 console.log("%s", msg);
+      return this;
+};
+// --------END Jquery Extensions---------- //
+
 function checkIfVoted(elm, type, isLink) {
 	  if (type == 1){
 		  if (isLink)
@@ -29,7 +51,7 @@ function checkIfVoted(elm, type, isLink) {
 	  }
   }
   
-  function swapVoteClass(elm, type) {
+function swapVoteClass(elm, type) {
 	  // swap relative to the vote anchor
 	  if (type == 1){
 		  var scoreElm = elm.next("div").next("div");
@@ -55,7 +77,7 @@ function checkIfVoted(elm, type, isLink) {
 	  }
   }
   
-  function swapVoteClassComment(elm, type) {
+function swapVoteClassComment(elm, type) {
 	  // swap relative to the vote anchor
 	  var scoreElm = elm.parent(".midcol").next(".entry").children(".noncollapsed").children(".tagline").children(".total");
 	  if (type == 1){
@@ -80,7 +102,7 @@ function checkIfVoted(elm, type, isLink) {
 	  }
   }
   
-  function animateVote(elm, type, points) {
+function animateVote(elm, type, points) {
 	  if (type == 1){
 		  var scoreElm = elm.next("div").next("div");
 		  scoreElm.html( points.toString());
@@ -92,7 +114,8 @@ function checkIfVoted(elm, type, isLink) {
 		  scoreElm.effect("highlight", {color:'#ff3a3a'}, 500); 
 	  }
   }
-  function animateVoteComment(elm, type, points) {
+  
+function animateVoteComment(elm, type, points) {
 	  var collapsedScore = elm.parent(".tagline").parent(".noncollapsed").prev(".collapsed").children(".total");
 	  if (points > 1 || points < 0)
 		  var pnt = " points";
@@ -111,7 +134,7 @@ function checkIfVoted(elm, type, isLink) {
 	  
   }
   
-  function isLoggedIn() {
+function isLoggedIn() {
 	  var loginTxt = $("#loginLink").attr( "name" );
 	  if (loginTxt == 'logged_out')
 		return false;
@@ -119,7 +142,7 @@ function checkIfVoted(elm, type, isLink) {
 		return true; 
   }
   
-  function commentVoteAction(elm, type, number) {
+function commentVoteAction(elm, type, number) {
 	  if (!isLoggedIn()) {
 		  showLogin('You must be logged in to vote. <span style="font-size:small">no account yet?: <a href="/auth/signup">sign up!</a></span>');
 		  return false;
@@ -162,7 +185,7 @@ function checkIfVoted(elm, type, isLink) {
 	    				showLogin('You must be logged in to vote. <span style="font-size:small">no account yet?: <a href="/auth/signup">sign up!</a></span>');
 	    			}
 	    			else {
-	    				alert("Server AJAX error : " + response.message);    	
+	    				alert("Vote Failure : " + response.message);    	
 	    			}
 					}
 				
@@ -206,7 +229,7 @@ function checkIfVoted(elm, type, isLink) {
 	    				showLogin('You must be logged in to vote. <span style="font-size:small">no account yet?: <a href="/auth/signup">sign up!</a></span>');
 	    			}
 	    			else {
-	    				alert("Server AJAX error : " + response.message);
+	    				alert("Vote Failure : " + response.message);
 	    			}
 					}
 				
@@ -219,7 +242,7 @@ function checkIfVoted(elm, type, isLink) {
 	  return false;
   }
   
-  function voteAction(elm, type, number) {
+function voteAction(elm, type, number) {
 	   
 	  if (!isLoggedIn()) {
 		  showLogin('You must be logged in to vote. <span style="font-size:small">no account yet?: <a href="/auth/signup">sign up!</a></span>');
@@ -262,7 +285,7 @@ function checkIfVoted(elm, type, isLink) {
 	    				showLogin('You must be logged in to vote. <span style="font-size:small">no account yet?: <a href="/auth/signup">sign up!</a></span>');
 	    			}
 	    			else {
-	    				alert("Server AJAX error : " + response.message);    	
+	    				alert("Vote Failure : " + response.message);    	
 	    			}
 					}
 				
@@ -309,7 +332,7 @@ function checkIfVoted(elm, type, isLink) {
 		    				showLogin('You must be logged in to vote. <span style="font-size:small">no account yet?: <a href="/auth/signup">sign up!</a></span>');
 		    			}
 		    			else {
-		    				alert("Server AJAX error : " + response.message);
+		    				alert("Vote Failure: " + response.message);
 		    			}
 						}
 					
@@ -328,40 +351,89 @@ function checkIfVoted(elm, type, isLink) {
 	  
   }
 
-  function recentVoteAction(elm, type, number) {
+function recentVoteAction(elm, type, number) {
+	 
+	if (!isLoggedIn()) {
+		  showLogin('You must be logged in to vote. <span style="font-size:small">no account yet?: <a href="/auth/signup">sign up!</a></span>');
+		  return false;
+	  }
+	
 	var points = $("#recent-link"+number+"-points").attr('title');
 	points = parseInt(points);
 	
 	if(type == 1)
 	{
-		if (!elm.children("span").hasClass("voted")) {
-			elm.children("span").addClass("voted");	
-		points++;
-		$("#recent-link"+number+"-points").html( points.toString() + " points" );
-		$("#recent-link"+number+"-points").effect("highlight", {color:'#53ff7b'}, 1000);
-		}
-		var el2 = $("#recent-link" + number + "-down");
-		if (el2.children("span").hasClass("downvoted")) {
-			el2.children("span").removeClass("downvoted");
-		}
+	    if (!elm.children("span").hasClass("voted")) {
+	    	
+			$.ajax( {
+				type : "POST",
+				url : "/blabs/vote",
+				data : "link="+number+"&type="+type,
+				success : function(data) {
+				var response = jQuery.parseJSON( data );
+    			if (response.success == true)
+    			{
+    				elm.children("span").addClass("voted");	
+    				points++;
+    				$("#recent-link"+number+"-points").html( points.toString() + " points" );
+    				$("#recent-link"+number+"-points").effect("highlight", {color:'#53ff7b'}, 1000);
+    				
+    				var el2 = $("#recent-link" + number + "-down");
+    				if (el2.children("span").hasClass("downvoted")) {
+    					el2.children("span").removeClass("downvoted");
+    				}
+    			}
+    			else if (response.error == 'login')
+    			{
+    				showLogin('You must be logged in to vote. <span style="font-size:small">no account yet?: <a href="/auth/signup">sign up!</a></span>');
+    			}
+    			else {
+    				alert("Vote Failure: " + response.message);    	
+    			}
+				}
+			
+			});
+	    }
+		
 	}
 	else
 	{
 		if (!elm.children("span").hasClass("downvoted")) {
-			elm.children("span").addClass("downvoted");	
-			points--;
-			$("#recent-link"+number+"-points").html( points.toString() + " points" );
-			$("#recent-link"+number+"-points").effect("highlight", {color:'#ff3a3a'}, 1000);
-			}
-		var el2 = $("#recent-link" + number + "-up");
-		if (el2.children("span").hasClass("voted")) {
-			el2.children("span").removeClass("voted");
-			}
+			
+			$.ajax( {
+				type : "POST",
+				url : "/blabs/vote",
+				data : "link="+number+"&type="+type,
+				success : function(data) {
+				var response = jQuery.parseJSON( data );
+    			if (response.success == true)
+    			{
+    				elm.children("span").addClass("downvoted");	
+    				points--;
+    				$("#recent-link"+number+"-points").html( points.toString() + " points" );
+    				$("#recent-link"+number+"-points").effect("highlight", {color:'#ff3a3a'}, 1000);
+    				var el2 = $("#recent-link" + number + "-up");
+    				if (el2.children("span").hasClass("voted")) {
+    					el2.children("span").removeClass("voted");
+    					}	
+    			}
+    			else if (response.error == 'login')
+    			{
+    				showLogin('You must be logged in to vote. <span style="font-size:small">no account yet?: <a href="/auth/signup">sign up!</a></span>');
+    			}
+    			else {
+    				alert("Vote Failure: " + response.message);
+    			}
+				}
+			
+			});
+		}
+
 	}
 
 }
   
-  function hideComment(elm) {
+function hideComment(elm) {
 	  var noncollapsedDiv = elm.parent().parent(".noncollapsed");
 	  var collapsedDiv = noncollapsedDiv.prev(".collapsed");
 	  var voteBtns = collapsedDiv.parent().prev(".midcol");
@@ -374,7 +446,7 @@ function checkIfVoted(elm, type, isLink) {
 	  return false;
   }
   
- function showComment(elm) {
+function showComment(elm) {
 	 var collapsedDiv = elm.parent(".collapsed");
 	 collapsedDiv.hide();
 	 var voteBtns = collapsedDiv.parent().prev(".midcol");
@@ -387,7 +459,7 @@ function checkIfVoted(elm, type, isLink) {
 	 return false;
  }
  
- function showLogin(msg) {
+function showLogin(msg) {
 	 	if (msg != null || msg != '') {
 			$('#dynamicLoginError').html(msg);
 	 	}
@@ -396,7 +468,7 @@ function checkIfVoted(elm, type, isLink) {
 		return false;
  }
  
- function toggle_delete(ele, commentID) {
+function toggle_delete(ele, commentID) {
 	 if ($("#dialog-confirm").length == 0) {
 	 $("#dynamicLogin").after('<div id="dialog-confirm" title="Delete your comment?"> <p> <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>	Your comment will be permanently deleted; Are you sure?	</p>	</div>	 ');
 	 }
@@ -440,7 +512,7 @@ function checkIfVoted(elm, type, isLink) {
 	 
  }
  
- function toggle_edit(ele, commentID) {
+function toggle_edit(ele, commentID) {
 	 var editForm = $('#formEdit-'+commentID);
 	 if (editForm.hasClass("closed")) {
 		 editForm.removeClass("closed");
@@ -456,7 +528,7 @@ function checkIfVoted(elm, type, isLink) {
 	 return false;
 }
  
- function toggle_reply(ele, commentID) {
+function toggle_reply(ele, commentID) {
 	 var replyForm = $('#formReply-'+commentID); 
 	 if (replyForm.hasClass("closed")) {
 		 replyForm.removeClass("closed");
@@ -473,7 +545,7 @@ function checkIfVoted(elm, type, isLink) {
 	 return false;
  }
  
- function post_comment(comForm, type) {
+function post_comment(comForm, type) {
 	 var err = comForm.find(".form_errors");
 	 var status = comForm.find(".status"); 
 	 var sBtn = comForm.find("button");
@@ -685,7 +757,7 @@ function checkIfVoted(elm, type, isLink) {
 	 
  }
  
- function hideForm (ele) {
+function hideForm (ele) {
 	 var form = ele.nextAll("form");
 	 if (ele.hasClass( "collapsedForm" )) {
 		 form.slideDown();
@@ -700,14 +772,54 @@ function checkIfVoted(elm, type, isLink) {
 	 ele.blur();
 	 return false;
  }
- 
-  
-  $(document).ready(function() {
+
+function linkBlab_click(event, ele) {
+	//if(event.preventDefault) { 
+	  //event.preventDefault(); 
+	//	}	else
+	  //event.returnValue = false;
+	 
+	var l = ele.attr("href");
+	var linkID = ele.attr("name").replace("linkblab_link", "").replace("-", "");
+	var links = $.cookie("rec_links");
+	if (links == null) {
+		$.cookie('rec_links', linkID, { expires: 7, path: '/', domain: 'linkblab.com' });
+	}
+	else {
+		links = linkID + ';' + unescape(links);
+	    links = $.unique(links.split(';')); // convert to array and remove dupes
+	    
+	    if (links.length > 5) { // remove links after 5
+	    	links.splice(5, links.length - 5);
+	    }
+	    links = links.join(';');
+		$.cookie('rec_links', links, { expires: 7, path: '/', domain: 'linkblab.com' });
+	}
+	
+	 // window.setTimeout(function () {
+		  //  window.location.href = l;
+		//	},100);
+	
+	return event.returnValue;
+}
+
+function clearHistory() {
+	$('.centerHeader').hide();
+	$('#recentlyViewed').fadeOut();
+	$.cookie('rec_links', null, { path: '/', domain: 'linkblab.com' });
+	return false;
+}
+
+$(document).ready(function() {
 	 
 	  $('#search').defaultValue({'value':' Search Linkblab'});
 
+	  $(".linkblab_link").click(function(event) {
+		  return linkBlab_click(event, $(this));
+		});
+	  
 	  $(".decoda-spoilerBody-blk").click(function(event) {
-		  if( window.console ) console.log("Spoiler Clicked");
+		  $.log("Spoiler Clicked");
 		  
 		  if(event.preventDefault) { 
 			  event.preventDefault(); }
@@ -783,7 +895,6 @@ function checkIfVoted(elm, type, isLink) {
 
 		  });
 		
-		$('#ajaxLoader').hide();
 		
 		$("#dynamicLogin").dialog({
 			autoOpen: false,
@@ -826,11 +937,13 @@ function checkIfVoted(elm, type, isLink) {
 							data : "username="+username.val()+"&password="+password.val()+"&token="+token+"&pl="+rememberMe,
 							beforeSend: function(request) {
 							$('#resetemail').attr('enabled', 'false');
+							$('#dynamicLoginForm').hide();
 							$('#ajaxLoader').show();
 							},
 							success : function(data) {
 							$('#resetemail').attr('enabled', 'true');
 							$('#ajaxLoader').hide();
+							$('#dynamicLoginForm').show();
 							var response = jQuery.parseJSON( data );
 			    			if (response.isvalid == 'true')
 			    			{
@@ -860,4 +973,4 @@ function checkIfVoted(elm, type, isLink) {
 			}
 		});
 				
-	  });
+});

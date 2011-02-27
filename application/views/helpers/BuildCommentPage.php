@@ -63,12 +63,12 @@ class Zend_View_Helper_BuildCommentPage {
 		}
 		
 		if (! (is_null ( self::$link->thumbnail ))) {
-			$this->content .= '<a href="' . $linkURL . '" class="thumbnail">&#8203;<img alt="" src="' . self::$link->thumbnail . '" /></a>';
+			$this->content .= '<a name="linkblab_link-' . self::$link->id . '" href="' . $linkURL . '" class="thumbnail linkblab_link">&#8203;<img alt="" src="' . self::$link->thumbnail . '" /></a>';
 		}
 		$spanClass = (self::$link->isSelf == 1) ? ' style="display:none;"' : '';
 		$this->content .= '<div class="entry">' . 
 
-		'<p class="title"><a href="' . $linkURL . '" class="title linkblab_link">' . self::$link->title . '</a>' . '&nbsp;<span' . $spanClass . ' class="domain">(<a title="see more links from this domain" href="/domain/' . self::$link->domain . '/">' . self::$link->domain . '</a>)</span></p>' . 
+		'<p class="title"><a name="linkblab_link' . self::$link->id . '" href="' . $linkURL . '" class="title linkblab_link">' . self::$link->title . '</a>' . '&nbsp;<span' . $spanClass . ' class="domain">(<a title="see more links from this domain" href="/domain/' . self::$link->domain . '/">' . self::$link->domain . '</a>)</span></p>' . 
 
 		'<p class="tagline">submitted ' . self::$utils->TimeSince ( strtotime ( self::$link->dateCreated ) ) . ' ago by ' . self::$displayName->displayName ( self::$link->userID, "autho user-" . self::$link->userID ) . '<span class="userattrs"></span> to ' . self::$blabInfo [1] . '</p>';
 		// If this is a self post, output the description here:

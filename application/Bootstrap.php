@@ -188,7 +188,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         	$view->headScript()->appendFile("/js/jquery-1.4.4.min.js");
         	$view->headScript()->appendFile("/js/jquery-ui-latest.min.js");
         }
- 		
+        //$view->headScript()->appendFile("/js/json2.js"); // for encoding json client-side
+ 		$view->headScript()->appendFile("/js/jquery.cookie.js");
  		$view->headScript()->appendFile("/js/site.js");
         //$view->headScript()->appendScript("var age = 0;", $type = 'text/javascript', $attrs = array());
  		

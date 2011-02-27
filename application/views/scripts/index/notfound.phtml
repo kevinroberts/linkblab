@@ -8,9 +8,11 @@ $this->headTitle('- 404 Not Found');
     	//$user = $auth->getIdentity();
     //    print_r($auth);
 ?>
- <div style="margin:0 auto; padding-top: 10px; width: 600px;" class="ui-state-highlight ui-corner-all"> 
-	<p><span style="position: relative; float: left; left: 5px; top: -24px;" class="ui-icon ui-icon-info"></span>
-		<?php 
+<div style="margin:0 auto; padding-top: 10px; width: 600px;" class="ui-state-highlight ui-corner-all"> 
+<p>
+<span style="float: left; position: relative; left: 5px; top: -23px;" class="ui-icon ui-icon-info"></span>
+<span style="text-align: center; display: block; margin-top: 0px;">	
+<?php 
 if (!empty($this->errorMsg)) {
 	//print_r($this->errorMsg);
 	echo $this->errorMsg;
@@ -21,5 +23,7 @@ else {
 	Please check your link to see if you\'ve misstyped something.' ;
 }
 
-?>			
+?>
+</span>
+</p>
 </div>
