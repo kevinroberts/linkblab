@@ -10,7 +10,7 @@
  *
  * @uses viewHelper Zend_View_Helper
  */
-class Zend_View_Helper_displayBlab {
+class Zend_View_Helper_DisplayBlab extends Zend_View_Helper_Abstract {
 	
 
 	/**

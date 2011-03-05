@@ -10,7 +10,7 @@
  *
  * @uses viewHelper Zend_View_Helper
  */
-class Zend_View_Helper_BuildSortingOptions {
+class Zend_View_Helper_BuildSortingOptions extends Zend_View_Helper_Abstract {
 	
 
 	/**

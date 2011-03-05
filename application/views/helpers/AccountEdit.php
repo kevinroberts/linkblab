@@ -10,7 +10,7 @@
  *
  * @uses viewHelper Zend_View_Helper
  */
-class Zend_View_Helper_AccountEdit {
+class Zend_View_Helper_AccountEdit extends Zend_View_Helper_Abstract {
 	
 
 	/**

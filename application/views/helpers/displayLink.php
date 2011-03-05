@@ -6,11 +6,11 @@
  */
 
 /**
- * displayLink helper
+ * DisplayLink helper
  *
  * @uses viewHelper Zend_View_Helper
  */
-class Zend_View_Helper_displayLink {
+class Zend_View_Helper_DisplayLink extends Zend_View_Helper_Abstract {
 	
 	// http://www.talkincode.com/cut-a-string-to-a-specified-length-with-php-135.html
 	private function substrwords($text,$maxchar,$end='...') {

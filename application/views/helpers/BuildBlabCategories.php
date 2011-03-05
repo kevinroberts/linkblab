@@ -10,7 +10,7 @@
  *
  * @uses viewHelper Zend_View_Helper
  */
-class Zend_View_Helper_BuildBlabCategories {
+class Zend_View_Helper_BuildBlabCategories extends Zend_View_Helper_Abstract {
 	
 
 	

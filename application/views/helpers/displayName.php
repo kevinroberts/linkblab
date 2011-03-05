@@ -10,7 +10,7 @@
  *
  * @uses viewHelper Zend_View_Helper
  */
-class Zend_View_Helper_displayName {
+class Zend_View_Helper_DisplayName extends Zend_View_Helper_Abstract {
 	
 
 	/**

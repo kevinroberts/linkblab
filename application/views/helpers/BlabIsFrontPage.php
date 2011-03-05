@@ -10,7 +10,7 @@
  *
  * @uses viewHelper Zend_View_Helper
  */
-class Zend_View_Helper_BlabIsFrontPage {
+class Zend_View_Helper_BlabIsFrontPage extends Zend_View_Helper_Abstract {
 	
 	public function blabIsFrontPage($blabID) {
 		$auth = Zend_Auth::getInstance ();

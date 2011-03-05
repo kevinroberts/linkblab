@@ -10,7 +10,7 @@
  *
  * @uses viewHelper Zend_View_Helper
  */
-class Zend_View_Helper_formattingDialog {
+class Zend_View_Helper_FormattingDialog extends Zend_View_Helper_Abstract {
 	
 
 	/**

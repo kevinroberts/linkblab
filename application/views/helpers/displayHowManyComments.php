@@ -10,7 +10,7 @@
  *
  * @uses viewHelper Zend_View_Helper
  */
-class Zend_View_Helper_displayHowManyComments {
+class Zend_View_Helper_DisplayHowManyComments extends Zend_View_Helper_Abstract {
 	
 
 	/**

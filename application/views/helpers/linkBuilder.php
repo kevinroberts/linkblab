@@ -10,7 +10,7 @@
  *
  * @uses viewHelper Zend_View_Helper
  */
-class Zend_View_Helper_linkBuilder {
+class Zend_View_Helper_LinkBuilder extends Zend_View_Helper_Abstract {
 	
 
 	/**

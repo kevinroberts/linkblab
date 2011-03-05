@@ -11,7 +11,7 @@
  *
  * @uses viewHelper Zend_View_Helper
  */
-class Zend_View_Helper_timeAgo extends Zend_View_Helper_Abstract{
+class Zend_View_Helper_TimeAgo extends Zend_View_Helper_Abstract{
 	
      /**
      * Time Ago

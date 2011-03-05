@@ -10,7 +10,7 @@
  *
  * @uses viewHelper Zend_View_Helper
  */
-class Zend_View_Helper_BuildReportButton {
+class Zend_View_Helper_BuildReportButton extends Zend_View_Helper_Abstract {
 	
 
 	/**

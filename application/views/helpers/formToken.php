@@ -6,11 +6,11 @@
  */
 
 /**
- * formToken helper
+ * FormToken helper
  *
  * @uses viewHelper Zend_View_Helper
  */
-class Zend_View_Helper_formToken {
+class Zend_View_Helper_FormToken extends Zend_View_Helper_Abstract {
 	
 
 	/**

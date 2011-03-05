@@ -10,7 +10,7 @@
  *
  * @uses viewHelper Zend_View_Helper
  */
-class Zend_View_Helper_currentURL {
+class Zend_View_Helper_CurrentURL extends Zend_View_Helper_Abstract {
 	
 	private function curPageURL() 
 {

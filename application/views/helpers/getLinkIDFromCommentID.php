@@ -10,7 +10,7 @@
  *
  * @uses viewHelper Zend_View_Helper
  */
-class Zend_View_Helper_getLinkIDFromCommentID {
+class Zend_View_Helper_GetLinkIDFromCommentID extends Zend_View_Helper_Abstract {
 	/**
 	 *  Returns the link id associated with a given comment id 
 	 */
