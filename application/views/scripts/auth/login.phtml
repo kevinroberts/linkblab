@@ -155,7 +155,7 @@ label {
 			<p> </p>
 			<div><?php echo $this->form->rememberMe;?> <label for="rememberMe">Remember me? </label> <label style="cursor: Text" class="tagline">(persistant login - don't use on public computers)</label></div>
 
-			<?php echo $this->form->captcha;?>
+			<?php echo $this->form->ReCaptcha;?>
 			<br />
 			<p>
 			<input title="log me in" style="cursor:pointer;" type="submit" value="Login" /> or  <a title="sign up for a new account"  href="<?php echo $this->url(array('controller' => 'auth', 'action' => 'signup'), null, true);?>">Sign up</a>

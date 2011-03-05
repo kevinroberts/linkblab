@@ -64,18 +64,16 @@ class Application_Form_Blab extends Zend_Form
         if ($captcha_session->tries > 5)
         {
 	        			
-			$element = new Zend_Form_Element_Captcha('captcha', array(
-				    'label' => "Enter security captcha code",
-				    'captcha' => array(
-				        'captcha' => 'Image',
-				        'wordLen' => 6,
-				        'timeout' => 300,
-        				'font' => 'Arial'        				
-				    ),
-				));
+        $recaptcha = new Zend_Service_ReCaptcha(RECAPTCHAPUBLIC,
+                        RECAPTCHAPRIVATE);
+        $element = $this->createElement('Captcha', 'ReCaptcha',
+                array('captcha'=>array('captcha'=>'ReCaptcha',
+                                        'service'=>$recaptcha))); 
+        $element->addErrorMessage('Invalid security captcha code');
+        $element->setLabel("Enter CAPTCHA");
+        $this->addElement($element);
  
-			$element->addErrorMessage('Invalid security captcha code');
-			$this->addElement($element);
+			
         }     
         $this->clearDecorators();
 		$this->addDecorator('FormElements')

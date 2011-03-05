@@ -159,7 +159,7 @@ label {
 							$message = 'A required field was not completed'; ?>
 					<?php if ($message == 'callbackValue')
 							$message = 'Please check your URL (It must start with "http://")'; ?>
-					<?php if ($message == 'badCaptcha')
+					<?php if ($message == 'missingValue')
 							$message = 'Invalid CAPTCHA code. Please try again'; ?>		
 						<div style="color:red"><span style="float: left; margin-right: 0.3em;position:relative; top:4px;" class="ui-icon ui-icon-alert"></span><?php echo $message;?></div>
 					<?php endforeach;?>
@@ -184,7 +184,7 @@ label {
 	<div><label for="blab">Blab:</label> <span class="gray">popular choices - <a onClick="$('#blab').val('linkblab.com')" href="#">linkblab.com</a>, <a onClick="$('#blab').val('funny')" href="#">funny</a>, <a onClick="$('#blab').val('self')" href="#">self.blab</a>, <a onClick="$('#blab').val('music')" href="#">music</a>, <a onClick="$('#blab').val('technology')" href="#">technology</a></span></div>	
 	 <?php echo $this->form->blab;?>
 	<p> </p>
-	<?php echo $this->form->captcha;?>
+	<?php echo $this->form->ReCaptcha;?>
 	<br />
 	<p style="text-align:center">
 	<input title="Create" style="cursor:pointer;" type="submit" value="Submit" />&nbsp; or &nbsp;<input id="resetbtn" type="reset" value="Reset form" />

@@ -156,7 +156,8 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
     	// Set allowed markup constants
     	define("DECODAPOST",     "b,i,u,align,color,sub,sup,code,url,quote,list,olist,email,li,decode,spoiler");
     	define("DECODACOMMENT",     "b,i,u,color,sub,sup,code,url,quote,list,olist,email,li,decode,spoiler");
-
+		define("RECAPTCHAPRIVATE",  $this->getOption("recaptcha_private_key"));
+		define("RECAPTCHAPUBLIC", $this->getOption("recaptcha_public_key"));
         $IE = '.content { margin-right: -1px; } /* this 1px negative margin can be placed on any of the columns in this layout with the same corrective effect. */'.PHP_EOL;
     	$IE.= 'ul.nav a { zoom: 1; }  /* the zoom property gives IE the hasLayout trigger it needs to correct extra whiltespace between the links */';
     	$IE2 = ".thumbnail {
