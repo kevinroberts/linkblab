@@ -12,12 +12,12 @@ resources.view[] =
 resources.db.adapter = "Pdo_Mysql"
 resources.db.params.charset = "utf8"
 resources.db.params.host = "localhost"
-resources.db.params.username = "root"
-resources.db.params.password = "kr7943"
+resources.db.params.username = "DBUSERNAME"
+resources.db.params.password = "YOUR-DB-PASSWORD"
 resources.db.params.dbname = "linkblab"
 remember_me_seconds = 864000
-recaptcha_private_key = "6LdJMcISAAAAAHBcG10vuDR5Ar6Ub2M40du-vQi9"
-recaptcha_public_key = "6LdJMcISAAAAADIKQH0nwwfB7RlH9ENub3w3TUQf"
+recaptcha_private_key = "PLACE-RECAPTCHA-PRIVATE-KEY-HERE"
+recaptcha_public_key = "PLACE-RECAPTCHA-PUBLIC-KEY-HERE"
 [staging : production]
 
 [testing : production]
