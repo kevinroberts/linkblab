@@ -206,9 +206,8 @@ td.clearbtn a {
 }
 
 #loginMenu {
-clear:right;
 float:right;
-margin-top: 1.6em;
+margin-top: 2.7em;
 padding:0;
 }
 .zend_form{

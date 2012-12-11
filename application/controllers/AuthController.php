@@ -8,8 +8,6 @@ class AuthController extends Zend_Controller_Action
     public function init()
     {
         
-    	//$this->formToken = hash("sha256", $_SERVER['REMOTE_ADDR']."2on23_BilBoBAgginS!".date("l",time()));
-    	
 		$this->config = array(
     	'ssl' => 'tls',
     	'port' => 587,
@@ -85,7 +83,7 @@ class AuthController extends Zend_Controller_Action
                                         $authAdapter->setTableName('users')
                                             ->setIdentityColumn('username')
                                             ->setCredentialColumn('password')
-                                            ->setCredentialTreatment('SHA1(CONCAT(?,salt))');
+                                            ->setCredentialTreatment('SHA2(CONCAT(?,salt), 256)');
                                             
                                         
                                         return $authAdapter;
@@ -230,7 +228,7 @@ class AuthController extends Zend_Controller_Action
                 					{
                 					    // Create the user in the database...
                 						$newSalt = sha1(time().'ntHGaxVr5zeOKmjvZFQleSQCs7DWtuh'.uniqid(mt_rand(),true));
-                						$newPass = sha1($data['password'].$newSalt);
+                						$newPass = hash('sha256', $data['password'].$newSalt);
         								$db = Zend_Db_Table::getDefaultAdapter();
         								$data = array(
         								'username'      => $data['username'],
@@ -407,7 +405,7 @@ class AuthController extends Zend_Controller_Action
 						{
 							// Token is valid and not expired => proceed with password reset
 							$newSalt = sha1(time().'ntHGaxVr5zeOKmjvZFQleSQCs7DWtuh'.uniqid(mt_rand(),true));
-                			$newPass = sha1($data['password'].$newSalt);
+                			$newPass = hash('sha256', $data['password'].$newSalt);
 							$updateData = array(
 											'password' => $newPass,
 											'salt' => $newSalt,

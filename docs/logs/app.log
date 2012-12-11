@@ -1,0 +1,10 @@
+2012-12-11T05:14:57+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T05:14:57+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-11T05:17:26+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T05:17:26+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-10T23:17:27-06:00 INFO (6): Informational message - setting new CSRFTOKEN: f074654c3daaf57f63265a67812bf9ec44a30d98
+2012-12-10T23:17:27-06:00 INFO (6): Informational message - setting new CSRFTOKEN: 9904b1537a816e7292c32e4252ef8b682a3ce618
+2012-12-11T05:17:36+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T05:17:36+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-10T23:17:36-06:00 INFO (6): Informational message - setting new CSRFTOKEN: 1db7f63da9c62b63dd4f9a5a547bb3f052cd7034
+2012-12-10T23:17:36-06:00 INFO (6): Informational message - setting new CSRFTOKEN: 937869250abd3f02e9daa74268e880277dc2aa50

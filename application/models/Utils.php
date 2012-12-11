@@ -5,7 +5,8 @@
 class Application_Model_Utils
 {
 	public $isReadOnly = false, $userID = 0;
-
+	    
+    
 	public function __construct()
 	{
 		/*if (is_array($options)) {
@@ -202,6 +203,9 @@ class Application_Model_Utils
         	// if session variable does not exist -> create a new unique token
      				if (!isset($_SESSION['csrfToken'])) {
 						$_SESSION['csrfToken'] = sha1(time().'ntHGaxVr5zeOKmjvZFQleSQCs7DWtuh'.uniqid(mt_rand(),true));
+						
+     				    Zend_Registry::get("log")->info('Informational message - setting new CSRFTOKEN: '.$_SESSION['csrfToken']);
+     				    
 						return $_SESSION['csrfToken'];
 						}
 						else if ($reset) {

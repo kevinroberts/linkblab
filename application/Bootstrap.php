@@ -2,6 +2,59 @@
 
 class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 {	
+    
+    /**
+     * @var Zend_Log
+     */
+    protected $_logger;
+        
+    /**
+     * @var Zend_Controller_Front
+     */
+    public $frontController;
+        
+	
+	    /**
+             * Setup the logging
+             */
+            protected function _initLogging()
+            {
+                $this->bootstrap('frontController');
+
+                $logger = new Zend_Log();
+
+                $writer = 'production' == $this->getEnvironment() ?
+        			new Zend_Log_Writer_Stream(APPLICATION_PATH . '/../docs/logs/app.log') :
+        			new Zend_Log_Writer_Stream(APPLICATION_PATH . '/../docs/logs/app.log');
+                $logger->addWriter($writer);
+
+                if ('production' == $this->getEnvironment()) {
+                        $filter = new Zend_Log_Filter_Priority(Zend_Log::CRIT);
+                        $logger->addFilter($filter);
+                }
+
+                $this->_logger = $logger;
+                Zend_Registry::set('log', $logger);
+            }
+            
+            /**
+               * Configure the resource autoloader
+               */
+              protected function _initConfigureResourceAutoloader()
+              {
+                  $this->_logger->info('Bootstrap ' . __METHOD__);
+
+                
+              }
+    
+              /**
+                  * Add the config to the registry
+                  */
+                 protected function _initConfig()
+                 {
+                     $this->_logger->info('Bootstrap ' . __METHOD__);
+                     Zend_Registry::set('config', $this->getOptions());
+                 }
 	
 	/*
 	 *  Define custom URL routes for Linkblab
