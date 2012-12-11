@@ -1,10 +1,206 @@
-2012-12-11T05:14:57+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
-2012-12-11T05:14:57+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
-2012-12-11T05:17:26+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
-2012-12-11T05:17:26+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
-2012-12-10T23:17:27-06:00 INFO (6): Informational message - setting new CSRFTOKEN: f074654c3daaf57f63265a67812bf9ec44a30d98
-2012-12-10T23:17:27-06:00 INFO (6): Informational message - setting new CSRFTOKEN: 9904b1537a816e7292c32e4252ef8b682a3ce618
-2012-12-11T05:17:36+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
-2012-12-11T05:17:36+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
-2012-12-10T23:17:36-06:00 INFO (6): Informational message - setting new CSRFTOKEN: 1db7f63da9c62b63dd4f9a5a547bb3f052cd7034
-2012-12-10T23:17:36-06:00 INFO (6): Informational message - setting new CSRFTOKEN: 937869250abd3f02e9daa74268e880277dc2aa50
+2012-12-11T05:48:32+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T05:48:32+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-11T05:48:33+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T05:48:33+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-10T23:48:34-06:00 INFO (6): Informational message - setting new CSRFTOKEN: abfb02ecf9e9e49bfffee418631b084bcae182d2
+2012-12-11T05:49:04+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T05:49:04+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-10T23:49:04-06:00 INFO (6): Auth controller init
+2012-12-11T05:49:05+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T05:49:05+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-10T23:49:05-06:00 INFO (6): Informational message - setting new CSRFTOKEN: 43492ccff56d3772c210b2e2fd8ead7735f3eb0c
+2012-12-11T05:49:38+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T05:49:38+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-10T23:49:38-06:00 INFO (6): Auth controller init
+2012-12-10T23:49:38-06:00 INFO (6): Informational message - setting new CSRFTOKEN: b7be43a5714ef7cfb3022b30f3a027ca0f98f664
+2012-12-11T05:49:51+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T05:49:51+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-10T23:49:52-06:00 INFO (6): Auth controller init
+2012-12-10T23:49:52-06:00 INFO (6): Comparing tokens submitted CSRFTOKEN: 43492ccff56d3772c210b2e2fd8ead7735f3eb0c server token: 
+2012-12-11T05:54:06+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T05:54:06+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-10T23:54:06-06:00 INFO (6): Auth controller init
+2012-12-10T23:54:06-06:00 INFO (6): Informational message - setting new CSRFTOKEN: e949260b4d8741f949e212851786956bcfe0b764
+2012-12-11T05:54:18+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T05:54:18+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-10T23:54:18-06:00 INFO (6): Auth controller init
+2012-12-10T23:54:19-06:00 INFO (6): Comparing tokens submitted CSRFTOKEN: b7be43a5714ef7cfb3022b30f3a027ca0f98f664 server token: b7be43a5714ef7cfb3022b30f3a027ca0f98f664
+2012-12-11T05:54:39+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T05:54:39+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-10T23:54:39-06:00 INFO (6): Auth controller init
+2012-12-10T23:54:39-06:00 INFO (6): Comparing tokens submitted CSRFTOKEN: b7be43a5714ef7cfb3022b30f3a027ca0f98f664 server token: b7be43a5714ef7cfb3022b30f3a027ca0f98f664
+2012-12-11T05:55:05+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T05:55:05+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-10T23:55:05-06:00 INFO (6): Auth controller init
+2012-12-10T23:55:05-06:00 INFO (6): Informational message - setting new CSRFTOKEN: 97cbb2e06f8090bb4243ea73e855d6d684732ab3
+2012-12-11T05:55:10+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T05:55:10+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-10T23:55:10-06:00 INFO (6): Auth controller init
+2012-12-10T23:55:10-06:00 INFO (6): Comparing tokens submitted CSRFTOKEN: e949260b4d8741f949e212851786956bcfe0b764 server token: b7be43a5714ef7cfb3022b30f3a027ca0f98f664
+2012-12-11T05:57:07+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T05:57:07+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-10T23:57:07-06:00 INFO (6): Auth controller init
+2012-12-10T23:57:07-06:00 INFO (6): Informational message - setting new CSRFTOKEN: 6615a50787585071fda4786d779c453998a5c981
+2012-12-11T05:57:17+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T05:57:17+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-10T23:57:18-06:00 INFO (6): Auth controller init
+2012-12-10T23:57:18-06:00 INFO (6): Comparing tokens submitted CSRFTOKEN: 97cbb2e06f8090bb4243ea73e855d6d684732ab3 server token: b7be43a5714ef7cfb3022b30f3a027ca0f98f664
+2012-12-11T05:58:37+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T05:58:37+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-10T23:58:38-06:00 INFO (6): Auth controller init
+2012-12-10T23:58:38-06:00 INFO (6): Informational message - setting new CSRFTOKEN: bb8877200b48bfc46e1688987c11ba7e1a0f973d
+2012-12-11T05:58:43+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T05:58:43+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-10T23:58:43-06:00 INFO (6): Auth controller init
+2012-12-10T23:58:44-06:00 INFO (6): Comparing tokens submitted CSRFTOKEN: 6615a50787585071fda4786d779c453998a5c981 server token: b7be43a5714ef7cfb3022b30f3a027ca0f98f664
+2012-12-11T06:02:14+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T06:02:14+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-11T00:02:14-06:00 INFO (6): Auth controller init
+2012-12-11T00:02:14-06:00 INFO (6): Informational message - setting new CSRFTOKEN: af09c314313cbadfe60e2f523e83983be79fb260
+2012-12-11T06:02:25+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T06:02:25+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-11T00:02:25-06:00 INFO (6): Auth controller init
+2012-12-11T00:02:26-06:00 INFO (6): Comparing tokens submitted CSRFTOKEN: bb8877200b48bfc46e1688987c11ba7e1a0f973d server token: bb8877200b48bfc46e1688987c11ba7e1a0f973d
+2012-12-11T06:02:33+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T06:02:33+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-11T00:02:33-06:00 INFO (6): Auth controller init
+2012-12-11T00:02:34-06:00 INFO (6): Comparing tokens submitted CSRFTOKEN: bb8877200b48bfc46e1688987c11ba7e1a0f973d server token: bb8877200b48bfc46e1688987c11ba7e1a0f973d
+2012-12-11T06:02:53+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T06:02:53+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-11T00:02:53-06:00 INFO (6): Auth controller init
+2012-12-11T00:02:53-06:00 INFO (6): Comparing tokens submitted CSRFTOKEN: bb8877200b48bfc46e1688987c11ba7e1a0f973d server token: bb8877200b48bfc46e1688987c11ba7e1a0f973d
+2012-12-11T06:03:06+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T06:03:06+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-11T00:03:06-06:00 INFO (6): Auth controller init
+2012-12-11T00:03:06-06:00 INFO (6): Informational message - setting new CSRFTOKEN: af7fe5aa15c7cbc9a42daf08306973df18dfccb0
+2012-12-11T06:03:12+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T06:03:12+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-11T00:03:13-06:00 INFO (6): Auth controller init
+2012-12-11T00:03:13-06:00 INFO (6): Comparing tokens submitted CSRFTOKEN: af09c314313cbadfe60e2f523e83983be79fb260 server token: af09c314313cbadfe60e2f523e83983be79fb260
+2012-12-11T06:03:40+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T06:03:40+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-11T00:03:40-06:00 INFO (6): Auth controller init
+2012-12-11T00:03:40-06:00 INFO (6): Comparing tokens submitted CSRFTOKEN: af09c314313cbadfe60e2f523e83983be79fb260 server token: af09c314313cbadfe60e2f523e83983be79fb260
+2012-12-11T06:06:01+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T06:06:01+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-11T00:06:02-06:00 INFO (6): Auth controller init
+2012-12-11T00:06:02-06:00 INFO (6): Informational message - setting new CSRFTOKEN: 0c135638b8e90bae3e86a0961e2bc4fab7a3011a
+2012-12-11T06:06:10+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T06:06:10+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-11T00:06:10-06:00 INFO (6): Auth controller init
+2012-12-11T06:06:10+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T06:06:10+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-11T00:06:10-06:00 INFO (6): Auth controller init
+2012-12-11T00:06:11-06:00 INFO (6): Informational message - setting new CSRFTOKEN: ad619cd98eff3cde828d406947b2189a40ece855
+2012-12-11T06:06:19+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T06:06:19+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-11T00:06:20-06:00 INFO (6): Auth controller init
+2012-12-11T00:06:20-06:00 INFO (6): Informational message - setting new CSRFTOKEN: 000fc98e7076a5c84ace1bf6c807b30a2e5351c7
+2012-12-11T06:09:56+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T06:09:56+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-11T00:09:56-06:00 INFO (6): Auth controller init
+2012-12-11T00:09:56-06:00 INFO (6): Informational message - setting new CSRFTOKEN: 04177e3e937b1e970999af061f7d8a64b657e8fe
+2012-12-11T06:09:57+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T06:09:57+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-11T00:09:58-06:00 INFO (6): Auth controller init
+2012-12-11T00:09:58-06:00 INFO (6): Informational message - setting new CSRFTOKEN: 7f7df5042cfb2cf7cf05ae0388bc354384b54daa
+2012-12-11T06:10:10+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T06:10:10+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-11T00:10:11-06:00 INFO (6): Auth controller init
+2012-12-11T00:10:11-06:00 INFO (6): Informational message - setting new CSRFTOKEN: bd8a904f4804ed34cda86bc4ebd042229fdee7db
+2012-12-11T06:21:12+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T06:21:12+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-11T00:21:12-06:00 INFO (6): Auth controller init
+2012-12-11T00:21:13-06:00 INFO (6): Informational message - setting new CSRFTOKEN: a414f5b61556722a863f101bac512b12663a31c5
+2012-12-11T06:21:19+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T06:21:19+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-11T00:21:20-06:00 INFO (6): Auth controller init
+2012-12-11T00:21:20-06:00 INFO (6): Informational message - setting new CSRFTOKEN: 2f3833224872957cf28b273ba048d13651073a49
+2012-12-11T06:21:32+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T06:21:32+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-11T00:21:33-06:00 INFO (6): Auth controller init
+2012-12-11T00:21:33-06:00 INFO (6): Informational message - setting new CSRFTOKEN: 3bbd71b48725c3cd5fe7fcc89ab926a91426570e
+2012-12-11T06:21:56+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T06:21:56+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-11T00:21:57-06:00 INFO (6): Auth controller init
+2012-12-11T00:21:57-06:00 INFO (6): Informational message - setting new CSRFTOKEN: d8a3a83167ef1296ed82b82c040c2309d9d88a43
+2012-12-11T06:24:52+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T06:24:52+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-11T00:24:52-06:00 INFO (6): Auth controller init
+2012-12-11T00:24:52-06:00 INFO (6): Informational message - setting new CSRFTOKEN: e387ebff2ff8cf336c1a40ea52ce4817d33aa3d8
+2012-12-11T06:24:58+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T06:24:58+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-11T00:24:59-06:00 INFO (6): Auth controller init
+2012-12-11T00:24:59-06:00 INFO (6): Informational message - setting new CSRFTOKEN: 1f6bd7e99f2d4384c43271d2f9675f44bc9a8d1c
+2012-12-11T06:25:08+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T06:25:08+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-11T00:25:08-06:00 INFO (6): Auth controller init
+2012-12-11T06:25:09+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T06:25:09+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-11T00:25:09-06:00 INFO (6): Informational message - setting new CSRFTOKEN: b8991dc6d63a2803cbd4c082d92ced209010eea9
+2012-12-11T06:25:15+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T06:25:15+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-11T00:25:16-06:00 INFO (6): Informational message - setting new CSRFTOKEN: 5834e5b6bbf6807fb7e267dee6dac88f662f11fd
+2012-12-11T00:25:16-06:00 INFO (6): Informational message - setting new CSRFTOKEN: 82d046510efab2ae9c53f87f1386a01f39eb564a
+2012-12-11T06:25:20+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T06:25:20+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-11T00:25:21-06:00 INFO (6): Informational message - setting new CSRFTOKEN: 8fe3a05a9e06170c8c49ce9b48c9519c5f0ec993
+2012-12-11T06:27:50+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T06:27:50+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-11T00:27:50-06:00 INFO (6): Auth controller init
+2012-12-11T06:27:50+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T06:27:50+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-11T00:27:50-06:00 INFO (6): Auth controller init
+2012-12-11T00:27:50-06:00 INFO (6): Informational message - setting new CSRFTOKEN: 768506183ebd47ac906d4532a791e5865a1b80eb
+2012-12-11T00:27:50-06:00 INFO (6): Informational message - setting new CSRFTOKEN: 737905b5993673d1962f7c60eeb6a3de3ec971b6
+2012-12-11T06:27:57+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T06:27:57+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-11T00:27:57-06:00 INFO (6): Auth controller init
+2012-12-11T06:27:57+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T06:27:57+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-11T00:27:58-06:00 INFO (6): Informational message - setting new CSRFTOKEN: f4d4cbe406a737d69611520b37c6d6fd920f2779
+2012-12-11T06:28:01+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T06:28:01+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-11T00:28:02-06:00 INFO (6): Auth controller init
+2012-12-11T06:28:02+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T06:28:02+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-11T00:28:02-06:00 INFO (6): Auth controller init
+2012-12-11T00:28:02-06:00 INFO (6): Informational message - setting new CSRFTOKEN: bfbfb97d79490df72bc25eb26bce9b52c579291e
+2012-12-11T00:28:02-06:00 INFO (6): Informational message - setting new CSRFTOKEN: 0607bb3d664a3778d6990236b3e3ddd540f363ac
+2012-12-11T06:28:14+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T06:28:14+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-11T00:28:14-06:00 INFO (6): Auth controller init
+2012-12-11T00:28:14-06:00 INFO (6): Informational message - setting new CSRFTOKEN: dbe39b69f72ed7ccbf0eda8f76f8195b18d52ed1
+2012-12-11T06:28:18+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T06:28:18+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-11T00:28:18-06:00 INFO (6): Auth controller init
+2012-12-11T06:28:19+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T06:28:19+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-11T00:28:19-06:00 INFO (6): Informational message - setting new CSRFTOKEN: 312f94592a7b1c785753847709418a1d8f0b0cec
+2012-12-11T06:28:24+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T06:28:24+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-11T00:28:25-06:00 INFO (6): Informational message - setting new CSRFTOKEN: a190e740f02ae63a8d91c0b8be2958d794ea5060
+2012-12-11T06:29:56+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T06:29:56+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-11T00:29:56-06:00 INFO (6): Informational message - setting new CSRFTOKEN: 23e15749e65c5eed127680be878aa968615d63af
+2012-12-11T06:30:15+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T06:30:15+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-11T00:30:16-06:00 INFO (6): Auth controller init
+2012-12-11T06:30:16+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T06:30:16+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-11T00:30:16-06:00 INFO (6): Auth controller init
+2012-12-11T00:30:16-06:00 INFO (6): Informational message - setting new CSRFTOKEN: ed9a9841d08da58ab179440e01aae3b50ab39f02
+2012-12-11T00:30:16-06:00 INFO (6): Informational message - setting new CSRFTOKEN: 009d91415a94d2192f94d255e4d071a452f1a8d0
+2012-12-11T06:30:19+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T06:30:19+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-11T00:30:20-06:00 INFO (6): Informational message - setting new CSRFTOKEN: 6b4d9d12bc684544d439df208e814615730e67c2
+2012-12-11T06:30:26+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T06:30:26+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-11T00:30:27-06:00 INFO (6): Auth controller init
+2012-12-11T00:30:27-06:00 INFO (6): Comparing tokens submitted CSRFTOKEN: 6b4d9d12bc684544d439df208e814615730e67c2 server token: 6b4d9d12bc684544d439df208e814615730e67c2
+2012-12-11T06:30:27+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T06:30:27+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-11T00:30:27-06:00 INFO (6): Informational message - setting new CSRFTOKEN: ce95dd8bb12fa6d27114fe4abb90fa4362824afd
+2012-12-11T06:30:49+00:00 INFO (6): Bootstrap Bootstrap::_initConfigureResourceAutoloader
+2012-12-11T06:30:49+00:00 INFO (6): Bootstrap Bootstrap::_initConfig
+2012-12-11T00:30:50-06:00 INFO (6): Informational message - setting new CSRFTOKEN: 63621c698a6d96dbd9df946487b46e7e426ca447

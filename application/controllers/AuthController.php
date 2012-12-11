@@ -16,7 +16,7 @@ class AuthController extends Zend_Controller_Action
     	'password' => 'kevroB7943!'
 		);
 		$this->mailConn = new Zend_Mail_Transport_Smtp('smtp.gmail.com', $this->config);
-		
+		Zend_Registry::get("log")->info('Auth controller init');
     }
     
         protected function _sql_date_format($value) {
@@ -126,16 +126,19 @@ class AuthController extends Zend_Controller_Action
             						$this->_helper->layout->disableLayout();
   	    							$this->_helper->viewRenderer->setNoRender();
 									$data = $this->_request->getPost();
+									Zend_Registry::get("log")->info('Comparing tokens submitted CSRFTOKEN: '.$data['token'].' server token: '.$utils->form_token());
 							        if (!($data['token'] == $utils->form_token()))
 									{ // token did not match
 										$myArray = array(
 							             'isvalid' => array(
 							                             false
 							                           ),
-							              'message' => array( 'Sorry your request could not be completed. Please try again. (Token error: HTTP400) ')
-							              //'message' => array( 't1:'.$data['token'].'  t2:'.$utils->form_token())
-							           ); $jsonData = Zend_Json::encode($myArray);
-										return $this->_response->appendBody($jsonData);
+							              'message' => array( 'Sorry your request could not be completed. Please try again. (Token error: HTTP500) ')
+							              
+							           );
+							           $jsonData = Zend_Json::encode($myArray);
+							           Zend_Registry::get("log")->info('Token miss-match submitted CSRFTOKEN: '.$data['token'].' server token: '.$utils->form_token());
+									   return $this->_response->appendBody($jsonData);
 									}
 									if($data["pl"] == '1') {
 										$remember = true;
@@ -205,7 +208,15 @@ class AuthController extends Zend_Controller_Action
                                         
                                         $this->view->form = $form;
 									    /* Create a per-user unique form token for CSRF protection */
-										$token = $utils->form_token(true);
+										$token = $utils->form_token(false);
+										$token_session = new Zend_Session_Namespace('token');
+										if (empty($token_session->csrftoken))
+                                		{
+                                			$token_session->csrftoken = $token;
+                                		}
+                                		else {
+                                		    $token_session->csrftoken = $token;
+                                		}
                                        	// Pass CSRF token to view
                                         $this->view->token = $token;
             				}
@@ -294,16 +305,23 @@ class AuthController extends Zend_Controller_Action
   	    $this->_helper->layout->disableLayout();
   	    $this->_helper->viewRenderer->setNoRender();
 		$data = $this->_request->getPost();
-		
+		$token_session = new Zend_Session_Namespace('token');
+		$token = "";
+		if (!empty($token_session->csrftoken))
+		{
+			$token = $token_session->csrftoken;
+		}
 		// Check if a valid token exists
-		if (!($data['token'] == $utils->form_token())) //sha1(date("l", time()).'o2S4hWw!!Cks')
+		Zend_Registry::get("log")->info('Comparing tokens submitted CSRFTOKEN: '.$data['token'].' server token: '.$token);
+		if (!($data['token'] == $token)) //sha1(date("l", time()).'o2S4hWw!!Cks')
 		{ // token did not match
 			$myArray = array(
              'isvalid' => array(
                              false
                            ),
               'message' => array( 'Sorry your request could not be completed. Please try again. (Token error: HTTP400) ')
-           ); $jsonData = Zend_Json::encode($myArray);
+           ); 
+            $jsonData = Zend_Json::encode($myArray);
 			return $this->_response->appendBody($jsonData);
 		}
 		// check if requested username and email are valid and exist
@@ -353,8 +371,9 @@ class AuthController extends Zend_Controller_Action
 			
 			// All is well so lets kill the CSRF unique token so a new one has to be regenerated
 			$utils->kill_token();
-			
+
 			$jsonData = Zend_Json::encode($myArray);
+			
 			$this->_response->appendBody($jsonData);
   	    
 		}
