@@ -37,11 +37,16 @@
    <div class="header">
        <div class="ui-corner-all" id="blabs">
 	<span class="ui-corner-all" id="blabsTitle">Categories</span>
-	<?php echo $this->buildBlabCategories(); ?>
+	<?php echo $this->buildBlabCategories();
+		echo $this->buildBlabCategories('moreLink');
+	 ?>
 	
 	</div>
-   		<a id="LinkBlabLogo" title="linkblab home" href="/"><img src="/images/LinkBlab2.png" alt="LinkBlab" name="LinkBlab" /></a> 
-    	<?php echo $this->buildBlabCategories('moreLink'); ?>
+   		<a id="LinkBlabLogo" title="linkblab home" href="/"><img src="/images/LinkBlab2.png" alt="LinkBlab" name="LinkBlab" /></a>
+   		<?php 
+   		// Create sorting options if this is a blab or home page:
+    	echo $this->buildSortingOptions();
+     ?>
     <div id="loginMenu">
     <?php echo $this->loggedInAs(); ?>
     <form id="searchForm" action="/search" method="GET">
@@ -60,8 +65,7 @@
     </div>
  	<div class="content">
 	<?php 
-	// Create sorting options if this is a blab or home page:
-	echo $this->buildSortingOptions();
+	
 	// Build Main Content Here
 	echo $this->layout()->content ?>
 	<!-- end .content --></div>

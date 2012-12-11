@@ -51,7 +51,8 @@ a:hover, a:active, a:focus { /* this group of selectors will give a keyboard nav
 /* ~~ the header is not given a width. It will extend the full width of your layout. It contains an image placeholder that should be replaced with your own linked logo ~~ */
 .header {
 	background: white;
-	border-bottom:1px groove black;
+	border-bottom:1px solid gray;
+	height: 102px;
 }
 
 /* ~~ These are the columns for the layout. ~~ 
@@ -67,10 +68,10 @@ a:hover, a:active, a:focus { /* this group of selectors will give a keyboard nav
 */
 .sidebar1 {
 	float: left;
+	clear: both;
 	width: 20%;
 	background: #93A5C4;
 	padding-bottom: 10px;
-	
 }
 .content {
 	padding: 0;
@@ -106,16 +107,17 @@ ul.nav a:hover, ul.nav a:active, ul.nav a:focus { /* this changes the background
 	color: #FFF;
 }
 #LinkBlabLogo {
-	clear: right; display: inline;
+	clear: right;
+	float: left;
+	width: 262px;
 }
 #LinkBlabLogo:visited {
 	text-decoration: none;
 }
 #LinkBlabLogo img {
-	background: #8090AB; width: 253px;
-	
+	background: #8090AB;
+	width: 253px;
 }
-
 #selected a {
 	background: #6F7D94;
 	color: #FFF;
@@ -206,7 +208,7 @@ td.clearbtn a {
 #loginMenu {
 clear:right;
 float:right;
-margin-top:26px;
+margin-top: 1.6em;
 padding:0;
 }
 .zend_form{
@@ -255,7 +257,6 @@ float:right;
 	color: #aaa;
 }
 #blabs {
-	float: right;
 	background-color: #F0F0F0;
 	height: 29px;
 	border: 1px solid gray;
@@ -289,8 +290,7 @@ font-size:small;
 font-weight:bold;
 padding-left:14px;
 position:relative;
-top:-24px;
-right:6px;	
+top: -23px;	
 }
 #moreLink a {
 text-decoration: none;
@@ -661,9 +661,8 @@ color: red;
 }
 .linkSortOptions {
 float:left;
-position: relative;
-top:-20px;
-font-size: 12px;
+font-size: 14px;
+margin-top: 3.4em;
 }
 .commentSortOptions {
 display: inline-block;
