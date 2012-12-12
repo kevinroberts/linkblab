@@ -16,7 +16,7 @@ class AuthController extends Zend_Controller_Action
     	'password' => 'kevroB7943!'
 		);
 		$this->mailConn = new Zend_Mail_Transport_Smtp('smtp.gmail.com', $this->config);
-		Zend_Registry::get("log")->info('Auth controller init');
+		
     }
     
         protected function _sql_date_format($value) {

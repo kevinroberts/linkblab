@@ -184,7 +184,11 @@ label {
 	<div><label for="blab">Blab:</label> <span class="gray">popular choices - <a onClick="$('#blab').val('linkblab.com')" href="#">linkblab.com</a>, <a onClick="$('#blab').val('funny')" href="#">funny</a>, <a onClick="$('#blab').val('self')" href="#">self.blab</a>, <a onClick="$('#blab').val('music')" href="#">music</a>, <a onClick="$('#blab').val('technology')" href="#">technology</a></span></div>	
 	 <?php echo $this->form->blab;?>
 	<p> </p>
-	<?php echo $this->form->ReCaptcha;?>
+	<?php 
+	if (!$this->isAdmin) {
+	echo $this->form->ReCaptcha;
+	}
+	?>
 	<br />
 	<p style="text-align:center">
 	<input title="Create" style="cursor:pointer;" type="submit" value="Submit" />&nbsp; or &nbsp;<input id="resetbtn" type="reset" value="Reset form" />

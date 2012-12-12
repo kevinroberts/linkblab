@@ -466,12 +466,30 @@ class BlabsController extends Zend_Controller_Action
                                         {
                                         	return $this->_redirect("/login?msg=2&r=".self::$utils->urlsafe_b64encode(self::$utils->curPageURL()));
                                         }
+                                        
+                                        $isAdmin = false;
+                                        if ($auth->getIdentity()->role == "administrator") {
+                                            // dont display captcha for admin
+                                            $isAdmin = true;
+                                        }
                                         $isSelf = false; // is this a self post?
                                         $user = $auth->getIdentity();
                                         $toBlab = $this->_request->getParam('to');
                                         $toBlab = (empty($toBlab)) ? '' : $toBlab;
                                         
                                         $form = new Application_Form_Link();
+                                        
+                                        if (!$isAdmin) {
+                                            // dont display captcha for admin
+                                            $recaptcha = new Zend_Service_ReCaptcha(RECAPTCHAPUBLIC,
+                                                            RECAPTCHAPRIVATE);
+                                            $element = $form->createElement('Captcha', 'ReCaptcha',
+                                                    array('captcha'=>array('captcha'=>'ReCaptcha',
+                                                                            'service'=>$recaptcha))); 
+                                            $element->setLabel("Enter CAPTCHA");
+                                            $form->addElement($element);
+
+                                        }
                                         
                                         if ($this->getRequest()->isPost()) {
                                          	$data = $this->_request->getPost();
@@ -536,6 +554,7 @@ class BlabsController extends Zend_Controller_Action
                                         $this->view->isSelf = $isSelf;
                                         $this->view->form = $form;
                                         $this->view->toBlab = $toBlab;
+                                        $this->view->isAdmin = $isAdmin;
                                         $this->view->username = $user->username;
     }
 

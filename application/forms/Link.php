@@ -2,6 +2,7 @@
 
 class Application_Form_Link extends Zend_Form
 {
+    
 
     public function init()
     {
@@ -76,14 +77,7 @@ class Application_Form_Link extends Zend_Form
         		->addErrorMessage('There was a problem processing your request. Please try again.');	
         $this->addElement($element);
         
-        $recaptcha = new Zend_Service_ReCaptcha(RECAPTCHAPUBLIC,
-                        RECAPTCHAPRIVATE);
-        $element = $this->createElement('Captcha', 'ReCaptcha',
-                array('captcha'=>array('captcha'=>'ReCaptcha',
-                                        'service'=>$recaptcha))); 
-        $element->setLabel("Enter CAPTCHA");
-        $this->addElement($element);
-        
+
 /*        $element = new Zend_Form_Element_Captcha('captcha', array(
 				    'label' => "Enter the text below:",
 				    'captcha' => array(
