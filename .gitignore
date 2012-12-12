@@ -3,4 +3,4 @@
 
 public/images/captchas/*
 application/configs/application.ini
-docs/logs/app.log
+docs/logs/*
