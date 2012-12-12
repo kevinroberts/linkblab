@@ -238,7 +238,8 @@ class AuthController extends Zend_Controller_Action
                 					if ($form->isValid($data))
                 					{
                 					    // Create the user in the database...
-                						$newSalt = sha1(time().'ntHGaxVr5zeOKmjvZFQleSQCs7DWtuh'.uniqid(mt_rand(),true));
+            					        $config = Zend_Registry::get("config"); 
+                						$newSalt = sha1($config['salted_string'].uniqid(mt_rand(),true));
                 						$newPass = hash('sha256', $data['password'].$newSalt);
         								$db = Zend_Db_Table::getDefaultAdapter();
         								$data = array(
@@ -423,7 +424,8 @@ class AuthController extends Zend_Controller_Action
 						else
 						{
 							// Token is valid and not expired => proceed with password reset
-							$newSalt = sha1(time().'ntHGaxVr5zeOKmjvZFQleSQCs7DWtuh'.uniqid(mt_rand(),true));
+							$config = Zend_Registry::get("config"); 
+							$newSalt = sha1($config['salted_string'].uniqid(mt_rand(),true));
                 			$newPass = hash('sha256', $data['password'].$newSalt);
 							$updateData = array(
 											'password' => $newPass,

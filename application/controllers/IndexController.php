@@ -97,6 +97,23 @@ class IndexController extends Zend_Controller_Action
                         	$this->view->errorMsg = $utils->XssCleaner(urldecode($_GET['m']));
             			}
     }
+    
+    public function searchAction() {
+        $config = Zend_Registry::get("config"); 
+        
+        if(!isset($_GET['q']) || empty($_GET['q']) ) {  
+          $q = $config['default_search'];  
+        } 
+        else {
+            $q = $_GET['q'];
+        }
+        
+        $utils = new Application_Model_Utils();
+        $this->view->defaultTerm = $config['default_search'];
+        $this->view->searchTerm = $utils->XssCleaner(urldecode($q));
+
+        
+    }
 
     public function testAction()
     {

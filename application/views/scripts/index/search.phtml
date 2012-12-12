@@ -1,0 +1,17 @@
+<?php
+$this->headTitle('- Search Results'); 
+?>
+<h2 class="searchTitle">
+    Results for 
+<?php
+echo $this->searchTerm; 
+if ($this->searchTerm == $this->defaultTerm) {
+	echo "&nbsp;<span>(that's what you get for leaving the search blank)</span>";
+}
+?>
+</h2>
+
+<br />
+<h3>
+    Search feature coming soon.
+    </h3>

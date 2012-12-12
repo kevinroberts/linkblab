@@ -1004,3 +1004,11 @@ a[href$="/spoiler"]:hover {
     padding-left: 5px;
     padding-right: 5px;	
 }
+.searchTitle {
+	margin-top: 10px;
+	font: 24px/1.231 arial,helvetica,clean,sans-serif;
+}
+.searchTitle span {
+	color: #444;
+	font-size: 50%;
+}

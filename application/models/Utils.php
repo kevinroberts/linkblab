@@ -415,7 +415,7 @@ class Application_Model_Utils
      * 	 handles both up and down votes on comments
      * @param $userID|int - the current user ID whose initiating the vote
      * @param $commentID|int - the comment ID to vote on
-     * @param $type - whether this is an up-vote or down-vote
+     * @param $type - whether this is an up-vote or down-vote (upVote | downVote)
      * @return $result|array the computed confidence value for comment ranking
      */
 	public function submitCommentVote($userID, $commentID, $type) {

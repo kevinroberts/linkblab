@@ -22,7 +22,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                 $this->bootstrap('frontController');
 
                 $logger = new Zend_Log();
-
+                // Possiblity to have different logger per environment
                 $writer = 'production' == $this->getEnvironment() ?
         			new Zend_Log_Writer_Stream(APPLICATION_PATH . '/../docs/logs/app.log') :
         			new Zend_Log_Writer_Stream(APPLICATION_PATH . '/../docs/logs/app.log');
@@ -54,6 +54,7 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
                  {
                      $this->_logger->info('Bootstrap ' . __METHOD__);
                      Zend_Registry::set('config', $this->getOptions());
+                    
                  }
 	
 	/*
@@ -183,6 +184,17 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         );
 
         $router->addRoute('richEdit', $route);  
+        
+        /*
+         * Search route
+         */
+        $route = new Zend_Controller_Router_Route_Static (
+            'search',
+            array('controller' => 'index', 
+                  'action' => 'search')
+        );
+
+        $router->addRoute('search', $route);
         
         /*
          * TESTING ROUTE _REMOVE_ on LIVE SITE
