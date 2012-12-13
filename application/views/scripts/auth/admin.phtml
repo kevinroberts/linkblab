@@ -1,0 +1,34 @@
+<?php 
+
+$this->headTitle(' | Admin');
+
+
+?>
+<style type="text/css">
+    .auth-container {
+        margin: 5px;
+    }
+    .auth-container h2 {
+        text-align: center;
+    }
+    .responseMessage {
+        font-weight: bold;
+        color: fireBrick;
+    }
+</style>
+<div class="auth-container">
+    <h2>Admin Area</h2>
+    <p>
+        <?php
+            if (isset($this->message)) {
+                echo '<span class="responseMessage">'.$this->message.'</span>';
+            }
+        ?>
+        <form method="POST">
+            <label for="userId">Delete user by id:</label>
+            <input type="hidden" name="do" value="deleteUser" />
+            <input id="userId" name="userId" type="text" />
+            <input style="padding-right: 10px;" type="submit"></input>
+        </form>
+    </p>
+</div>

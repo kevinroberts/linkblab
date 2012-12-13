@@ -196,6 +196,17 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
         $router->addRoute('search', $route);
         
+         /*
+         * Administrator Area ROUTE 
+         */
+        $route = new Zend_Controller_Router_Route_Static (
+            'auth/admin',
+            array('controller' => 'auth', 
+                  'action' => 'admin')
+        );
+
+        $router->addRoute('admin', $route);
+        
         /*
          * TESTING ROUTE _REMOVE_ on LIVE SITE
          */
