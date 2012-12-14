@@ -843,6 +843,23 @@ $(document).ready(function() {
 	  		}
 		});
 		
+		$("#topSortOptionsDropdown").linkselect({
+			change: function(li, value, text){
+				var g = value.split("|");
+				if (g[0] == 'index') {
+					var url = "/index/" + g[1];
+					window.location.href = url;
+				}
+				else {
+					var url = "/b/" + g[0] + "/" + g[1];
+					window.location.href = url;
+					
+				}
+	  		}
+		});
+		
+		
+		
 		$("#commentSortOptionsDropdown").linkselect({
 			change: function(li, value, text){
 				var g = value.split("|");

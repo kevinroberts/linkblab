@@ -44,7 +44,12 @@ class IndexController extends Zend_Controller_Action
                                 case 'top':
                                 	$this->view->addJS = '$("#sortOptionsDropdown_link").text("top scoring");'.PHP_EOL.
                                 	'$("#promotedAndUpcoming").hide().after("<br />");';
-        	                        $results = $links->fetchAll(500,null, null, 'votes DESC');
+                                	if (isset($_GET["t"]) && $_GET["t"] == "all") {
+                                	    $results = $links->fetchAll(500,null, null, 'votes DESC', 'CURDATE() >= date_created', 180);
+                            	    }
+                            	    else {
+                            	       $results = $links->fetchAll(500,null, null, 'votes DESC'); 
+                            	    }
         	                        break;
                                 case 'saved':
                                 	// Change to saved links only when implemented

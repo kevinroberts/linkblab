@@ -16,9 +16,12 @@ class Zend_View_Helper_BuildSortingOptions extends Zend_View_Helper_Abstract {
 	/**
 	 *  
 	 */
-	public function buildSortingOptions($commentSort = false) {
+	public function buildSortingOptions($commentSort = false, $topSort = false) {
 		if ($commentSort) {
 			return $this->buildCommentSortingOptions();
+		}
+		if ($topSort) {
+		    return $this->buildTopSortingOptions();
 		}
 		$content = null;
 		$tmpContent = null;
@@ -156,4 +159,44 @@ EOT;
 		
 	}
 	
+    private function buildTopSortingOptions() {
+    	    $utils = new Application_Model_Utils();
+    		$content = null;
+    		$tmpContent = null;
+    		$frontController = Zend_Controller_Front::getInstance();
+    		$request = $frontController->getRequest();
+
+    		$controller = $request->getControllerName();
+    		$action = $request->getActionName();
+    		$params = $request->getParams();
+
+    		if ($controller == 'index' && $action == 'index' && isset($params['sort']) && $params['sort'] == 'top') {
+    			$sortOps = array(
+        		"year" => '<option value="index|top">this year</option>',
+        		"all" => '<option value="index|top?t=all">all time</option>'	
+        		);
+        		if (isset($_GET["t"]) && $_GET["t"] == "all") {
+        		    $sortOps = array(
+            		"all" => '<option value="index|top?t=all">all time</option>',	
+            		"year" => '<option value="index|top">this year</option>'
+            		);
+        		}
+
+        		foreach ($sortOps as $key => $value) {
+    				$tmpContent .= $value;
+    			}
+
+    		    $content .= <<<EOT
+                		<div class="topSortOptions">
+                			links from <span class="selected"></span>
+
+                			<select id="topSortOptionsDropdown" class="linkselect">
+                			$tmpContent
+                			</select>
+                		</div>
+EOT;
+
+    	    }
+    	 return $content;   
+    }
 }

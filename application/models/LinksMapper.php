@@ -94,7 +94,7 @@ class Application_Model_LinksMapper
                   ->setTimesReported($row->times_reported);
     }
     
-    public function fetchAll($limit = null, $blabID = null, $domain = null, $orderBy = null, $where = null) {
+    public function fetchAll($limit = null, $blabID = null, $domain = null, $orderBy = null, $where = null, $dayAgo = 180) {
     	$defaultOrder = (is_null($orderBy)) ? array('hot DESC', 'date_created DESC') : array($orderBy, 'date_created DESC'); // set up user specified order criteria
     	$where = (is_null($where)) ? "DATE_SUB(CURDATE(),INTERVAL 180 DAY) <= date_created" : $where; // customize where condition or use default link < 180 days
     	if (!is_null($limit) && is_null($blabID) && is_null($domain)) { // all links with limit

@@ -64,8 +64,9 @@
     <!-- end .sidebar1 -->
     </div>
  	<div class="content">
+ 	    
 	<?php 
-	
+	echo $this->buildSortingOptions(false, true);
 	// Build Main Content Here
 	echo $this->layout()->content ?>
 	<!-- end .content --></div>

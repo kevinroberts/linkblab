@@ -1,4 +1,8 @@
 <?php 
+$getOps = "";
+if (isset($_GET["t"]) && $_GET["t"] == "all") {
+    $getOps = "?t=all";
+}
 $customSortPage = false;
 if (strpos($this->url(), "index/controversial") !== false) {
 	$customSortPage = true;
@@ -7,6 +11,7 @@ if (strpos($this->url(), "index/controversial") !== false) {
 else if (strpos($this->url(), "index/top") !== false) {
 	$customSortPage = true;
 	$url = "/index/top";
+	$this->url(array('controller' => 'index', 'action' => 'top'));	
 }
 else if (strpos($this->url(), "/index") !== false) {
 	$customSortPage = true;
@@ -19,7 +24,7 @@ else if (strpos($this->url(), "/index") !== false) {
     <div style="float:right;width:70%;margin:5px;">
         <!-- First page link -->
         <?php if (isset($this->previous)): ?>
-              <a href="<?php echo $this->url(array('page' => $this->first)); ?>">Start</a> |
+              <a href="<?php echo $this->url(array('page' => '1')).$getOps; ?>">Start</a> |
         <?php else: ?>
                 <span class="disabled">Start</span> |
         <?php endif; ?>
@@ -27,7 +32,7 @@ else if (strpos($this->url(), "/index") !== false) {
         <!-- Previous page link -->
     
         <?php if (isset($this->previous)): ?>
-              <a href="<?php echo $this->url(array('page' => $this->previous)); ?>">&lt; Previous</a> |
+              <a href="<?php echo $this->url(array('page' => $this->previous)).'/'.$this->previous.$getOps; ?>">&lt; Previous</a> |
         <?php else: ?>
             <span class="disabled">&lt; Previous</span> |
         <?php endif; ?>
@@ -37,7 +42,7 @@ else if (strpos($this->url(), "/index") !== false) {
             	<?php if (!$customSortPage): ?>
                 <a href="<?php echo $this->url(array('page' => $page)); ?>"><?php echo $page; ?></a>
                 <?php else: ?>
-                <a href="<?php echo $url."/page/".$page; ?>"><?php echo $page; ?></a>
+                <a href="<?php echo $url."/page/".$page.$getOps; ?>"><?php echo $page; ?></a>
                 <?php endif; ?>
             <?php else: ?>
                 <?php echo $page; ?>
@@ -45,13 +50,13 @@ else if (strpos($this->url(), "/index") !== false) {
         <?php endforeach; ?>
         <!-- Next page link -->
         <?php if (isset($this->next)): ?>
-              | <a href="<?php echo $this->url(array('page' => $this->next)); ?>">Next &gt;</a> |
+              | <a href="<?php echo $this->url(array('page' => $this->next)).$getOps ?>">Next &gt;</a> |
         <?php else: ?>
             | <span class="disabled">Next &gt;</span> |
         <?php endif; ?>
         <!-- Last page link -->
         <?php if (isset($this->next)): ?>
-              <a href="<?php echo $this->url(array('page' => $this->last)); ?>">End</a>
+              <a href="<?php echo $this->url(array('page' => $this->last)).$getOps; ?>">End</a>
         <?php else: ?>
             <span class="disabled">End</span>
         <?php endif; ?>

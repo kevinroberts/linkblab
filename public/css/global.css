@@ -1012,3 +1012,9 @@ a[href$="/spoiler"]:hover {
 	color: #444;
 	font-size: 50%;
 }
+.topSortOptions {
+	margin-top: 7px;
+	font-size: 14px;
+	margin-left: 2px;
+	width: 200px;
+}

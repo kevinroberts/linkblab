@@ -172,7 +172,8 @@ class BlabsController extends Zend_Controller_Action
                     	else 
                     	{
                     	    	
-                        $sort = $this->_request->getParam('sort'); $sortNumber = 25;
+                        $sort = $this->_request->getParam('sort');
+                        $sortNumber = 25;
                         $page = $this->_getParam('page',1);
                         $this->view->loggedIn = false;
                 		$auth = Zend_Auth::getInstance();
@@ -237,7 +238,7 @@ class BlabsController extends Zend_Controller_Action
                 	                break;
                 				}	
                 		}
-                		if (!empty($results)) { 
+                		if (!empty($results)) {
                 		$paginator = Zend_Paginator::factory($results);
                         $paginator->setItemCountPerPage($sortNumber);
                         $paginator->setCurrentPageNumber($page);
