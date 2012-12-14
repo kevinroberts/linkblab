@@ -7,6 +7,7 @@ $customSortPage = false;
 if (strpos($this->url(), "index/controversial") !== false) {
 	$customSortPage = true;
 	$url = "/index/controversial";
+	$this->url(array('controller' => 'index', 'action' => 'controversial'));	
 }
 else if (strpos($this->url(), "index/top") !== false) {
 	$customSortPage = true;
@@ -16,6 +17,7 @@ else if (strpos($this->url(), "index/top") !== false) {
 else if (strpos($this->url(), "/index") !== false) {
 	$customSortPage = true;
 	$url = "/index/hot";
+	$this->url(array('controller' => 'index', 'action' => 'hot'));
 }
 ?>
 <div class="pagination">
@@ -50,13 +52,19 @@ else if (strpos($this->url(), "/index") !== false) {
         <?php endforeach; ?>
         <!-- Next page link -->
         <?php if (isset($this->next)): ?>
-              | <a href="<?php echo $this->url(array('page' => $this->next)).$getOps ?>">Next &gt;</a> |
+              | <?php if (!$customSortPage): ?> <a href="<?php echo $this->url(array('page' => $this->next)).$getOps ?>">Next &gt;</a>
+                <?php else: ?>
+                <a href="<?php echo $url."/page/".$this->next.$getOps; ?>">Next &gt;</a>
+                <?php endif; ?> |
         <?php else: ?>
             | <span class="disabled">Next &gt;</span> |
         <?php endif; ?>
         <!-- Last page link -->
         <?php if (isset($this->next)): ?>
-              <a href="<?php echo $this->url(array('page' => $this->last)).$getOps; ?>">End</a>
+              <?php if (!$customSortPage): ?> <a href="<?php echo $this->url(array('page' => $this->last)).$getOps; ?>">End</a>
+                  <?php else: ?>
+                  <a href="<?php echo $url."/page/".$this->last.$getOps; ?>">End</a>
+                  <?php endif; ?>
         <?php else: ?>
             <span class="disabled">End</span>
         <?php endif; ?>
