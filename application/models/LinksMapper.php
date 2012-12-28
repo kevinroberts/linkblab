@@ -94,6 +94,36 @@ class Application_Model_LinksMapper
                   ->setTimesReported($row->times_reported);
     }
     
+    public function findOne($id)
+    {
+        $result = $this->getDbTable()->find($id);
+        if (0 == count($result)) {
+            return;
+        }
+        $row = $result->current();
+        $link = new Application_Model_Link();
+        $link->setId($row->id)
+                  ->setLinkUrl($row->link_url)
+                  ->setDomain($row->domain)
+                  ->setThumbnail($row->thumbnail)
+                  ->setUpVotes($row->up_votes)
+                  ->setDownVotes($row->down_votes)
+                  ->setVotes($row->votes)
+                  ->setControversy($row->controversy)
+                  ->setTitle($row->title)
+                  ->setDescription($row->description)
+                  ->setDateCreated($row->date_created)
+                  ->setBlabID($row->blab_id)
+                  ->setUserID($row->user_id)
+                  ->setIsNsfw($row->is_nsfw)
+                  ->setIsSelf($row->is_self)
+                  ->setHot($row->hot)
+                  ->setUrlTitle($row->url_safe_title)
+                  ->setTimesReported($row->times_reported);
+                  
+        return $link;
+    }
+    
     public function fetchAll($limit = null, $blabID = null, $domain = null, $orderBy = null, $where = null, $dayAgo = 180) {
     	$defaultOrder = (is_null($orderBy)) ? array('hot DESC', 'date_created DESC') : array($orderBy, 'date_created DESC'); // set up user specified order criteria
     	$where = (is_null($where)) ? "DATE_SUB(CURDATE(),INTERVAL 180 DAY) <= date_created" : $where; // customize where condition or use default link < 180 days

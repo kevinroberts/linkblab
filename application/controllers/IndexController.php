@@ -104,7 +104,18 @@ class IndexController extends Zend_Controller_Action
     }
     
     public function searchAction() {
-        $config = Zend_Registry::get("config"); 
+        $this->view->loggedIn = false;
+        $page = $this->_getParam('page',1);
+        $sortNumber = 25;
+        $utils = new Application_Model_Utils();
+        $config = Zend_Registry::get("config");
+        $auth = Zend_Auth::getInstance();
+		
+        if ($auth->hasIdentity())
+        {
+        	$this->view->loggedIn = true;
+            $userID = $auth->getIdentity()->id;
+        }
         
         if(!isset($_GET['q']) || empty($_GET['q']) ) {  
           $q = $config['default_search'];  
@@ -113,11 +124,66 @@ class IndexController extends Zend_Controller_Action
             $q = $_GET['q'];
         }
         
-        $utils = new Application_Model_Utils();
-        $this->view->defaultTerm = $config['default_search'];
-        $this->view->searchTerm = $utils->XssCleaner(urldecode($q));
-
+        $searchString = strip_tags(trim(urldecode($q)));
         
+        $wordsInSearch = str_word_count($searchString, 1);
+        $numberWords = count($wordsInSearch);
+        
+        
+        $this->view->defaultTerm = $config['default_search'];
+        $this->view->searchTerm = $searchString;
+        
+
+            $searchString = $utils->XssCleaner($searchString);
+            $db = Zend_Db_Table::getDefaultAdapter();
+            $linksMapper = new Application_Model_LinksMapper();
+            $links;
+            
+            if ($numberWords > 1) {
+                $stmt = $db->query("SELECT * FROM search_index WHERE MATCH (link_text) AGAINST ('".$searchString."')");
+            
+                $rows = $stmt->fetchAll();
+                if (empty($rows)) {
+                    $this->view->searchEmpty = $config['empty_search_message'];
+                }
+                else {
+                    foreach($rows as $row) {
+                        $links[] = $linksMapper->findOne($row['link_id']);
+                    }
+                    $paginator = Zend_Paginator::factory($links);
+                    $paginator->setItemCountPerPage($sortNumber);
+                    $paginator->setCurrentPageNumber($page);
+                    
+                    $this->view->paginator=$paginator;
+                    $this->view->pagenumber = $page;
+                    $this->view->sortNumber = $sortNumber;
+                    $this->view->searchCount = count($links);
+                    
+                }
+            }
+            else {
+                $stmt = $db->query("SELECT * FROM search_index WHERE MATCH (link_text) AGAINST ('".$searchString."' WITH QUERY EXPANSION)");
+
+                $rows = $stmt->fetchAll();
+                
+                if (empty($rows)) {
+                    $this->view->searchEmpty = $config['empty_search_message'];
+                }
+                else {
+                     foreach($rows as $row) {
+                            $links[] = $linksMapper->findOne($row['link_id']);
+                        }
+                        $paginator = Zend_Paginator::factory($links);
+                        $paginator->setItemCountPerPage($sortNumber);
+                        $paginator->setCurrentPageNumber($page);
+
+                        $this->view->paginator=$paginator;
+                        $this->view->pagenumber = $page;
+                        $this->view->sortNumber = $sortNumber;
+                        $this->view->searchCount = count($links);
+                }
+            }
+            
     }
 
     public function testAction()

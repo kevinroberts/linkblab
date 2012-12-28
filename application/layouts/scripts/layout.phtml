@@ -50,7 +50,7 @@
     <div id="loginMenu">
     <?php echo $this->loggedInAs(); ?>
     <form id="searchForm" action="/search" method="GET">
-    <input name="q" id="search" type="text" />
+    <input name="q" id="search" type="text" value="<?php if (isset($_GET['q'])) {echo ' - '; }  ?>" />
     <input type="submit" value="Go" />
     </form>
     </div>
