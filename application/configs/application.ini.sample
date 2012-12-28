@@ -18,6 +18,8 @@ resources.db.params.dbname = "linkblab"
 remember_me_seconds = 864000
 recaptcha_private_key = "PLACE-RECAPTCHA-PRIVATE-KEY-HERE"
 recaptcha_public_key = "PLACE-RECAPTCHA-PUBLIC-KEY-HERE"
+default_search = "Lots of cute puppies"
+empty_search_message = "No results found. Please try your search again."
 [staging : production]
 
 [testing : production]
