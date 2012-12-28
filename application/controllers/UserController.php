@@ -46,6 +46,7 @@ class UserController extends Zend_Controller_Action {
 				$this->view->loggedIn = true;
 				$this->view->username = $user->username;
 				$this->view->userID = $user->id;
+				$this->view->email = $user->email;
 				
 				$request = $this->getRequest ();
 				if ($request->isPost ()) {
@@ -133,7 +134,47 @@ class UserController extends Zend_Controller_Action {
 				}
 				
 				break;
-			
+			case 'changepassword':
+			    if ($token != $validToken || !filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+			        if (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
+			            $this->_response->appendBody ( "Email address is not valid" );
+			        }
+			        else
+					    $this->_response->appendBody ( "Token not valid" );
+				}
+				else {
+				    $db = Zend_Db_Table::getDefaultAdapter ();
+				    
+				    //check if this is a valid user:
+                    $select = $db->select();
+    				$select->from("users", array("id", "password", "salt"));
+    				$select->where("id = ?", $user->id);
+                    $results = $db->fetchAll($select);
+                    
+                    $salt = $results[0]['salt'];
+                    $combined = $data['curpass'].$salt;
+                    $submittedPassword = hash('sha256', $combined);
+                    if ($submittedPassword == $results[0]['password']) { //password matches recorded hash
+				    
+				    $config = Zend_Registry::get("config"); 
+				    $newSalt = hash('sha256', $config['salted_string'].uniqid(mt_rand(),true));
+				    $newPass = hash('sha256', $data['newpass'].$newSalt);
+				    $updateData = array(
+									'password' => $newPass,
+									'salt' => $newSalt,
+									'email' => $data['email'],
+                        		    'password_reset_token'      => new Zend_Db_Expr('NULL'),
+									'password_reset_expires'  =>  new Zend_Db_Expr('NULL')
+                        		    );
+    				$n = $db->update('users', $updateData, 'id = '.$user->id.'');
+				    
+				    $this->_response->appendBody ( "Password changed" );
+				    }
+				    else {
+				        $this->_response->appendBody ( "Current Password does not match our records. Please re-enter and try again. ");
+				    }
+				}
+			    break;
 			default :
 				$this->_response->appendBody ( "Invalid Action " . $action );
 				break;

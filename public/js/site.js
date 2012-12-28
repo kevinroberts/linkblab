@@ -591,6 +591,9 @@ function post_comment(comForm, type) {
 						var response = jQuery.parseJSON( data );
 		    			if (response.success == true)
 		    			{
+							// hide no comments message if exists
+							if ($("#noComments").length > 0)
+								$("#noComments").hide();
 		    				err.text(response.message);
 		    				err.show();
 		    				var texarea = comForm.find("textarea");

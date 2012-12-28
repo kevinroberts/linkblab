@@ -12,10 +12,13 @@ if (isset($this->searchEmpty)) {
     echo $this->searchEmpty;
 }
 else {
+    $pl = "";
     if (isset($this->searchCount)) {
           echo $this->searchCount." ";
+          if ($this->searchCount > 1)
+            $pl = "s";
       }
-    echo "Results for <em>".$this->searchTerm."</em>"; 
+    echo "Result".$pl." for <em>".$this->searchTerm."</em>"; 
     if ($this->searchTerm == $this->defaultTerm) {
 	    echo "&nbsp;<span>(that's what you get for leaving the search blank)</span>";
     }

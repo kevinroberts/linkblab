@@ -1,108 +1,24 @@
 <?php
-$this->headTitle(' - account '.$this->username);
+$this->headTitle(' - '.$this->username."'s account");
 $this->headStyle()->appendStyle('@import "/css/table.css";');
+$this->headStyle()->appendStyle('@import "/css/user.css";');
+$this->headScript()->appendFile("/js/user.js", $type = 'text/javascript', $attrs = array());
 $this->headScript()->appendFile("/js/jquery.dataTables.min.js", $type = 'text/javascript', $attrs = array());
 ?>
-<style>
-<!--
-.helptxt { font-size: 14px; }
-ul.tabs, ul.tabs2 {
-	margin: 0;
-	padding: 0;
-	float: left;
-	list-style: none;
-	height: 32px; /*--Set height of tabs--*/
-	border-bottom: 1px solid #999;
-	border-left: 1px solid #999;
-	width: 100%;
-}
-ul.tabs li, ul.tabs2 li {
-	float: left;
-	margin: 0;
-	padding: 0;
-	height: 31px; /*--Subtract 1px from the height of the unordered list--*/
-	line-height: 31px; /*--Vertically aligns the text within the tab--*/
-	border: 1px solid #999;
-	border-left: none;
-	margin-bottom: -1px; /*--Pull the list item down 1px--*/
-	overflow: hidden;
-	position: relative;
-	background: #e0e0e0;
-}
-ul.tabs li a, ul.tabs2 li a {
-	text-decoration: none;
-	color: #000;
-	display: block;
-	font-size: 1.2em;
-	padding: 0 20px;
-	border: 1px solid #fff; /*--Gives the bevel look with a 1px white border inside the list item--*/
-	outline: none;
-}
-ul.tabs li a:hover, ul.tabs2 li a:hover {
-	background: #ccc;
-}
-html ul.tabs li.active, html ul.tabs li.active a:hover, html ul.tabs2 li.active, html ul.tabs2 li.active a:hover  { /*--Makes sure that the active tab does not listen to the hover properties--*/
-	background: #fff;
-	border-bottom: 1px solid #fff; /*--Makes the active tab look like it's connected with its content--*/
-}
-.tab_container {
-	border: 1px solid #999;
-	border-top: none;
-	overflow: hidden;
-	clear: both;
-	float: left; width: 100%;
-	background: #fff;
-}
-.tab_content, .tab_content2 {
-	padding: 20px;
-	font-size: 12px;
-}
-.blabinfo {
-	color: gray; font-size: small;
-}
-.posted {
-	font-size: 14px;
-	text-align: center;
-}
-#loader {
-	display: block;
-	width: 220px;
-	float: right;
-	text-align: center;
-	margin-top:100px;
-}
 
-#sortable { list-style-type: none; margin: 0; padding: 0; width: 60%; }
-#sortable li { cursor: move; margin: 0 3px 3px 3px; padding: 0.4em; padding-left: 1.5em; font-size: 1.4em; height: 18px; }
-#sortable li span { position: absolute; margin-left: -1.3em; }
--->
-</style>
 <script type="text/javascript">
 <!--
-var oTable;
 $(document).ready(function() {
-	$(".tab_content, #loader").hide(); //Hide all content
 	<?php if (!$this->postedResponse) { ?>
-	$("ul.tabs li:first").addClass("active").show(); //Activate first tab
-	$(".tab_content:first").show(); //Show first tab content
+	    $("ul.tabs li:first").addClass("active").show(); //Activate first tab
+	    $(".tab_content:first").show(); //Show first tab content
 	<?php } else { ?>
-	$("ul.tabs li:eq(2)").addClass("active").show(); //Activate third tab
-	$(".tab_content:eq(2)").show(); //Show third tab content
-	$("#edit3").prepend('<div class="posted">Blabs updated succesfully</div>');
-	$('.posted').delay(500).effect('highlight');
-	$('.posted').delay(800).fadeOut();
+	    $("ul.tabs li:eq(2)").addClass("active").show(); //Activate third tab
+	    $(".tab_content:eq(2)").show(); //Show third tab content
+	    $("#edit3").prepend('<div class="posted">Blabs updated succesfully</div>');
+	    $('.posted').delay(500).effect('highlight');
+	    $('.posted').delay(800).fadeOut();
 	<?php } ?>
-	//On Click Event
-	$("ul.tabs li").click(function() {
-
-		$("ul.tabs li").removeClass("active"); //Remove any "active" class
-		$(this).addClass("active"); //Add "active" class to selected tab
-		$(".tab_content").hide(); //Hide all tab content
-
-		var activeTab = $(this).find("a").attr("href"); //Find the href attribute value to identify the active tab + content
-		$(activeTab).fadeIn(); //Fade in the active ID content
-		return false;
-	});
 	
 	$("#sortable").sortable({
 		cursor: 'move',
@@ -117,54 +33,54 @@ $(document).ready(function() {
 			  $("#loader").show();
 			},
 			error: function(){
-			alert("theres an error with AJAX");
+			    alert("Server Error, Please try again later");
 			},
 		    success: function(data) {
 				$("#loader").hide();
 				$("#sortable").sortable("enable");
 			    //alert(data);
 			  }
-					
+
 			});
 		}
 		});
 		
-	$( "#sortable" ).disableSelection();
+		$("#passwordUpdateFrm").submit( function(event) {
+		    event.preventDefault();
+			serial = $(this).serialize();
+			valid = true;
+			if ($("#newpass").val() != $("#verpass").val()) {
+			    $("#verpass").effect('highlight', { color: "orange" }).next().show();
+			    valid = false;
+			}
+			if ($("#curpass").val().length < 1) {
+			    $("#curpass").effect('highlight', { color: "orange" }).next().show();
+			    valid = false;
+			}
+			if (valid) {
+    		    $.ajax({
+    			    url: "/user/ajaxhandler/token/<?php echo hash('sha256',$this->username.date('D', time() ).'SaK0fSa1t'); ?>/a/changepassword/",
+    			    type: "post",
+    			    data: serial,
+    			    beforeSend: function(){
+    			        $("#loader2").show();
+    			    },
+    			    error: function(){
+    			        alert("Server Error, Please try again later");
+    			    },
+    		        success: function(data) {
+    				    $("#loader2").hide();
+    				    $("#curpas, #verpass").next().hide();
+    				    if (data == "Password changed") {
+    				        $("#curpass, #newpass, #verpass").val("");
+    				    }
+    			        alert(data);
+    			    }
+    			    });
+    			}
 
-	$('#form').submit( function() {
-		var sData = $('input', oTable.fnGetNodes()).serialize();
-		var answer = confirm("Are you sure you want to mark/unmark selected blabs as read only?");
-		if (answer){
-			return true;
-		}
-		else{
-			return false;
-		}
-
-	} );
-	
-	oTable = $('#blabsGrid').dataTable({
-		"bJQueryUI": true
-	});
-	
+		} );
 });
-
-function addToOpen(ele) {
-	var valuep = ele.value;
-	valuep = valuep.split('~');
-	valuep = valuep[1];
-	var current = $( "#unchecked" ).attr("value");
-	if (current != '')
-	{
-	$( "#unchecked" ).attr("value", current + "," + valuep);
-	}
-	else
-	{
-    $( "#unchecked" ).attr("value", valuep);
-	}
-	
-}
-
 //-->
 </script>
 <div class="usernameHeader">
@@ -193,18 +109,19 @@ Account Management
 	         <p class="helptxt"><br />Want to subscribe to more Blab categories? <a href="/blabs">visit /blabs</a> and add some more to your front page!</p>
 	      </div>
 	    <div id="edit2" class="tab_content">
+	        <div id="loader2">PLEASE WAIT<br />SAVING YOUR CHANGES<br /><img alt="loading" src="/images/ajax-loader2.gif" /></div>
 	        <h3>Update your email or password</h3>
-	         <form action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="post">
-	         <label for="curpas">Current Password</label><br />
-	         <input id="curpas" type="password" name="curpass" /><br />
-	         <label>email</label><br />
-	         <input type="text" value="" name="email" /><br />
-	         <label>new password</label><br />
-	         <input type="password" name="newpass"><br />
-	         <label>verify password</label><br />
-	         <input type="password" name="verpass"><br />
+	         <form id="passwordUpdateFrm" action="<?php echo $_SERVER['REQUEST_URI']; ?>" method="post">
+	         <label for="curpass">Current Password</label><br />
+	         <input id="curpass" type="password" name="curpass" /><span class="ui-state-error" style="display:none; margin-left: 10px;">Current password is required.</span><br />
+	         <label for="email">email</label><br />
+	         <input id="email" type="text" value="<?php echo $this->email; ?>" name="email" /><br />
+	         <label for="newpass">new password</label><br />
+	         <input id="newpass" type="password" name="newpass"><br />
+	         <label for="verpass">verify password</label><br />
+	         <input id="verpass" type="password" name="verpass"><span class="ui-state-error" style="display:none; margin-left: 10px;">Verification password must equal new password.</span><br />
 	         <br />
-	         <button disabled="disabled" class="btn" type="submit">save</button> (feature not implemented yet)
+	         <button class="btn" type="submit">Save</button>
 	         </form>
   
 	    </div>
@@ -228,6 +145,7 @@ Account Management
            </div>'.PHP_EOL;}  ?>
 	    </div>
 	</div>
+	<br />	<br />
 
 
 
