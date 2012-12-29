@@ -66,8 +66,11 @@ class Zend_View_Helper_BuildSortingOptions extends Zend_View_Helper_Abstract {
 EOT;
 		}
 	 // If this is a Blab Specific page and not the comments page
-	 if ($controller == 'blabs' && $action == 'display' && !isset($params['comments']) && !isset($params['comment'])) {
+	 if (($controller == 'blabs' && $action == 'display' && !isset($params['comments']) && !isset($params['comment'])) || $action == 'domain') {
 	 	$cat = $params["category"];
+	 	if ($action == "domain") {
+	 	    $cat = "domain/".$params["domainfqdn"];
+	 	}
 	 	// REPLACE index with the blab category	 	
 	 	foreach ($sortOps as $key => $value) {
 			$sortOps[$key] = str_replace('index|',$cat.'|', $value);

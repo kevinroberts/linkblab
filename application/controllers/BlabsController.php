@@ -1023,6 +1023,61 @@ EOT;
            return $this->_response->appendBody($content);
            
     }
-
+    public function domainAction() {
+        $utils = new Application_Model_Utils();
+        $page = $this->_getParam('page',1);
+        $auth = Zend_Auth::getInstance();
+        $sortNumber = 25;
+        $this->view->loggedIn = false;
+        if ($auth->hasIdentity())
+        {
+            $this->view->loggedIn = true;
+            $userID = $auth->getIdentity()->id;
+        }
+        $sort = $this->_request->getParam('sort');
+        $domain = $utils->XssCleaner($this->_request->getParam('domainfqdn'));
+        
+        $links = new Application_Model_LinksMapper();
+        
+        $this->view->sort = $sort;
+        $this->view->domain = $domain;
+        $this->view->page = $page;
+        
+        switch ($sort) {
+                case 'hot':
+                    $results = $links->fetchAll(500,null, null, 'hot DESC', "domain = '".$domain."'");
+                    break;
+                case 'controversial':
+                	$this->view->addJS = '$("#sortOptionsDropdown_link").text("controversial");'.PHP_EOL;
+                    $results = $links->fetchAll(500,null, null, 'controversy DESC', "domain = '".$domain."'");
+                    break;
+                case 'top':
+                	$this->view->addJS = '$("#sortOptionsDropdown_link").text("top scoring");'.PHP_EOL;
+                	if (isset($_GET["t"]) && $_GET["t"] == "all") {
+                	    $results = $links->fetchAll(500,null, null, 'votes DESC', "CURDATE() >= date_created && domain = '".$domain."'", 180);
+            	    }
+            	    else {
+            	       $results = $links->fetchAll(500,null, null, 'votes DESC', "domain = '".$domain."'"); 
+            	    }
+                    break;
+                case 'saved':
+                	// Change to saved links only when implemented
+                    return $this->_redirect("/index/notfound?t=notimpl");
+                    break;
+                default:
+                    $results = $links->fetchAll(500,null, null, 'hot DESC', "domain = '".$domain."'");
+                    break;
+                }
+                
+                $paginator = Zend_Paginator::factory($results);
+                $paginator->setItemCountPerPage($sortNumber);
+                $paginator->setCurrentPageNumber($page);
+                
+                $this->view->upcoming = $upcoming;
+                $this->view->paginator=$paginator;
+                $this->view->pagenumber = $page;
+                $this->view->sortNumber = $sortNumber;
+        
+    }
 
 }

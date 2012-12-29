@@ -838,6 +838,10 @@ $(document).ready(function() {
 					var url = "/index/" + g[1];
 					window.location.href = url;
 				}
+				else if (g[0].indexOf("domain/") !== -1) {
+					var url = "/" + g[0] + "/" + g[1];
+					window.location.href = url;
+				}
 				else {
 					var url = "/b/" + g[0] + "/" + g[1];
 					window.location.href = url;

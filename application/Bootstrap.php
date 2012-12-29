@@ -196,6 +196,20 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
 
         $router->addRoute('search', $route);
         
+        /*
+          * domain route
+          */
+          $route = new Zend_Controller_Router_Route (
+             'domain/:domainfqdn/:sort/:page',
+              array('controller' => 'blabs',
+                'action'     => 'domain', 
+                'domainfqdn'   => 'allthingsd.com',
+                'sort' => 'hot',
+                'page' => 1 )
+      		);
+
+         $router->addRoute('domain', $route);
+        
          /*
          * Administrator Area ROUTE 
          */
@@ -264,11 +278,9 @@ class Bootstrap extends Zend_Application_Bootstrap_Bootstrap
         	$view->headScript()->appendFile("/js/jquery-1.4.4.min.js");
         	$view->headScript()->appendFile("/js/jquery-ui-latest.min.js");
         }
-        //$view->headScript()->appendFile("/js/json2.js"); // for encoding json client-side
  		$view->headScript()->appendFile("/js/jquery.cookie.js");
  		$view->headScript()->appendFile("/js/site.js");
-        //$view->headScript()->appendScript("var age = 0;", $type = 'text/javascript', $attrs = array());
- 		
+        
  		// Get the requested URL to determine if controller specific scripts are needed:
  		$reqURL = parse_url($_SERVER["REQUEST_URI"]);
  		// Extract Contoller

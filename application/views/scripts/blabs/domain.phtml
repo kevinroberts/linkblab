@@ -1,0 +1,91 @@
+<?php
+$this->headTitle()->prepend("domain search ".$this->domain." - ");
+
+if (isset($this->addJS)) {
+    $addJS = $this->addJS.PHP_EOL;
+    $script = <<<EOT
+    $(document).ready(function(){
+    	$addJS			
+    });
+EOT;
+
+    $this->headScript()->appendScript($script, $type = 'text/javascript', $attrs = array());
+} 
+
+
+?>
+<br>
+<h3>Domain Links for <?php echo $this->domain ?></h3>
+<div id="linkList">
+<?php 
+	/*
+	 * Properties of a link:
+	protected $_linkurl;
+	protected $_domain;
+	protected $_thumbnail;
+	protected $_upvotes;
+	protected $_downvotes;
+	protected $_votes;
+	protected $_title;
+	protected $_description;
+	protected $_dateCreated;
+	protected $_blabID;
+	protected $_userID;
+	protected $_isNsfw;
+	protected $_isSelf;
+	protected $_timesReported;
+	protected $_controversy;
+	protected $_id;
+	*/
+$i = 1;
+if ($this->pagenumber > 1) {
+$i = 1 + (25 * ($this->pagenumber -1));
+}
+
+foreach ($this->paginator as $link):
+$linkBlab = $this->displayBlab($link->blabID, 1); // returns an array with [0] = blab title, [1] = anchor link to blab
+$linkURL = ($link->isSelf == 1) ? '/b/'.$linkBlab[0].'/comments/'.$link->id.'/'.$link->urlTitle : $link->linkurl;
+?>
+<div class="link">
+<span style="width: 2.2ex;" class="listNumber"><?php echo $i; ?></span>	
+		<?php if ($this->loggedIn) {?>
+			<?php echo $this->linkBuilder($link->id, $link->downvotes, $link->votes, $link->upvotes); ?>
+		<?php } else {?>
+		<div style="width: 5ex;" class="midcol unvoted">
+			<a id="link<?php echo $link->id; ?>-up" class="ui-state-default ui-corner-all" title="vote this link up" onclick="voteAction($(this), 1, <?php echo $link->id; ?>)"><span class="ui-icon ui-icon-circle-arrow-n"></span></a>
+			<div class="score downVotes"><?php echo $link->downvotes; ?></div>
+			<div class="score unVoted"><?php echo $link->votes; ?></div>
+			<div class="score upVotes"><?php echo $link->upvotes; ?></div>
+			<a id="link<?php echo $link->id; ?>-down" class="ui-state-default ui-corner-all" title="vote this link down" onclick="voteAction($(this), 2, <?php echo $link->id; ?>)"><span class="ui-icon ui-icon-circle-arrow-s"></span></a>
+		</div>
+		<?php } if (!(is_null($link->thumbnail))) {?>
+			<a name="linkblab_link-<?php echo $link->id; ?>" href="<?php echo $linkURL; ?>" class="thumbnail linkblab_link">&#8203;<img alt="<?php echo $link->urlTitle; ?>" src="<?php echo $link->thumbnail; ?>" /></a>
+		<?php }?>
+		<div class="entry">
+			<p class="title"><a name="linkblab_link<?php echo $link->id; ?>" href="<?php echo $linkURL; ?>" class="title linkblab_link"><?php echo $link->title; ?></a> 
+			<span<?php echo ($link->isSelf == 1) ? ' style="display:none;"' : '' ?> class="domain">(<a title="see more links from this domain" href="/domain/<?php echo $link->domain; ?>/"><?php echo $link->domain; ?></a>)</span></p>	
+			<p class="tagline">submitted <?php echo $this->timeAgo(strtotime($link->dateCreated));?> by <?php echo $this->displayName($link->userID, "autho user-".$link->userID); ?><span class="userattrs"></span> to <?php echo $linkBlab[1]; ?></p>
+			<ul class="flat-list buttons">
+				<?php if ($link->isNsfw == 1) {?>
+				<li class="ui-corner-all nsfw-stamp stamp">
+				<acronym title="Adult content: Not Safe For Work">NSFW</acronym></li>
+				<?php } ?>
+				<li class="first">
+					<a target="_parent" href="/b/<?php echo $linkBlab[0].'/comments/'.$link->id.'/'.$link->urlTitle; ?>" class="comments"><?php echo $this->displayHowManyComments($link->id); ?> comments</a>
+				</li>
+				<li>
+					<?php echo $this->buildReportButton($link->id); ?>
+				</li>
+			</ul>
+		</div>
+</div>
+<div class="clrLeft"></div>
+<?php 
+$i++;
+endforeach; ?>
+<?php 
+echo $this->paginationControl($this->paginator, 'Sliding', 'pagination.phtml'); ?>
+</div>
+
+
+<br />
