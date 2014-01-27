@@ -56,6 +56,7 @@ class Zend_View_Helper_BuildSidebarContent extends Zend_View_Helper_Abstract {
 			$links->find($_id, $link);
 			$linkBlab = $this->view->displayBlab($link->blabID, 1); // returns an array with [0] = blab title, [1] = anchor link to blab
 			$linkURL = ($link->isSelf == 1) ? '/b/'.$linkBlab[0].'/comments/'.$link->id.'/'.$link->urlTitle : $link->linkurl;
+			$commentURL = '/b/'.$linkBlab[0].'/comments/'.$link->id.'/'.$link->urlTitle;
 			$recentLinksContent .= "<tr>
 			<td class=\"viewedVote\">";
 			
@@ -103,7 +104,7 @@ class Zend_View_Helper_BuildSidebarContent extends Zend_View_Helper_Abstract {
 			</td>
 			<td><a href=\"$linkURL\">".$link->title."</a>
 			<br />
-			<label title=\"".$link->votes."\" id=\"recent-link".$link->id."-points\">".$link->votes." points</label> | <a href=\"#\">".$this->view->displayHowManyComments($link->id)." comments</a>
+			<label title=\"".$link->votes."\" id=\"recent-link".$link->id."-points\">".$link->votes." points</label> | <a href=\"".$commentURL."\">".$this->view->displayHowManyComments($link->id)." comments</a>
 			</td>
 			</tr>";
 		}
