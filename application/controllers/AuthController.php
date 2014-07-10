@@ -470,103 +470,121 @@ class AuthController extends Zend_Controller_Action
 			die();
         }
         
+        $user = $auth->getIdentity ();
+        $this->view->userID = $user->id;
+        
         $request = $this->getRequest();
          if ($request->isPost()) {
          	$data = $this->_request->getPost();
          	if (isset($data['do']) && isset($data['userId']) && $data['do'] == 'deleteUser') {
-         	    $userId = $data['userId'];
-                if (!empty($userId) && is_numeric($userId) && $userId != 1 && $userId != 6 && $userId != 9) {
+         	    $submittedUserId = $data['userId'];
+                if (!empty($submittedUserId)) {
+                    
+                	$userIds = array();
+                	
+                	if (is_numeric($submittedUserId)) {
+                    	$userIds[] = $submittedUserId;
+                    } else if (strpos($submittedUserId,',') !== false) {
+                    	$userIds = explode(',', $submittedUserId);
+                    }
                     
                     $db = Zend_Db_Table::getDefaultAdapter();
-            		$select = $db->select();
-            		$select->from("users");
-            		$select->where("id = ?", $userId);
-            		$results = $db->fetchAll($select);
                     
-                    if (empty($results[0]['id']))
-					{
-						$this->view->message = "The user &quot;".$userId."&quot; does not exist in linkblab's database (not found)";
-					}
-                    else {
-                        $userName = $results[0]['username'];
-                        // this is a vlaid user to be deleted
-                        $select = $db->select();
-            			$select->from("subscriptions");
-            			$select->where("user_id = ?", $userId);
-            			$select->order("display_order ASC");
-            
-            			$results = $db->fetchAll($select);
-                        
-                        foreach ($results as $row) {
-    						$delete = $db->delete("subscriptions", "id = ".$row["id"]);        					
-        				}
-        				
-        				$select = $db->select();
-            			$select->from("link_history");
-            			$select->where("user_id = ?", $userId);
-            			
-            			$results = $db->fetchAll($select);
-        				if (count($results) > 0) {
-                            foreach ($results as $row) {
-    						    $delete = $db->delete("link_history", "id = ".$row["id"]);        					
-        				    }
-        				}
-        				
-        				$select = $db->select();
-                		$select->from("comment_history");
-                		$select->where("user_id = ?", $userId);
-        				
-        				$results = $db->fetchAll($select);
-        				
-        				if (count($results) > 0) {
-                            foreach ($results as $row) {
-    						    $delete = $db->delete("comment_history", "id = ".$row["id"]);        					
-        				    }
-        				}
-        				
-        				// remove all the users comments
-        				$select = $db->select();
-            			$select->from("comments");
-            			$select->where("user_id = ?", $userId);
-            			
-            			$results = $db->fetchAll($select);
-            			$commentCount = count($results);
-            			if ($commentCount > 0) {
-                            foreach ($results as $row) {
-    						    $delete = $db->delete("comments", "id = ".$row["id"]);        					
-        				    }
-        				}
-        				
-        				// delete all of the users links
-        				$select = $db->select();
-            			$select->from("links");
-            			$select->where("user_id = ?", $userId);
-            			
-            			$results = $db->fetchAll($select);
-            			$linkCount = count($results);
-            			if ($linkCount > 0) {
-                            foreach ($results as $row) {
-    						    $delete = $db->delete("links", "id = ".$row["id"]);        					
-        				    }
-        				}
-        				
-                        $select = $db->select();
-                		$select->from("user_meta");
-                		$select->where("user_id = ?", $userId);
-
-                		$results = $db->fetchAll($select);
-
-                		if (count($results) > 0) {
-                            foreach ($results as $row) {
-        					    $delete = $db->delete("user_meta", "id = ".$row["id"]);        					
-            			    }
-            			}
-            			
-            			// finally delete the user
-            			$delete = $db->delete("users", "id = ".$userId);  		
-                        
-                        
-                        $this->view->message = "Successfully deleted user &quot;".$userName."&quot; - ID: ".$userId." and there ".$linkCount." number of links plus ".$commentCount." comments from linkblab's database";
+                	foreach ($userIds as $userId) {
+                		if (!is_numeric($userId) || $userId == 1 || $userId == 6 || $userId == 9) {
+                			$this->view->message = "The user &quot;".$userId."&quot; does not exist in linkblab's database (not found)";
+                			return false;
+                    	}
+	            		$select = $db->select();
+	            		$select->from("users");
+	            		$select->where("id = ?", $userId);
+	            		$results = $db->fetchAll($select);
+	                    
+	                    if (empty($results[0]['id']))
+						{
+							$this->view->message = "The user &quot;".$userId."&quot; does not exist in linkblab's database (not found)";
+						}
+	                    else {
+	                        $userName = $results[0]['username'];
+	                        // this is a vlaid user to be deleted
+	                        $select = $db->select();
+	            			$select->from("subscriptions");
+	            			$select->where("user_id = ?", $userId);
+	            			$select->order("display_order ASC");
+	            
+	            			$results = $db->fetchAll($select);
+	                        
+	                        foreach ($results as $row) {
+	    						$delete = $db->delete("subscriptions", "id = ".$row["id"]);        					
+	        				}
+	        				
+	        				$select = $db->select();
+	            			$select->from("link_history");
+	            			$select->where("user_id = ?", $userId);
+	            			
+	            			$results = $db->fetchAll($select);
+	        				if (count($results) > 0) {
+	                            foreach ($results as $row) {
+	    						    $delete = $db->delete("link_history", "id = ".$row["id"]);        					
+	        				    }
+	        				}
+	        				
+	        				$select = $db->select();
+	                		$select->from("comment_history");
+	                		$select->where("user_id = ?", $userId);
+	        				
+	        				$results = $db->fetchAll($select);
+	        				
+	        				if (count($results) > 0) {
+	                            foreach ($results as $row) {
+	    						    $delete = $db->delete("comment_history", "id = ".$row["id"]);        					
+	        				    }
+	        				}
+	        				
+	        				// remove all the users comments
+	        				$select = $db->select();
+	            			$select->from("comments");
+	            			$select->where("user_id = ?", $userId);
+	            			
+	            			$results = $db->fetchAll($select);
+	            			$commentCount = count($results);
+	            			if ($commentCount > 0) {
+	                            foreach ($results as $row) {
+	    						    $delete = $db->delete("comments", "id = ".$row["id"]);        					
+	        				    }
+	        				}
+	        				
+	        				// delete all of the users links
+	        				$select = $db->select();
+	            			$select->from("links");
+	            			$select->where("user_id = ?", $userId);
+	            			
+	            			$results = $db->fetchAll($select);
+	            			$linkCount = count($results);
+	            			if ($linkCount > 0) {
+	                            foreach ($results as $row) {
+	    						    $delete = $db->delete("links", "id = ".$row["id"]);        					
+	        				    }
+	        				}
+	        				
+	                        $select = $db->select();
+	                		$select->from("user_meta");
+	                		$select->where("user_id = ?", $userId);
+	
+	                		$results = $db->fetchAll($select);
+	
+	                		if (count($results) > 0) {
+	                            foreach ($results as $row) {
+	        					    $delete = $db->delete("user_meta", "id = ".$row["id"]);        					
+	            			    }
+	            			}
+	            			
+	            			// finally delete the user
+	            			$delete = $db->delete("users", "id = ".$userId);  		
+	                        
+	                        
+	                        $this->view->message .= "Successfully deleted user &quot;".$userName."&quot; - ID: ".$userId." and there ".$linkCount." number of links plus ".$commentCount." comments from linkblab's database".PHP_EOL;
+                    	}
                     }
                     
                 }

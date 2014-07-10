@@ -1,7 +1,10 @@
 <?php 
 
 $this->headTitle(' | Admin');
-
+$this->headStyle()->appendStyle('@import "/css/table.css";');
+$this->headScript()->appendFile("/js/jquery.uiforms.js", $type = 'text/javascript', $attrs = array());
+$this->headScript()->appendFile("/js/admin.js", $type = 'text/javascript', $attrs = array());
+$this->headScript()->appendFile("/js/jquery.dataTables.min.js", $type = 'text/javascript', $attrs = array());
 
 ?>
 <style type="text/css">
@@ -21,14 +24,23 @@ $this->headTitle(' | Admin');
     <p>
         <?php
             if (isset($this->message)) {
-                echo '<span class="responseMessage">'.$this->message.'</span>';
+                echo '<span class="responseMessage">'.nl2br($this->message).'</span>';
             }
         ?>
         <form method="POST">
-            <label for="userId">Delete user by id:</label>
+            <label for="userId">Delete user(s) by id:</label>
             <input type="hidden" name="do" value="deleteUser" />
-            <input id="userId" name="userId" type="text" />
+            <input id="userId" name="userId" type="text" placeholder="e.g. 1,3,4" />
             <input style="padding-right: 10px;" type="submit"></input>
         </form>
     </p>
+    <h3>Current Users on Linkblab</h3>
+     <?php 
+	      $output = $this->userList();
+	      if ($output !== false) {
+	      ?>
+	      <?php echo $output; 
+	      }
+	      ?>
+	      
 </div>
