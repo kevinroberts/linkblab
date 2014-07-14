@@ -5,19 +5,7 @@ class AuthController extends Zend_Controller_Action
 	protected $mailConfig, $mailConn;
 	private $disabled = FALSE;
 
-    public function init()
-    {
-        
-		$this->config = array(
-    	'ssl' => 'tls',
-    	'port' => 587,
-    	'auth' => 'login',
-    	'username' => 'kevon202@gmail.com',
-    	'password' => 'kevroB7943!'
-		);
-		$this->mailConn = new Zend_Mail_Transport_Smtp('smtp.gmail.com', $this->config);
-		
-    }
+    public function init() { }
     
         protected function _sql_date_format($value) {
 
@@ -365,10 +353,10 @@ class AuthController extends Zend_Controller_Action
             // Send the email
             $mail = new Zend_Mail();
             $mail->setBodyText('As you requested, here is the link to reset your password:'.PHP_EOL.' http://linkblab.com/auth/reset?tk='.$resetToken.'');
-			$mail->setFrom('kevon202@gmail.com', 'Kevin Roberts');
+			$mail->setFrom('noreply@linkblab.com', 'Linkblab');
 			$mail->addTo($sendTo, $results[0]['username']);
 			$mail->setSubject('LinkBlab Password Reset');
-			$mail->send($this->mailConn);
+			$mail->send();
 			
 			// All is well so lets kill the CSRF unique token so a new one has to be regenerated
 			$utils->kill_token();
