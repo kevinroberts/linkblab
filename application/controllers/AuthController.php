@@ -2,7 +2,6 @@
 
 class AuthController extends Zend_Controller_Action
 {
-	protected $mailConfig, $mailConn;
 	private $disabled = FALSE;
 
     public function init() { }
@@ -184,7 +183,8 @@ class AuthController extends Zend_Controller_Action
                 						{
                 							if ($this->disabled) // if this account has been disabled notify the user
                 							{
-                								$form->setErrors(array('Your account has been disabled by a site administrator. Please email admin@linkblab.com if you want to reactivate.'));
+                								$form->setErrors(array('Your account has been disabled by a site administrator. 
+													Please email admin@linkblab.com if you want to reactivate.'));
                 								Zend_Auth::getInstance()->clearIdentity();
                 							}
                 							else
