@@ -687,7 +687,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `username` varchar(50) NOT NULL,
   `password` varchar(90) NOT NULL,
   `email` varchar(255) NOT NULL,
-  `salt` varchar(50) CHARACTER SET latin1 NOT NULL,
+  `salt` varchar(90) CHARACTER SET latin1 NOT NULL,
   `role` varchar(50) CHARACTER SET latin1 NOT NULL DEFAULT 'basic',
   `date_created` datetime DEFAULT NULL,
   `last_login` datetime DEFAULT NULL,
