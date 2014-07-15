@@ -421,7 +421,6 @@ class BlabsController extends Zend_Controller_Action
                     // Update first row with new blab id
                     $data                          = array(
                         'blab_id' => $blabId,
-                        'user_id' => $loggedInId
                     );
                     $update                        = $db->update("subscriptions", $data, "id = " . $oldFirstItem["id"]);
                     
