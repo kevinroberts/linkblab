@@ -432,6 +432,7 @@ class BlabsController extends Zend_Controller_Action
                 
                 // Add blab as next available display order
                 $insert = $db->insert("subscriptions", $data);
+				$this->view->message = "You've succesfully added the following to your front page";
                 
             } else {
                 return $this->_redirect("/index/notfound");
@@ -439,8 +440,6 @@ class BlabsController extends Zend_Controller_Action
             
         }
         
-        
-        $this->view->message = "You've succesfully added the following to your front page";
         $this->view->action  = $blabId;
     }
     
