@@ -430,8 +430,6 @@ class BlabsController extends Zend_Controller_Action
                     $shifter = $this->moveBlabsDown($count, $oldFirstItem);
                 }
                 
-                // Add blab as next available display order
-                $insert = $db->insert("subscriptions", $data);
 				$this->view->message = "You've succesfully added the following to your front page";
                 
             } else {
