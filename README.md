@@ -1,4 +1,4 @@
-http://Linkblab.com - A Reddit Clone in PHP w/ Zend FW
+Linkblab - A Reddit Clone in PHP w/ Zend FW
 ==========================================
 
 Thoughts on the project
